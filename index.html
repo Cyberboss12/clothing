@@ -7,6 +7,49 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <div class = "tabs">
+    <button class = "tab-button active" data-tab = "home">Home</button>
+    <button class = "tab-button" data-tab = "men">Men</button>
+    <button class = "tab-button" data-tab = "women">Women</button>
+    <button class = "tab-button" data-tab = "contact">Contact</button>
+  </div>
+
+  <div id = "home" class = "tab-content active">
+    <h2>Welcome on the homepage</h2>
+    <p>This is the homepage</p>
+  </div>
+
+  <div id = "men" class ="tab-content">
+    <h2>Men's wear</h2>
+    <p>Men's wear for you</p>
+  </div>
+
+  <div id = "women" class ="tab-content">
+    <h2>Women's wear</h2>
+    <p>Women's wear for you</p>
+  </div>
+
+  <div id = "contact" class ="tab-content">
+    <h2>Servicechat</h2>
+    <p>Keep in touch with our servicechat</p>
+  </div>
+
+   <script>
+    const buttons = document.querySelectorAll('.tab-button');
+    const contents = document.querySelectorAll('.tab-content');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        contents.forEach(content => content.classList.remove('active'));
+
+        button.classList.add('active');
+        document.getElementById(button.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+
   <header>
     <h1>Welkom op mijn website</h1>
     <p>Ik hoop dat jullie dit leuk gaan vinden</p>
