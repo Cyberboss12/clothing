@@ -19,6 +19,15 @@ body {
   border-radius: 5px;
 }
 
+.tabs li a.active {
+  background-color: #ccc;
+  font-weight: bold;
+}
+
+.tabs li a:hover {
+  background-color: #ddd;
+}
+
 .tab-button {
   padding: 10px 20px;
   background-color: #eee;
