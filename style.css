@@ -117,3 +117,65 @@ body {
 .tab-content.active {
   display: block;
 }  */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Bovenste info-balk */
+.info-bar {
+  background-color: #C3A580; /* Beige kleur */
+  color: white;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+/* Hoofdnavigatie */
+.topbar {
+  background-color: #333; /* Zwart/donkergrijs */
+  padding: 15px 0;
+}
+
+.navbar {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.navbar li a {
+  color: #C3A580;
+  text-decoration: none;
+  font-size: 16px;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect met onderstreep */
+.navbar li a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #C3A580;
+  transition: width 0.3s ease;
+}
+
+.navbar li a:hover::after {
+  width: 100%;
+}
+
+/* Actieve link */
+.navbar li a.active {
+  font-weight: bold;
+}
