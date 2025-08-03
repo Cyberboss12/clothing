@@ -23,6 +23,8 @@
 
 body {
   font-family: Special Elite, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .tabs {
