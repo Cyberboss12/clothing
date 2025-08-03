@@ -1,9 +1,9 @@
-/* .topbar {
-    background-color: #C3A580; Donkerblauw */
-    /* width: 100%;
+.topbar {
+    background-color: #C3A580;  
+    width: 100%;
     color: white;
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 14px; 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,13 +27,13 @@ body {
   padding: 0;
 }
 
-/* .tabs {
+.tabs {
   list-style-type: none;
   padding: 0;
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-} */
+} 
 
 .navbar {
   list-style: none;
@@ -80,33 +80,33 @@ body {
   background-color: beige;
 }
 
-/* .tabs li a {
+.tabs li a {
   display: inline-block;
   padding: 10px 20px;
   background-color: #eee;
   color: black;
-  text-decoration: none; 🔥 Dit haalt het blauw & underline weg */
-  /* border-radius: 5px;
-} */
+  text-decoration: none; 
+  border-radius: 5px;
+} 
 
-/* .tabs li a.active {
+.tabs li a.active {
   background-color: #ccc;
   font-weight: bold;
 }
 
 .tabs li a:hover {
   background-color: #ddd;
-} */
+} 
 
-/* .tab-button {
+.tab-button {
   padding: 10px 20px;
   background-color: #eee;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-} */
+} 
 
-/* .tab-button.active {
+.tab-button.active {
   background-color: #ccc;
 }
 
@@ -116,4 +116,4 @@ body {
 
 .tab-content.active {
   display: block;
-} */
+} 
