@@ -1,4 +1,4 @@
-.topbar {
+/* .topbar {
     background-color: #C3A580;  
     width: 100%;
     color: white;
@@ -19,7 +19,7 @@
 
 .topbar .right a span {
     margin-right: 5px;
-} 
+}  */
 
 body {
   font-family: Special Elite, sans-serif;
@@ -80,7 +80,7 @@ body {
   background-color: beige;
 }
 
-.tabs li a {
+/* .tabs li a {
   display: inline-block;
   padding: 10px 20px;
   background-color: #eee;
@@ -116,4 +116,4 @@ body {
 
 .tab-content.active {
   display: block;
-} 
+}  */
