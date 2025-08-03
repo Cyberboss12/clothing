@@ -1,3 +1,26 @@
+.topbar {
+    background-color: #C3A580; /* Donkerblauw */
+    width: 100%;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.topbar a {
+    color: white;
+    text-decoration: underline;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.topbar .right a span {
+    margin-right: 5px;
+}
+
 body {
   font-family: Special Elite, sans-serif;
 }
@@ -46,25 +69,4 @@ body {
 
 .tab-content.active {
   display: block;
-}
-
-.topbar {
-    background-color: #C3A580; /* Donkerblauw */
-    color: white;
-    padding: 10px 20px;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.topbar a {
-    color: white;
-    text-decoration: underline;
-    margin-left: 15px;
-    font-weight: bold;
-}
-
-.topbar .right a span {
-    margin-right: 5px;
 }
