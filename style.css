@@ -132,8 +132,10 @@ body {
 .info-bar {
   background-color: #C3A580; /* Beige kleur */
   color: white;
+  display: flex;
+  justify-content: space-between;
   text-align: center;
-  padding: 8px 0;
+  padding: 8px 20px;
   font-size: 14px;
 }
 
