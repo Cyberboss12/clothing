@@ -110,6 +110,10 @@ nav ul li a:hover {
 }
 
 /* Dropdown menu - standaard verborgen */
+.dropdown {
+  position: relative;
+}
+
 .dropdown-content {
   display: none;
   position: absolute;
@@ -131,8 +135,7 @@ nav ul li a:hover {
   background-color: #666;
 }
 
-/* Toon dropdown bij hover */
-nav ul li:hover .dropdown-content {
+.dropdown:hover .dropdown-content {
   display: block;
 }
 
