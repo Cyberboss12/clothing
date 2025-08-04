@@ -110,17 +110,17 @@ nav ul li a:hover {
 }
 
 /* Dropdown menu - standaard verborgen */
-.dropdown {
+.has-dropdown {
   position: relative;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #444;
-  min-width: 160px;
   top: 100%;
   left: 0;
+  background-color: #444;
+  min-width: 160px;
   z-index: 1;
 }
 
@@ -135,7 +135,8 @@ nav ul li a:hover {
   background-color: #666;
 }
 
-.dropdown:hover .dropdown-content {
+/* Dropdown tonen bij hover over de parent <li> */
+.has-dropdown:hover .dropdown-content {
   display: block;
 }
 
