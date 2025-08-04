@@ -132,11 +132,29 @@ body {
 .info-bar {
   background-color: #C3A580; /* Beige kleur */
   color: white;
-  display: flex;
-  justify-content: space-between;
   text-align: center;
   padding: 8px 20px;
   font-size: 14px;
+  position: relative;
+}
+
+.info-content {
+  max-width: 1200px; /* Brede container, pas aan indien nodig */
+  margin: 0 auto;
+  position: relative;
+}
+
+.info-center {
+  text-align: center;
+  font-weight: normal;
+}
+
+.info-right {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 20px;
 }
 
 /* Hoofdnavigatie */
