@@ -9,7 +9,7 @@ body {
 }
 
 /* Bovenste info-balk */
-/* .info-bar {
+.info-bar {
   width: 100%;
   background-color: #C3A580;
   color: white;
@@ -29,33 +29,7 @@ body {
 
 .info-right {
   display: flex;
-  gap: 80px; <<< Hier vergroot je de ruimte
-  align-items: center;
-} */
-
-.info-bar {
-  width: 100%;
-  background-color: #C3A580;
-  color: white;
-  padding: 8px 0;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.info-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.info-right {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 80px; /* Grote ruimte tussen NL Nederlands en Stores */
-  padding-right: 20px; /* Houd een klein beetje lucht rechts */
+  gap: 80px; 
   align-items: center;
 }
 
