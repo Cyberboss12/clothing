@@ -138,11 +138,11 @@ body {
   position: relative;
 }
 
-/* .info-content {
+.info-content {
   max-width: 1200px; 
   margin: 0 auto;
   position: relative;
-} */
+}
 
 .info-center {
   position: absolute;
