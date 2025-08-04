@@ -76,3 +76,69 @@ body {
   font-weight: bold;
 }
 
+/* dropmenu */
+body, html {
+  margin: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.split-container {
+  display: flex;
+  height: 100vh;
+}
+
+.left-pane, .right-pane {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-pane {
+  background-color: #333;
+  color: white;
+  flex-direction: column;
+}
+
+.right-pane {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #444;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #666;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
