@@ -130,6 +130,7 @@ body {
 
 /* Bovenste info-balk */
 .info-bar {
+  width: 100%;
   background-color: #C3A580; /* Beige kleur */
   color: white;
   padding: 8px 0;
