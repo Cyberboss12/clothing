@@ -69,6 +69,26 @@
     });
   </script>
 
+  <script>
+// 1. Dropdown click toggle
+document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function(event) {
+    event.preventDefault(); // voorkomt doorverwijzen
+    this.parentElement.classList.toggle('open');
+  });
+});
+
+// 2. Active state onthouden op basis van URL
+const links = document.querySelectorAll('.nav-link');
+const currentPage = window.location.pathname.split("/").pop();
+
+links.forEach(link => {
+  if(link.getAttribute('href') === currentPage) {
+    link.classList.add('active');
+  }
+});
+</script>
+
   <header>
     <h1>Welkom op mijn website</h1>
     <p>Ik hoop dat jullie dit leuk gaan vinden</p>
