@@ -76,54 +76,47 @@ body {
   font-weight: bold;
 }
 
-/* dropmenu */
-body, html {
-  margin: 0;
-  height: 100%;
+/* Basis styling */
+body {
   font-family: Arial, sans-serif;
+  margin: 0;
 }
 
-.split-container {
-  display: flex;
-  height: 100vh;
-}
-
-.left-pane, .right-pane {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.left-pane {
+/* Navigatiebalk */
+nav {
   background-color: #333;
-  color: white;
-  flex-direction: column;
 }
 
-.right-pane {
-  background-color: #f4f4f4;
-  color: #333;
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
-/* Dropdown Styles */
-.dropdown {
+nav ul li {
   position: relative;
 }
 
-.dropbtn {
+nav ul li a {
+  display: block;
+  padding: 14px 20px;
   color: white;
   text-decoration: none;
-  font-size: 20px;
-  cursor: pointer;
 }
 
+nav ul li a:hover {
+  background-color: #555;
+}
+
+/* Dropdown menu - standaard verborgen */
 .dropdown-content {
   display: none;
   position: absolute;
   background-color: #444;
   min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+  top: 100%;
+  left: 0;
   z-index: 1;
 }
 
@@ -138,7 +131,8 @@ body, html {
   background-color: #666;
 }
 
-.dropdown:hover .dropdown-content {
+/* Toon dropdown bij hover */
+nav ul li:hover .dropdown-content {
   display: block;
 }
 
