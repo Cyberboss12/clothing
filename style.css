@@ -163,7 +163,72 @@ nav ul li a:hover {
   background-color: #555;
 }
 
-/* 4: Dropdown menu - standaard verborgen */
+/* 4: Dropdown menu men */
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.dropmenu_men_container {
+  position: relative;
+}
+
+.dropmenu_men_button {
+  display: block;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: black;
+}
+
+.dropmenu_men_content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #f9f9f9;
+  width: 100vw;
+  height: 400px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  display: flex;
+}
+
+.dropmenu_men_left {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropmenu_men_left a {
+  margin: 10px 0;
+  color: black;
+}
+
+.dropmenu_men_right {
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dropmenu_men_right img {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Hover effect */
+.dropmenu_men_container:hover .dropmenu_men_content {
+  display: flex;
+}
+
+/* Active (sticky open) via JS */
+.dropmenu_men_content.active {
+  display: flex !important;
+}
 
 
 
