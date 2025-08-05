@@ -75,6 +75,38 @@
     });
   </script>
 
+<!-- dropmenu men -->
+  <script>
+  const dropmenuButton = document.getElementById('dropmenu_men_button');
+  const dropmenuContent = document.getElementById('dropmenu_men_content');
+
+  // Toggle open on click
+  dropmenuButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Voorkomt directe navigatie
+    dropmenuContent.classList.toggle('active');
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!dropmenuContent.contains(event.target) && !dropmenuButton.contains(event.target)) {
+      dropmenuContent.classList.remove('active');
+    }
+  });
+
+  // Hover open
+  dropmenuButton.addEventListener('mouseenter', function() {
+    dropmenuContent.classList.add('active');
+  });
+
+  dropmenuContent.addEventListener('mouseenter', function() {
+    dropmenuContent.classList.add('active');
+  });
+
+  dropmenuContent.addEventListener('mouseleave', function() {
+    dropmenuContent.classList.remove('active');
+  });
+</script>
+
   <!-- <header>
     <h1>Welkom op mijn website</h1>
     <p>Ik hoop dat jullie dit leuk gaan vinden</p>
