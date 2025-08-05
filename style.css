@@ -4,11 +4,74 @@
   box-sizing: border-box;
 }
 
+/* 1: Algemene styling */
 body {
-  font-family: Special Elite;
+    font-family: 'Special Elite';
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Bovenste info-balk */
+/* Header styling */
+header {
+    background-color: #333;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    margin-bottom: 20px;
+}
+
+header p {
+    margin: 0;
+}
+
+/* Main content styling */
+main {
+    padding: 0 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+main h2 {
+    margin-bottom: 20px;
+}
+
+main p {
+    margin-bottom: 20px;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    margin-top: 40px;
+}
+
+/* 2: Bovenste info-balk */
 .info-bar {
   width: 100%;
   background-color: #C3A580;
@@ -33,7 +96,7 @@ body {
   align-items: center;
 }
 
-/* Hoofdnavigatie */
+/* 3: Hoofdnavigatie */
 .topbar {
   background-color: #333; /* Zwart/donkergrijs */
   padding: 15px 0;
@@ -103,10 +166,10 @@ nav ul li a:hover {
   background-color: #555;
 }
 
-/* Dropdown menu - standaard verborgen */
+/* 4: Dropdown menu - standaard verborgen */
 
 
-/* Header spacing */
+
 
 
 
