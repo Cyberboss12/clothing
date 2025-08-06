@@ -250,7 +250,6 @@ nav ul li a:hover {
   font-size: 16px;
   text-decoration: none; */
   position: relative;
-  display: inline-block;
 }
 
 .dropdown-left a::after {
