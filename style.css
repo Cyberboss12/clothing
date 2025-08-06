@@ -194,8 +194,8 @@ nav ul li a:hover {
   .dropdown-content {
     visibility: hidden;
     opacity: 0;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 60px; /* Pas aan afhankelijk van hoogte van topbar */
     left: 0;
     width: 100%;
     background-color: #f8f8f8;
@@ -258,7 +258,6 @@ nav ul li a:hover {
   .block-2 {
     background-color: #777;
   }
-
 
 
 
