@@ -195,18 +195,26 @@ nav ul li a:hover {
     position: absolute;
     top: 100%;
     left: 0;
+    right: 0;
     width: 100vw;
     background-color: #f8f8f8;
     display: flex;
-    padding: 20px 40px;
+    padding: 40px 80px;
     box-sizing: border-box;
     border-top: 1px solid #ddd;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
   }
 
   .dropdown:hover .dropdown-content {
     visibility: visible;
     opacity: 1;
+  }
+
+  .dropdown-inner {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
   .dropdown-left {
