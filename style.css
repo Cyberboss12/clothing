@@ -167,6 +167,8 @@ nav ul li a:hover {
   .topbar {
     background-color: #fff;
     padding: 10px 0;
+    position: relative;
+    z-index: 1000;
   }
 
   .navbar {
@@ -195,10 +197,8 @@ nav ul li a:hover {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
-    width: 100vw;
+    width: 100%;
     background-color: #f8f8f8;
-    display: flex;
     padding: 40px 80px;
     box-sizing: border-box;
     border-top: 1px solid #ddd;
