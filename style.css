@@ -208,25 +208,22 @@ nav ul li a:hover {
   width: 100%;
 }
 
-/* DROPDOWN MENU FIXES */
+/* ------------ DIT IS DE MEGA MENU FIX ------------------- */
 .dropdown-content {
-  visibility: hidden;
-  opacity: 0;
-  position: fixed; /* <<< Belangrijk: nu fixed aan viewport */
-  top: 60px; /* <<< Zet dit gelijk aan de hoogte van je topbar */
+  display: none;
+  position: absolute;
+  top: 100%;
   left: 0;
-  width: 100%;
+  width: 100vw;
   background-color: #333;
   padding: 40px 80px;
   box-sizing: border-box;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 999;
   border-top: 1px solid #444;
 }
 
 .dropdown:hover .dropdown-content {
-  visibility: visible;
-  opacity: 1;
+  display: block;
 }
 
 .dropdown-inner {
@@ -255,7 +252,6 @@ nav ul li a:hover {
   position: relative;
 }
 
-/* Streepjes onder de woorden die even groot zijn als de tekst */
 .dropdown-left a::after {
   content: '';
   display: block;
