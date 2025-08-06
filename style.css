@@ -212,7 +212,7 @@ nav ul li a:hover {
 .dropdown-content {
   display: none;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 20px);
   left: 0;
   width: 100vw;
   background-color: #333;
@@ -246,10 +246,11 @@ nav ul li a:hover {
 }
 
 .dropdown-left a {
-  color: #fff;
+  /* color: #fff;
   font-size: 16px;
-  text-decoration: none;
+  text-decoration: none; */
   position: relative;
+  display: inline-block;
 }
 
 .dropdown-left a::after {
