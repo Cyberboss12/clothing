@@ -189,16 +189,33 @@ nav ul li a:hover {
     font-weight: 500;
     padding: 10px 15px;
     display: block;
+    position: relative;
+  }
+
+  .navbar a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #000;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .navbar a:hover::after {
+    width: 100%;
   }
 
   .dropdown-content {
     visibility: hidden;
     opacity: 0;
-    position: fixed;
-    top: 60px; /* Pas aan afhankelijk van hoogte van topbar */
+    position: absolute;
+    top: 100%; 
     left: 0;
-    width: 100%;
-    background-color: #f8f8f8;
+    width: 100vw;
+    background-color: #333;
     padding: 40px 80px;
     box-sizing: border-box;
     border-top: 1px solid #ddd;
@@ -231,9 +248,26 @@ nav ul li a:hover {
   }
 
   .dropdown-left a {
-    color: #333;
+    color: #fff;
     font-size: 16px;
     text-decoration: none;
+    position: relative;
+  }
+
+  .dropdown-left a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+  }
+
+ .dropdown-left a:hover::after {
+    width: 100%;
   }
 
   .dropdown-right {
