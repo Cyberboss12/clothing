@@ -94,10 +94,10 @@ footer {
 }
 
 /* 3: Hoofdnavigatie */
-.topbar {
-  background-color: #333; /* Zwart/donkergrijs */
+/* .topbar {
+  background-color: #333; 
   padding: 15px 0;
-}
+} */
 
 .navbar {
   list-style: none;
@@ -209,88 +209,6 @@ nav ul li a:hover {
 }
 
 /* ------------ DIT IS DE MEGA MENU FIX ------------------- */
-/* .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  background-color: #333;
-  padding: 40px 80px;
-  box-sizing: border-box;
-  z-index: 999;
-  border-top: 1px solid #444;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown-inner {
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.dropdown-left {
-  flex: 1;
-}
-
-.dropdown-left ul {
-  list-style: none;
-  padding: 0;
-}
-
-.dropdown-left li {
-  margin-bottom: 15px;
-}
-
-.dropdown-left a {
-  color: #fff;
-  font-size: 16px;
-  text-decoration: none;
-  position: relative;
-}
-
-.dropdown-left a::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 2px;
-  background: #fff;
-  transition: width 0.3s;
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-}
-
-.dropdown-left a:hover::after {
-  width: 100%;
-}
-
-.dropdown-right {
-  display: flex;
-  gap: 20px;
-}
-
-.color-block {
-  width: 200px;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
-}
-
-.block-1 {
-  background-color: #333;
-}
-
-.block-2 {
-  background-color: #777;
-} */
 
 .dropdown-content {
   display: none;
