@@ -294,7 +294,7 @@ nav ul li a:hover {
 
 .dropdown-content {
   display: none;
-  position: absolute;
+  position: fixed;
   top: calc(100% + 10px); /* iets lager onder de navbar */
   left: 0;
   right: 0;
