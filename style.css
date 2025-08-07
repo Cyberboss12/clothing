@@ -164,7 +164,7 @@ nav ul li a:hover {
 }
 
 /* 4: Dropdown menu men */
-.topbar {
+.main-navbar {
   background-color: #333;
   padding: 15px 0;
   position: relative;
@@ -174,37 +174,37 @@ nav ul li a:hover {
 .navbar {
   list-style: none;
   display: flex;
+  justify-content: center;
   margin: 0;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .navbar li {
   position: relative;
-  margin-right: 30px;
+  margin-right: 0 20px;
 }
 
-.navbar a {
+.navbar li a {
   text-decoration: none;
-  color: #000;
-  font-weight: 500;
+  color: #C3A580;
+  font-size: 16px;
   padding: 10px 15px;
-  display: block;
+  display: inline-block;
   position: relative;
 }
 
-.navbar a::after {
-  content: '';
-  display: block;
+.navbar li a::after {
+  content: "";
   width: 0;
   height: 2px;
-  background: #000;
-  transition: width 0.3s;
+  background: #C3A580;
+  transition: width 0.3s ease;
   position: absolute;
   bottom: 0;
   left: 0;
 }
 
-.navbar a:hover::after {
+.navbar li a:hover::after {
   width: 100%;
 }
 
