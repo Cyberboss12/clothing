@@ -5,16 +5,16 @@
 }
 
 /* 1: Algemene styling */
-/* body {
+body {
     font-family: 'Special Elite';
     line-height: 1.6;
     margin: 0;
     padding: 0;
     color: #333;
-} */
+}
 
 /* Header styling */
-/* header {
+header {
     color: #333;
     padding: 40px 20px;
     text-align: left;
@@ -30,7 +30,7 @@ header p {
 } */
 
 /* Main content styling */
-/* main {
+main {
     padding: 0 20px;
     max-width: 800px;
     margin: 0 auto;
@@ -45,7 +45,7 @@ main p {
 } */
 
 /* Button styling */
-/* button {
+button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -60,13 +60,13 @@ button:hover {
     background-color: #555;
 } */
 
-/* Footer styling */
-/* footer {
+/* Footer styling  */
+footer {
     text-align: left;
     padding: 20px;
     color: #333;
     margin-top: 40px;
-} */
+}
 
 /* 2: Bovenste info-balk */
 .info-bar {
@@ -290,6 +290,7 @@ nav ul li a:hover {
 .block-2 {
   background-color: #777;
 }
+
 
 
 
