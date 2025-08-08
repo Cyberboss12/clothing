@@ -206,7 +206,7 @@ nav ul li a:hover {
 }
 
 .navbar li a:hover::after {
-  width: 100%;
+  width: 100vw;
 }
 
 /* Dropdown inhoud */
@@ -215,6 +215,7 @@ nav ul li a:hover {
   position: absolute;
   top: 100%;
   left: 0;
+  right: 0;
   width: 100vw;
   background-color: #333;
   padding: 40px 80px;
@@ -267,7 +268,7 @@ nav ul li a:hover {
 }
 
 .dropdown-left a:hover::after {
-  width: 100%;
+  width: 100vw;
 }
 
 .dropdown-right {
