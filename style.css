@@ -230,7 +230,7 @@ nav ul li a:hover {
 /* Dropdown layout */
 .dropdown-inner {
   display: flex;
-  max-width: 1400px;
+  /* max-width: 1400px; */
   margin: 0 auto;
 }
 
