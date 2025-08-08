@@ -94,10 +94,10 @@ footer {
 }
 
 /* 3: Hoofdnavigatie */
-/* .topbar {
-  background-color: #333; 
-  padding: 15px 0;
-} */
+ .topbar {
+  position: relative;
+  z-index: 10;
+} 
 
 .navbar {
   list-style: none;
