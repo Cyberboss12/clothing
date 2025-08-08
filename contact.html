@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mijn Eerste Website</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style5.css" />
 </head>
 <body>
 
@@ -19,19 +19,43 @@
 
 <!-- Hoofdnavigatie -->
 <div class="topbar">
+  <div class="main-navbar">
     <ul class="navbar">
       <li><a href="index.html">Mijn merk</a></li>
-      <li><a href="men.html">Men</a></li>
+      <!-- <li><a href="men.html">Men</a></li> -->
+
+<!-- Dropdown Menu voor "Men" -->
+    <li class="dropdown">
+      <a href="men.html">Men</a>
+      <div class="dropdown-content">
+        <div class="dropdown-inner">
+          <div class="dropdown-left">
+            <ul>
+              <li><a href="#">Kleding</a></li>
+              <li><a href="#">Schoenen</a></li>
+              <li><a href="#">Accessoires</a></li>
+              <li><a href="#">Cadeau's</a></li>
+            </ul>
+          </div>
+          <div class="dropdown-right">
+            <div class="color-block block-1">Vlak 1</div>
+            <div class="color-block block-2">Vlak 2</div>
+          </div>
+        </div>
+      </div>
+    </li>
+
       <li><a href="women.html">Women</a></li>
       <li><a href="children.html">Children</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
     </ul>
+  </div>
 </div>>
 
-<div id = "contact" class ="tab-content">
+<!-- <div id = "contact" class ="tab-content"> -->
   <h2>Contact</h2>
   <p>Keep in touch with our servicechat</p>
-</div>
+<!-- </div> -->
 
 </body>
 </html>
