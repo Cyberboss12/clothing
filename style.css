@@ -166,68 +166,68 @@ nav ul li a:hover {
 /* 4: Dropdown menu men */
 .main-navbar {
   background-color: #333;
-  padding: 15px 0;
   position: relative;
   z-index: 1000;
 }
 
+/* Navigatielinks */
 .navbar {
   list-style: none;
   display: flex;
   justify-content: center;
   margin: 0;
   padding: 0;
+  gap: 40px;
 }
 
 .navbar li {
   position: relative;
-  margin-right: 0 20px;
 }
 
 .navbar li a {
-  text-decoration: none;
   color: #C3A580;
+  text-decoration: none;
   font-size: 16px;
-  padding: 10px 15px;
+  padding: 15px 10px;
   display: inline-block;
   position: relative;
 }
 
+/* Hover onderstreping */
 .navbar li a::after {
   content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
   width: 0;
   height: 2px;
-  background: #C3A580;
+  background-color: #C3A580;
   transition: width 0.3s ease;
-  position: absolute;
-  bottom: 0;
-  left: 0;
 }
 
 .navbar li a:hover::after {
   width: 100%;
 }
 
-/* ------------ DIT IS DE MEGA MENU FIX ------------------- */
-
+/* Dropdown inhoud */
 .dropdown-content {
   display: none;
-  position: fixed;
-  top: calc(100% + 10px); /* iets lager onder de navbar */
+  position: absolute;
+  top: 100%;
   left: 0;
-  right: 0;
-  width: 100vw; /* volledig scherm vullen */
+  width: 100vw;
   background-color: #333;
   padding: 40px 80px;
   box-sizing: border-box;
-  z-index: 999;
   border-top: 1px solid #444;
 }
 
+/* Toon dropdown bij hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
+/* Dropdown layout */
 .dropdown-inner {
   display: flex;
   max-width: 1400px;
@@ -251,8 +251,8 @@ nav ul li a:hover {
   color: #fff;
   font-size: 16px;
   text-decoration: none;
+  display: inline-block;
   position: relative;
-  display: inline-block; /* belangrijk: zorgt dat de ::after alleen zo breed is als het woord */
 }
 
 .dropdown-left a::after {
@@ -260,14 +260,14 @@ nav ul li a:hover {
   position: absolute;
   bottom: -5px;
   left: 0;
-  height: 2px;
   width: 0;
+  height: 2px;
   background: #fff;
   transition: width 0.3s ease;
 }
 
 .dropdown-left a:hover::after {
-  width: 100%; /* 100% van de tekstbreedte, niet van de hele rij */
+  width: 100%;
 }
 
 .dropdown-right {
@@ -292,7 +292,6 @@ nav ul li a:hover {
 .block-2 {
   background-color: #777;
 }
-
 
 
 
