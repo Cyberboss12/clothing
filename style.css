@@ -167,7 +167,8 @@ nav ul li a:hover {
 .main-navbar {
   background-color: #333;
   position: relative;
-  z-index: 1000;
+  z-index: 10;
+  width: 100%;
 }
 
 /* Navigatielinks */
