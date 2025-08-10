@@ -220,7 +220,7 @@ nav ul li a:hover {
   background-color: #333;
   padding: 40px;
   box-sizing: border-box;
-  border-top: none;
+  border-top: 1px solid #444;
 }
 
 /* Toon dropdown bij hover */
