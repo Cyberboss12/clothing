@@ -221,6 +221,7 @@ nav ul li a:hover {
   padding: 40px;
   box-sizing: border-box;
   border-top: 1px solid #444;
+  overflow-x: hidden;
 }
 
 /* Toon dropdown bij hover */
