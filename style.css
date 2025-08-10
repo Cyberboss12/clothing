@@ -221,7 +221,6 @@ nav ul li a:hover {
   padding: 40px;
   box-sizing: border-box;
   border-top: 1px solid #444;
-  overflow-x: hidden;
 }
 
 /* Toon dropdown bij hover */
@@ -254,7 +253,7 @@ nav ul li a:hover {
   font-size: 16px;
   text-decoration: none;
   display: inline-block;
-  position: relative;
+  position: absolute;
 }
 
 .dropdown-left a::after {
