@@ -215,11 +215,13 @@ nav ul li a:hover {
   position: fixed;
   top: 100%;
   left: 0;
+  right: 0;
   width: 100vw;
   background-color: #333;
-  padding: 40px 80px;
+  padding: 40px;
   box-sizing: border-box;
   border-top: 1px solid #444;
+  
 }
 
 /* Toon dropdown bij hover */
