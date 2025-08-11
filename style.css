@@ -217,7 +217,7 @@ nav ul li a:hover {
   left: 0;
   width: 100vw;
   background-color: #333;
-  padding: 40px;
+  padding: 40px 80px;
   box-sizing: border-box;
   border-top: 1px solid #444;
   
