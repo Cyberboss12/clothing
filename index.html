@@ -52,25 +52,7 @@
   </div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const dropdown = document.querySelector(".dropdown");
-  const dropdownContent = dropdown.querySelector(".dropdown-content");
 
-  // Toggle dropdown bij klik op de link
-  dropdown.querySelector("a").addEventListener("click", function (e) {
-    e.preventDefault(); // voorkomt dat hij naar men.html gaat
-    dropdownContent.classList.toggle("show");
-  });
-
-  // Sluit dropdown als je buiten klikt
-  document.addEventListener("click", function (e) {
-    if (!dropdown.contains(e.target)) {
-      dropdownContent.classList.remove("show");
-    }
-  });
-});
-</script>
 
 <!-- dropmenu voor men -->
 

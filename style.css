@@ -228,10 +228,6 @@ nav ul li a:hover {
   display: block;
 }
 
-.dropdown-content.show {
-  display: block;
-}
-
 /* Dropdown layout */
 .dropdown-inner {
   display: flex;
