@@ -212,7 +212,7 @@ nav ul li a:hover {
 /* Dropdown inhoud */
 .dropdown-content {
   display: block; 
-  position: relative;
+  position: fixed;
   top: 100px;
   left: 0;
   width: 100vw;
