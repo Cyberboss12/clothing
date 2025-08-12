@@ -224,10 +224,10 @@ nav ul li a:hover {
 }
 
 /* Toon dropdown bij hover */
-.dropdown:hover .dropdown-content, 
+/* .dropdown:hover .dropdown-content, 
 .dropdown-content:hover {
   display: block;
-}
+} */
 
 /* Dropdown layout */
 .dropdown-inner {
