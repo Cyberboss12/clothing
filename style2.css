@@ -211,16 +211,23 @@ nav ul li a:hover {
 
 /* Dropdown inhoud */
 .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
+  display: none; 
+  position: fixed;
+  top: 100px;
   left: 0;
   width: 100vw;
   background-color: #333;
   padding: 40px 80px;
   box-sizing: border-box;
   border-top: 1px solid #444;
+  overflow-x: hidden;
 }
+
+/* De vorige wijzigingen
+display: none;
+position: absolute;
+overflow-x: hidden;
+top: 100%; */
 
 /* Toon dropdown bij hover */
 .dropdown:hover .dropdown-content {
