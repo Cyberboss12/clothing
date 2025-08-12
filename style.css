@@ -213,7 +213,7 @@ nav ul li a:hover {
 .dropdown-content {
   display: none;
   position: fixed;
-  top: 100%;
+  top: 60px;
   left: 0;
   width: 100vw;
   background-color: #333;
