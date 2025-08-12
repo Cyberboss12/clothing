@@ -82,9 +82,9 @@ footer {
 }
 
 .info-center {
-  position: static;
+  position: absolute;
   left: 50%;
-  /* transform: translateX(-50%); */
+  transform: translateX(-50%);
 }
 
 .info-right {
