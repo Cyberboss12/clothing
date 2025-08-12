@@ -75,7 +75,7 @@ footer {
   color: white;
   padding: 8px 20px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   position: relative;
