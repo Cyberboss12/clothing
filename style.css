@@ -182,6 +182,7 @@ nav ul li a:hover {
 
 .navbar li {
   position: relative;
+  padding: 0 15px;
 }
 
 .navbar li a {
