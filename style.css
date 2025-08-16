@@ -168,21 +168,7 @@ nav ul li a:hover {
   position: relative;
   z-index: 10;
   width: 100%;
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between; 
-  padding: 0 40px; */
 }
-
-/* .brand {
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: 8px;       
-  color: #C3A580;            
-  text-transform: uppercase; 
-  font-family: "Special Elite"; 
-  cursor: pointer;
-} */
 
 /* Navigatielinks */
 .navbar {
@@ -196,7 +182,6 @@ nav ul li a:hover {
 
 .navbar li {
   position: relative;
-  /* padding: 0 15px; */
 }
 
 .navbar li a {
@@ -314,6 +299,3 @@ top: 100%; */
 .block-2 {
   background-color: #777;
 }
-
-
-
