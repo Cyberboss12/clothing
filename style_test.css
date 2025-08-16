@@ -176,7 +176,7 @@ nav ul li a:hover {
 
 /* Merknaam links */
 .main-navbar .brand {
-  position: absolute;
+  position: relative;
   left: 65px; /* afstand vanaf de linkerkant */
   font-size: 24px;
   font-weight: bold;
