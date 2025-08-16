@@ -170,6 +170,16 @@ nav ul li a:hover {
   width: 100%;
 }
 
+.brand {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 8px;       
+  color: #C3A580;            
+  text-transform: uppercase; 
+  font-family: "Special Elite"; 
+  cursor: pointer;
+}
+
 /* Navigatielinks */
 .navbar {
   list-style: none;
