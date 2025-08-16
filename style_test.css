@@ -185,6 +185,12 @@ nav ul li a:hover {
   font-family: 'Times New Roman', serif;
   color: #C3A580;
   text-decoration: none;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 60px;
 }
 
 /* Navigatielinks */
