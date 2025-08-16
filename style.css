@@ -168,10 +168,10 @@ nav ul li a:hover {
   position: relative;
   z-index: 10;
   width: 100%;
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: space-between; 
-  padding: 0 40px;
+  padding: 0 40px; */
 }
 
 /* .brand {
