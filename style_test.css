@@ -168,16 +168,16 @@ nav ul li a:hover {
   align-items: center;
   justify-content: center; /* standaard: alles in het midden */
   position: relative;      /* zodat we absolute posities kunnen gebruiken */
-  padding: 0 60px;
   background-color: #333;
   width: 100%;
+  height: 70px;
   box-sizing: border-box;
 }
 
 /* Merknaam links */
 .main-navbar .brand {
-  position: relative;
-  left: 65px; /* afstand vanaf de linkerkant */
+  position: absolute;
+  left: 50px; /* afstand vanaf de linkerkant */
   font-size: 24px;
   font-weight: bold;
   letter-spacing: 8px;  /* luxe uitstraling */
@@ -185,12 +185,12 @@ nav ul li a:hover {
   font-family: 'Times New Roman', serif;
   color: #C3A580;
   text-decoration: none;
-  height: 90px;
+  /* height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 60px;
+  padding: 0 60px; */
 }
 
 /* Navigatielinks */
