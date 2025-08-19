@@ -300,3 +300,24 @@ top: 100%; */
   background-color: #777;
 }
 
+.paper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 40px;
+  justify-items: center;
+  padding: 40px;
+}
+
+.paper {
+  width: 220px;
+  height: 70px;
+  background: url("brown_paper.png") no-repeat center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #1d2e6e; /* donkerblauw, zoals op je voorbeeld */
+  transform: rotate(-3deg); /* elk element kan een andere draai krijgen */
+  text-align: center;
+}
