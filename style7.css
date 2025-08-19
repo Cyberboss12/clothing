@@ -300,32 +300,3 @@ top: 100%; */
   background-color: #777;
 }
 
-.split-container {
-  display: flex;
-  height: 100vh; /* vult volledige hoogte van het scherm */
-}
-
-.split-left, 
-.split-right {
-  flex: 1; /* beide nemen 50% van de breedte */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-}
-
-.split-left {
-  background-color: #f9f9f9; /* zachte achtergrondkleur (optioneel) */
-  text-align: left;
-}
-
-.split-right {
-  background-color: #fff; /* wit of transparant */
-}
-
-.split-right img {
-  max-width: 100%;
-  height: auto;
-  object-fit: cover; /* zorgt dat afbeelding netjes schaalt */
-  border-radius: 10px; /* optioneel: afgeronde hoeken */
-}
