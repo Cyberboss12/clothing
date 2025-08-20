@@ -394,12 +394,12 @@ top: 100%; */
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(60px, 8vw, 300px);
-  width: min(1200px, 100%);
+  gap: 200px;
+  width: auto;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: clamp(40px, 8vw, 100px) 0;
+  padding: 100px 0;
   background: #fff; /* zodat ze losstaan van je donkere navbar */
-  box-sizing: border-box;
 }
 
 /* Eén touw met borden */
