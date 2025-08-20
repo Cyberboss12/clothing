@@ -300,3 +300,91 @@ top: 100%; */
   background-color: #777;
 }
 
+/* Scene */
+.board-scene{
+  position:relative;
+  min-height:140vh;           /* genoeg ruimte om te “strooien” */
+  padding:80px 6vw 120px;
+  overflow:hidden;
+  background:#fff;
+}
+
+/* Touwtjes in het midden */
+.strings{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:28px;
+  pointer-events:none;
+  z-index:0;                  /* achter de boards */
+  padding-top:10px;
+}
+.string{
+  width:2px;
+  height:60vh;
+  background:linear-gradient(#111,#444);
+  box-shadow:0 0 1px rgba(0,0,0,.25);
+  position:relative;
+}
+.string::after{               /* klein knoopje onderaan */
+  content:"";
+  position:absolute;
+  bottom:-6px; left:50%;
+  width:8px;height:8px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#222;
+}
+
+/* Grid die de pagina vult */
+.board-grid{
+  position:relative;
+  z-index:1;                  /* boven de touwtjes */
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:64px 96px;
+  align-content:start;
+}
+
+/* Houten kaartjes */
+.board{
+  aspect-ratio:11/3;          /* langwerpige lat */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 20px;
+  text-align:center;
+  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:.5px;
+  color:#243A8F;              /* blauw zoals voorbeeld */
+  text-shadow:0 1px 0 rgba(255,255,255,.25);
+
+  /* >>> VERVANG onderstaande URL door jouw gebrand-hout texture */
+  background:url("YOUR-BURNT-WOOD-TEXTURE.jpg") center/cover no-repeat;
+
+  border-radius:4px;
+  box-shadow:
+    0 10px 18px rgba(0,0,0,.18),
+    0 2px 0 rgba(0,0,0,.25) inset;
+  transform:rotate(0deg);
+  transition:transform .2s ease;
+}
+
+/* Vast wat variatie zonder JS (sommige balken gedraaid) */
+.board.rot-1{ transform:rotate(-5deg); }
+.board.rot-2{ transform:rotate(4deg);  }
+.board.rot-3{ transform:rotate(-8deg); }
+
+/* Kleine interactie (optioneel) */
+.board:hover{ transform:scale(1.02) rotate(0deg); }
+
+/* Responsiveness */
+@media (max-width: 768px){
+  .board-scene{ padding:60px 4vw 80px; }
+  .strings{ display:none; }   /* touwtjes verbergen op mobiel */
+  .board-grid{ gap:36px 24px; }
+}
+
