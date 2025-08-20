@@ -395,9 +395,8 @@ top: 100%; */
   justify-content: center;
   align-items: flex-start;
   gap: 300px;
-  width: 100vw;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto;
+  max-width: 100%;
   padding: 100px 0;
   background: #fff; /* zodat ze losstaan van je donkere navbar */
 }
