@@ -388,3 +388,68 @@ top: 100%; */
   .board-grid{ gap:36px 24px; }
 }
 
+/* Strings sectie */
+.strings-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin-top: 40px; /* ruimte onder navbar */
+  padding: 60px 0;
+  position: relative;
+  background: #fff; /* zodat ze losstaan van je donkere navbar */
+}
+
+/* Eén touw met borden */
+.string {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  position: relative;
+  padding-top: 20px;
+}
+
+.string::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #8B5A2B 0,
+    #8B5A2B 6px,
+    #A0522D 6px,
+    #A0522D 12px
+  );
+  border-radius: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+/* Borden */
+.board {
+  background: url("YOUR-BURNT-WOOD-TEXTURE.jpg") center/cover no-repeat;
+  color: #243A8F;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 20px 40px;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,.3);
+  min-width: 220px;
+  text-align: center;
+  transform-origin: top center; /* slingeren vanaf touw */
+  display: inline-block;
+}
+
+/* Swing animatie */
+@keyframes swing {
+  0%   { transform: rotate(-3deg); }
+  50%  { transform: rotate(3deg); }
+  100% { transform: rotate(-3deg); }
+}
+
+.board.swing {
+  animation: swing 4s ease-in-out infinite;
+}

@@ -51,40 +51,40 @@
     <li><a href="contact.html">Contact</a></li>
     <li><a href="discover.html" class="active">Discover</a></li>
 
-<!-- Touw en borden -->
-<section class="board-scene">
-  <!-- Touwtjes in het midden -->
-  <div class="strings">
-    <span class="string"></span>
-    <span class="string"></span>
-    <span class="string"></span>
-    <span class="string"></span>
-    <span class="string"></span>
-  </div>
+  <!-- Nieuwe sectie met touwen + borden -->
+  <section class="strings-wrapper">
+    <div class="string">
+      <div class="board">IT’S REAL</div>
+      <div class="board">FREE THINKING</div>
+      <div class="board">BEYOND BORDERS</div>
+    </div>
 
-  <!-- Houten “kaartjes” -->
-  <div class="board-grid">
-    <div class="board rot-1">IT’S REAL</div>
-    <div class="board">FREE THINKING</div>
-    <div class="board rot-2">BEYOND BORDERS</div>
-    <div class="board">QUESTION EVERYTHING</div>
-    <div class="board rot-3">SUSPEND DISBELIEF</div>
-    <div class="board">WORKING DOCUMENT</div>
-    <div class="board rot-2">TOUCH OF HAND</div>
-    <div class="board">AGE OF IMAGINATION</div>
-    <div class="board rot-1">HUMAN</div>
-  </div>
-</section>
+    <div class="string">
+      <div class="board">QUESTION EVERYTHING</div>
+      <div class="board">SUSPEND DISBELIEF</div>
+      <div class="board">WORKING DOCUMENT</div>
+    </div>
+
+    <div class="string">
+      <div class="board">TOUCH OF HAND</div>
+      <div class="board">AGE OF IMAGINATION</div>
+      <div class="board">HUMAN</div>
+    </div>
+  </section>
 
 <script>
-  // Geef elk board een subtiele random rotatie (-6° .. +6°),
-  // behalve de expliciete .rot-* varianten.
-  document.querySelectorAll('.board-grid .board:not([class*="rot-"])')
-    .forEach(el=>{
-      const deg = (Math.random()*12 - 6).toFixed(1);
-      el.style.transform = `rotate(${deg}deg)`;
-    });
+document.querySelectorAll('.board').forEach(el => {
+  // Willekeurige beginrotatie (-6° tot +6°)
+  const deg = (Math.random() * 12 - 6).toFixed(1);
+  el.style.transform = `rotate(${deg}deg)`;
+
+  // Swing-animatie met random delay
+  el.classList.add('swing');
+  const delay = (Math.random() * 4).toFixed(2); // tussen 0 - 4s
+  el.style.animationDelay = `${delay}s`;
+});
 </script>
+
 
 
 
