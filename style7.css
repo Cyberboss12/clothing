@@ -319,6 +319,10 @@ top: 100%; */
   margin: 0 auto;
   padding: 100px 0;
   background: #fff; /* zodat ze losstaan van je donkere navbar */
+  margin-left: auto;
+  margin-right: auto;
+  left: 50%;
+  transform: translate(-50%);
 }
 
 /* Eén touw met borden */
