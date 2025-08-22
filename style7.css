@@ -1,8 +1,13 @@
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Misschien handig voor later: */
+
+/* Responsiveness */
+/* @media (max-width: 768px){
+  .board-scene{ padding:60px 4vw 80px; }
+  .strings{ display:none; }   touwtjes verbergen op mobiel
+  .board-grid{ gap:36px 24px; }
 } */
+
+/* Hier beginnen alle codes: */
 
 /* 1: Algemene styling */
 body {
@@ -300,47 +305,35 @@ top: 100%; */
   background-color: #777;
 }
 
-/* Responsiveness */
-@media (max-width: 768px){
-  .board-scene{ padding:60px 4vw 80px; }
-  .strings{ display:none; }   /* touwtjes verbergen op mobiel */
-  .board-grid{ gap:36px 24px; }
-}
-
-/* Strings sectie */
+/* Wrapper: centreert de hele sectie */
 .strings-wrapper {
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 120px;
-  width: auto;
+  justify-content: center;   /* zet de kolommen in het midden */
+  gap: 150px;                /* afstand tussen de 3 touwen */
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0 auto;            /* centreren op de pagina */
   padding: 100px 0;
-  background: #fff; /* zodat ze losstaan van je donkere navbar */
-  margin-left: auto;
-  margin-right: auto;
-  left: 50%;
-  transform: translate(-50%);
+  position: relative;
+  background: #fff;          /* witte achtergrond los van je navbar */
 }
 
 /* Eén touw met borden */
 .string {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 200px;
+  align-items: flex-start;   /* bordjes starten links naast het touw */
+  gap: 180px;                /* afstand tussen de bordjes */
   position: relative;
-  padding-top: 20px;
 }
 
+/* Het touw zelf */
 .string::before {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 6px;
+  width: 4px;
+  left: 0;                   /* lijn komt links in de kolom */
   background: repeating-linear-gradient(
     to bottom,
     #8B5A2B 0,
@@ -348,15 +341,13 @@ top: 100%; */
     #A0522D 6px,
     #A0522D 12px
   );
-  border-radius: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: -1;
+  border-radius: 2px;
+  z-index: 0;
 }
 
-/* Borden */
+/* Bordjes */
 .board {
-  background: url("YOUR-BURNT-WOOD-TEXTURE.jpg") center/cover no-repeat;
+  background: #fff;          /* eventueel vervangen door wood texture */
   color: #243A8F;
   font-weight: bold;
   text-transform: uppercase;
@@ -365,8 +356,12 @@ top: 100%; */
   box-shadow: 0 8px 16px rgba(0,0,0,.3);
   min-width: 220px;
   text-align: center;
-  transform-origin: top center; /* slingeren vanaf touw */
+  transform-origin: top center;
   display: inline-block;
+
+  position: relative;
+  z-index: 1;                /* zorgt dat bordjes altijd vóór het touw staan */
+  margin-left: 40px;         /* bordjes schuiven naast het touw */
 }
 
 /* Swing animatie */
