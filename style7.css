@@ -311,7 +311,7 @@ top: 100%; */
   justify-content: center;   /* zet de kolommen in het midden */
   gap: 150px;                /* afstand tussen de 3 touwen */
   max-width: none;
-  /* margin: 0 auto;            centreren op de pagina */
+  margin: 0 auto;            /*centreren op de pagina*/
   width: 100%;
   padding: 100px 0;
   position: relative;
