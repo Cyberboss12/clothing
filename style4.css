@@ -223,12 +223,6 @@ nav ul li a:hover {
   overflow-x: hidden;
 }
 
-/* De vorige wijzigingen
-display: none;
-position: absolute;
-overflow-x: hidden;
-top: 100%; */
-
 /* Toon dropdown bij hover */
 .dropdown:hover .dropdown-content {
   display: block;

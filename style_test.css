@@ -1,9 +1,11 @@
+/* Touwen en balken gecentreerd
+
 body {
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;   /* centreert horizontaal */
-  align-items: flex-start;   /* start bovenaan */
+  justify-content: center;    centreert horizontaal 
+  align-items: flex-start;    start bovenaan 
   min-height: 100vh;
   background: #eee;
 }
@@ -44,7 +46,7 @@ body {
 }
 
 .board {
-  background: #ddd; /* testkleur, vervang later door jouw texture */
+  background: #ddd; 
   color: #243A8F;
   font-weight: bold;
   text-transform: uppercase;
@@ -55,4 +57,4 @@ body {
   text-align: center;
   position: relative;
   z-index: 1;
-}
+} */
