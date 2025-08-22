@@ -16,9 +16,9 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start; */
 }
 
 /* Header styling */
@@ -316,8 +316,8 @@ top: 100%; */
   gap: 120px;                /* afstand tussen de 3 touwen */
   margin: 0 auto;            /*centreren op de pagina*/
   padding: 100px 0;
-  /* max-width: none;
-  width: 100%;
+  max-width: 100%;
+  /*width: 100%;
   position: relative; */
   background: #fff;          /* witte achtergrond los van je navbar */
 }
