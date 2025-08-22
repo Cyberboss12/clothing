@@ -310,8 +310,9 @@ top: 100%; */
   display: flex;
   justify-content: center;   /* zet de kolommen in het midden */
   gap: 150px;                /* afstand tussen de 3 touwen */
-  max-width: 1000px;
-  margin: 0 auto;            /* centreren op de pagina */
+  max-width: none;
+  /* margin: 0 auto;            centreren op de pagina */
+  width: 100%;
   padding: 100px 0;
   position: relative;
   background: #fff;          /* witte achtergrond los van je navbar */
