@@ -309,12 +309,13 @@ top: 100%; */
 .strings-wrapper {
   display: flex;
   justify-content: center;   /* zet de kolommen in het midden */
-  gap: 150px;                /* afstand tussen de 3 touwen */
-  max-width: none;
+  align-items: flex-start;
+  gap: 120px;                /* afstand tussen de 3 touwen */
   margin: 0 auto;            /*centreren op de pagina*/
-  width: 100%;
   padding: 100px 0;
-  position: relative;
+  /* max-width: none;
+  width: 100%;
+  position: relative; */
   background: #fff;          /* witte achtergrond los van je navbar */
 }
 
@@ -322,7 +323,7 @@ top: 100%; */
 .string {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;   /* bordjes starten links naast het touw */
+  align-items: center;   /* bordjes starten links naast het touw */
   gap: 180px;                /* afstand tussen de bordjes */
   position: relative;
 }
@@ -333,8 +334,7 @@ top: 100%; */
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 4px;
-  left: 0;                   /* lijn komt links in de kolom */
+  width: 4px;                 
   background: repeating-linear-gradient(
     to bottom,
     #8B5A2B 0,
@@ -357,12 +357,8 @@ top: 100%; */
   box-shadow: 0 8px 16px rgba(0,0,0,.3);
   min-width: 220px;
   text-align: center;
-  transform-origin: top center;
-  display: inline-block;
-
   position: relative;
   z-index: 1;                /* zorgt dat bordjes altijd vóór het touw staan */
-  margin-left: 40px;         /* bordjes schuiven naast het touw */
 }
 
 /* Swing animatie */
