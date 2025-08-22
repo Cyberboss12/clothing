@@ -229,6 +229,7 @@ nav ul li a:hover {
   box-sizing: border-box;
   border-top: 1px solid #444;
   overflow-x: hidden;
+  z-index: 9999;
 }
 
 /* De vorige wijzigingen
