@@ -4,10 +4,10 @@ const products = [
   { img: "afbeeldingen/model1.JPG", label: "Women" },
   { img: "afbeeldingen/model1.JPG", label: "Children" },
   { img: "afbeeldingen/model1.JPG", label: "Discover" },
-  { img: "afbeeldingen/model1.JPG", label: "New 1" },
-  { img: "afbeeldingen/model1.JPG", label: "New 2" },
-  { img: "afbeeldingen/model1.JPG", label: "New 3" },
-  { img: "afbeeldingen/model1.JPG", label: "New 4" }
+  { img: "afbeeldingen/model1.JPG", label: "Meer" },
+  { img: "afbeeldingen/model1.JPG", label: "Meer" },
+  { img: "afbeeldingen/model1.JPG", label: "Meer" },
+  { img: "afbeeldingen/model1.JPG", label: "En meer" }
   // Voeg hier extra producten toe
 ];
 
