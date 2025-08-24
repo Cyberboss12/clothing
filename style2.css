@@ -331,9 +331,9 @@ header h1 {
   /* height: 475px; */
 }
 
-.product:hover {
+/* .product:hover {
   transform: translateY(-5px);
-}
+} */
 
 .product img {
   width: 100%;
