@@ -35,12 +35,13 @@ function loadProducts() {
 
 // Scroll event: laad nieuwe producten als gebruiker bijna onderaan is
 window.addEventListener('scroll', () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+  // if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     if (index < products.length) {
       loadProducts();
-    }
+    // }
   }
 });
 
 // Initial load
 loadProducts();
+
