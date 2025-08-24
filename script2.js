@@ -48,7 +48,5 @@ window.addEventListener('scroll', () => {
 });
 
 // Initial load
-function loadProducts() {
-  console.log("Nieuwe batch geladen:", slice);
-};
+loadProducts();
 
