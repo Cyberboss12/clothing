@@ -328,6 +328,7 @@ header h1 {
   transition: transform 0.3s; */
   position: relative;
   overflow: hidden;
+  height: 500px;
 }
 
 .product:hover {
