@@ -327,7 +327,7 @@ header h1 {
   text-align: center;
   transition: transform 0.3s; */
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* height: 475px; */
   display: flex;
   flex-direction: column;

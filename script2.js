@@ -11,16 +11,14 @@ const products = [
   { img: "afbeeldingen/model1.JPG", label: "9" },
   { img: "afbeeldingen/model1.JPG", label: "10" },
   { img: "afbeeldingen/model1.JPG", label: "11" },
-  { img: "afbeeldingen/model1.JPG", label: "12" },
-
-  // Voeg hier extra producten toe
+  { img: "afbeeldingen/model1.JPG", label: "12" }
 ];
 
 const grid = document.getElementById('productGrid');
 let index = 0;
 const batchSize = 4;
 
-// Functie om producten toe te voegen
+// Functie om een batch producten toe te voegen
 function loadProducts() {
   const slice = products.slice(index, index + batchSize);
   slice.forEach(p => {
@@ -31,22 +29,29 @@ function loadProducts() {
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(productDiv);
-
-    // Animatie bij verschijnen
     setTimeout(() => productDiv.classList.add('loaded'), 50);
   });
   index += batchSize;
 }
 
-// Scroll event: laad nieuwe producten als gebruiker bijna onderaan is
+// Zorg dat er altijd genoeg content is om te scrollen
+function ensureScrollable() {
+  while (document.body.scrollHeight <= window.innerHeight && index < products.length) {
+    loadProducts();
+  }
+}
+
+// Initial load
+loadProducts();
+ensureScrollable();
+
+// Infinite scroll bij bijna onderaan
 window.addEventListener('scroll', () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
     if (index < products.length) {
       loadProducts();
+      ensureScrollable();
     }
   }
 });
-
-// Initial load
-loadProducts();
 
