@@ -3,7 +3,10 @@ const messages = [
   "Welkom bij onze webshop!",
   "Gratis verzending vanaf €50",
   "Vandaag: 10% korting op alle tassen",
-  "Nieuw binnen: lente collectie 🌸"
+  "Nieuw binnen: lente collectie 🌸",
+  "Sign up to recieve 15% off on your next order!",
+  "Free shipping on orders above €150",
+  "Sign up to our community newsletter!"
 ];
 
 const infoMessage = document.getElementById('infoMessage');
