@@ -16,8 +16,9 @@ const products = [
 const grid = document.getElementById('productGrid');
 let index = 0;
 const batchSize = 4;
-let loading = false; // voorkomt dat meerdere batches tegelijk geladen worden
+let loading = false;
 
+// Functie om producten te laden
 function loadProducts() {
   if (index >= products.length) return;
 
@@ -39,14 +40,20 @@ function loadProducts() {
 
   index += batchSize;
   loading = false;
+
+  // Controleer of pagina nog scrollbaar moet zijn
+  if (document.documentElement.scrollHeight <= window.innerHeight && index < products.length) {
+    loadProducts(); // laad extra batches totdat scroll mogelijk is
+  }
 }
 
-// Scroll-event: laad volgende rij wanneer bijna onderaan
+// Scroll-event: laad volgende batch als bijna onderaan
 window.addEventListener('scroll', () => {
   if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10 && !loading) {
     loadProducts();
   }
 });
 
-// Start met eerste rij
+// Start met eerste batch
 loadProducts();
+
