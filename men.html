@@ -4,16 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mijn Eerste Website</title>
-  <link rel="stylesheet" href="style2.css" />
+  <link rel="stylesheet" href="style_test.css" />
 </head>
 <body>
 
 <!-- Bovenste Info-balk -->
-<div class="info-bar">
+<!-- <div class="info-bar">
   <div class="info-center">Gratis levering vanaf €50</div>
   <div class="info-right">
     <span>NL Nederlands</span>
     <span>Stores</span>
+  </div>
+</div> -->
+
+<div class="info-bar">
+  <div class="info-left">Gratis verzending vanaf €50</div>
+  <div class="info-center" id="infoMessage">Welkom bij onze webshop!</div>
+  <div class="info-right">
+    <a href="#">Contact</a>
+    <a href="#">Help</a>
   </div>
 </div>
 
@@ -64,7 +73,19 @@
     <h1>Welkom bij onze collectie</h1>
   </header>
 
-  <section class="grid" id="productGrid">
+  <!-- Content -->
+  <main>
+    <h2>Producten</h2>
+    <p>Hier komt de productgrid met infinite scroll...</p>
+    <div id="productGrid" class="grid"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Mijn Webshop</p>
+  </footer>
+
+  <!-- <section class="grid" id="productGrid"> -->
     <!-- <div class="product">
       <img src="afbeeldingen/model1.JPG" alt="Product 1">
       <h3>Product 1</h3>
@@ -90,8 +111,8 @@
       <div class="product-label">Discover</div>
     </div> -->
  
-  </section>
+  <!-- </section> -->
 
-  <script src="script2.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
