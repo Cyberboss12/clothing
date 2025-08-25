@@ -78,16 +78,15 @@ header h1 {
   font-size: 2rem;
 }
 
-.grid {
+.product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   width: 90%;
   margin: 20px auto;
 }
 
 .product {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,8 +109,23 @@ header h1 {
 
 .product-label {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
+
+/* Skeleton loader voor visuele feedback tijdens laden */
+.skeleton-loader {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
