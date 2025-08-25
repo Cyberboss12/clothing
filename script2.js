@@ -1,4 +1,3 @@
-// Productlijst (afbeelding en label)
 const products = [
   { img: "afbeeldingen/model1.JPG", label: "Men" },
   { img: "afbeeldingen/model1.JPG", label: "Women" },
@@ -18,7 +17,7 @@ const grid = document.getElementById('productGrid');
 let index = 0;
 const batchSize = 4;
 
-// Functie om een batch producten toe te voegen
+// Functie om producten toe te voegen
 function loadProducts() {
   const slice = products.slice(index, index + batchSize);
   slice.forEach(p => {
@@ -34,23 +33,14 @@ function loadProducts() {
   index += batchSize;
 }
 
-// Zorg dat er altijd genoeg content is om te scrollen
-function ensureScrollable() {
-  while (document.body.scrollHeight <= window.innerHeight && index < products.length) {
-    loadProducts();
-  }
-}
-
-// Initial load
+// Initial load = alleen eerste 4
 loadProducts();
-ensureScrollable();
 
-// Infinite scroll bij bijna onderaan
+// Scroll event: pas bij onderkant nieuwe batch
 window.addEventListener('scroll', () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
     if (index < products.length) {
       loadProducts();
-      ensureScrollable();
     }
   }
 });
