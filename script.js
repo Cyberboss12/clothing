@@ -18,13 +18,13 @@ let index = 0;
 const batchSize = 4;
 let loading = false;
 
-// Functie om producten te laden
+// Functie om één batch te laden
 function loadProducts() {
   if (index >= products.length) return;
 
   loading = true;
-  const slice = products.slice(index, index + batchSize);
 
+  const slice = products.slice(index, index + batchSize);
   slice.forEach(p => {
     const productDiv = document.createElement('div');
     productDiv.classList.add('product');
@@ -34,16 +34,16 @@ function loadProducts() {
     `;
     grid.appendChild(productDiv);
 
-    // Fade-in animatie
+    // fade-in animatie
     setTimeout(() => productDiv.classList.add('loaded'), 50);
   });
 
   index += batchSize;
   loading = false;
 
-  // Controleer of pagina nog scrollbaar moet zijn
+  // Automatisch extra batches laden totdat scroll mogelijk is
   if (document.documentElement.scrollHeight <= window.innerHeight && index < products.length) {
-    loadProducts(); // laad extra batches totdat scroll mogelijk is
+    loadProducts();
   }
 }
 
