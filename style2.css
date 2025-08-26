@@ -336,6 +336,8 @@ header h1 {
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease;
+
+  height: 320px;
 }
 
 .product.loaded {
