@@ -31,10 +31,10 @@ function showNextMessage() {
 setInterval(showNextMessage, 4000);
 
 const products = [
-  { img: "afbeeldingen/model.JPG", label: "Men" },
-  { img: "afbeeldingen/model.JPG", label: "Women" },
-  { img: "afbeeldingen/model.JPG", label: "Children" },
-  { img: "afbeeldingen/model.JPG", label: "Discover" },
+  { img: "afbeeldingen/model.jpg", label: "Men" },
+  { img: "afbeeldingen/model.jpg", label: "Women" },
+  { img: "afbeeldingen/model.jpg", label: "Children" },
+  { img: "afbeeldingen/model.jpg", label: "Discover" },
   { img: "afbeeldingen/model1.JPG", label: "5" },
   { img: "afbeeldingen/model1.JPG", label: "6" },
   { img: "afbeeldingen/model1.JPG", label: "7" },
