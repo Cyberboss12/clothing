@@ -13,54 +13,94 @@ const products = [
   { img: "afbeeldingen/model1.JPG", label: "12" }
 ];
 
-const grid = document.getElementById('productGrid');
-const spacer = document.getElementById('scrollSpacer');
+// --- Elementen & state ---
+const grid   = document.getElementById("productGrid");
+const spacer = document.getElementById("scrollSpacer");
 
-let index = 0;
-const batchSize = 4;
-let lastScroll = 0;
-let loading = false; // lock zodat niet alles tegelijk laadt
+let index = 0;              // volgende startindex in products
+const batchSize = 4;        // altijd 4 per keer
+let gestureLock = false;    // voorkomt meerdere batches per scroll-actie
+let wheelIdleTimer = null;  // om "actie afgelopen" te detecteren
+let touchStartY = null;     // voor touch richting
 
-function loadProducts() {
+// --- Batch laden (exact 4) ---
+function loadBatch() {
+  if (index >= products.length) return;
+
   const slice = products.slice(index, index + batchSize);
   slice.forEach(p => {
-    const div = document.createElement('div');
-    div.classList.add('product');
+    const div = document.createElement("div");
+    div.className = "product";
     div.innerHTML = `
       <img src="${p.img}" alt="${p.label}">
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(div);
-
-    requestAnimationFrame(() => div.classList.add('loaded'));
+    requestAnimationFrame(() => div.classList.add("loaded"));
   });
+
   index += batchSize;
 
+  // Als alles geladen is, spacer weghalen (dan stopt de pagina netjes)
   if (index >= products.length) {
-    spacer.style.display = "none"; // geen extra ruimte meer nodig
+    spacer.style.display = "none";
   }
 }
 
-// Eerste batch tonen
-loadProducts();
+// --- Init: begin met 4 ---
+loadBatch();
 
-window.addEventListener('scroll', () => {
-  if (loading || index >= products.length) return;
+// --- Helper: één batch per scroll-actie ---
+function triggerNextBatchOnce() {
+  if (index >= products.length) return;
+  if (gestureLock) return;
 
-  const currentScroll = window.scrollY;
+  gestureLock = true;
+  loadBatch();
 
-  // alleen bij naar beneden scrollen en minstens 100px verschil
-  if (currentScroll > lastScroll + 100) {
-    loading = true;
-    loadProducts();
+  // "actie is voorbij" zodra er even geen scroll/wheel meer komt
+  clearTimeout(wheelIdleTimer);
+  wheelIdleTimer = setTimeout(() => {
+    gestureLock = false;
+  }, 250); // 250ms zonder input = volgende actie toegestaan
+}
 
-    // cooldown van 300ms om meerdere triggers tegelijk te voorkomen
-    setTimeout(() => {
-      loading = false;
-    }, 300);
+// --- Muiswiel (desktop/trackpad) ---
+window.addEventListener("wheel", (e) => {
+  // Alleen bij naar beneden scrollen
+  if (e.deltaY > 0) {
+    triggerNextBatchOnce();
   }
+}, { passive: true });
 
-  lastScroll = currentScroll;
+// --- Toetsenbord: PgDown, Space, ArrowDown (= ook "1 scroll-actie") ---
+window.addEventListener("keydown", (e) => {
+  const keys = ["PageDown", "ArrowDown", " ", "Spacebar"]; // " " voor sommige browsers
+  if (keys.includes(e.key)) {
+    triggerNextBatchOnce();
+  }
 });
 
+// --- Touch (mobiel): swipe omhoog = naar beneden scrollen ---
+window.addEventListener("touchstart", (e) => {
+  if (e.touches && e.touches.length) {
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: true });
 
+window.addEventListener("touchend", (e) => {
+  if (touchStartY == null) return;
+  const endY = (e.changedTouches && e.changedTouches.length)
+    ? e.changedTouches[0].clientY
+    : touchStartY;
+
+  const delta = touchStartY - endY; // positief = swipe omhoog (naar beneden scrollen)
+  if (delta > 15) { // kleine drempel om tikjes te negeren
+    triggerNextBatchOnce();
+  }
+  touchStartY = null;
+}, { passive: true });
+
+// --- (optioneel) pijltjes omhoog/omlaag onderscheid ---
+// Als je ECHT alleen bij omlaag wil laden, laat bovenstaande zo.
+// Wil je ook bij omhoog niets doen: huidige code doet al niets bij omhoog.
