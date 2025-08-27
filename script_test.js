@@ -17,7 +17,11 @@ const grid = document.getElementById('productGrid');
 let index = 0;
 const batchSize = 4;
 
+// Functie om exact één batch te laden
 function loadProducts() {
+  // verwijder eerst alle producten uit grid
+  grid.innerHTML = '';
+
   const slice = products.slice(index, index + batchSize);
   slice.forEach(p => {
     const div = document.createElement('div');
@@ -29,16 +33,18 @@ function loadProducts() {
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add('loaded'));
   });
-  index += batchSize;
 }
 
-// Eerst 4 producten laden
+// Start met eerste batch
 loadProducts();
 
-// Infinite scroll
+// Infinite scroll: pas volgende batch tonen bij scroll
 window.addEventListener('scroll', () => {
-  const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
-  if (nearBottom && index < products.length) {
-    loadProducts();
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 5) {
+    if (index + batchSize < products.length) {
+      index += batchSize;   // ga naar volgende batch
+      loadProducts();       // vervang de grid door de volgende 4
+      window.scrollTo(0, 0); // reset scroll naar boven voor nieuwe batch
+    }
   }
 });
