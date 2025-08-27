@@ -14,7 +14,6 @@ const products = [
 ];
 
 const grid = document.getElementById('productGrid');
-const wrapper = document.querySelector('.grid-wrapper');
 let index = 0;
 const batchSize = 4;
 
@@ -28,19 +27,22 @@ function loadProducts() {
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(div);
+
+    // fade-in animatie
     requestAnimationFrame(() => div.classList.add('loaded'));
   });
   index += batchSize;
 }
 
-// Eerst 4 producten
+// Eerste 4 producten tonen
 loadProducts();
 
-// Infinite scroll op wrapper
-wrapper.addEventListener('scroll', () => {
-  if (wrapper.scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 5) {
-    if (index < products.length) {
-      loadProducts();
-    }
+// Scroll-event: check of je bijna bij de onderkant van de grid bent
+window.addEventListener('scroll', () => {
+  const scrollBottom = window.scrollY + window.innerHeight;
+  const gridBottom = grid.offsetTop + grid.offsetHeight;
+
+  if (scrollBottom >= gridBottom - 100 && index < products.length) {
+    loadProducts();
   }
 });

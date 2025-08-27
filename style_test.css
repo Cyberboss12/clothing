@@ -1,18 +1,9 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.grid-wrapper {
-  height: 100vh;        /* altijd 1 viewport hoog */
-  overflow-y: auto;     /* scroll binnen deze wrapper */
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  padding: 10px;
+  gap: 20px;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .product {
@@ -22,7 +13,6 @@ body {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s, transform 0.5s;
-  height: 250px;
 }
 
 .product.loaded {
@@ -33,10 +23,11 @@ body {
 .product img {
   width: 100%;
   height: auto;
+  object-fit: cover;
 }
 
 .product-label {
-  margin-top: 5px;
+  margin-top: 8px;
   font-weight: bold;
   text-align: center;
 }
