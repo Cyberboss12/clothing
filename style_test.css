@@ -3,51 +3,34 @@ body {
   font-family: Arial, sans-serif;
 }
 
-header {
-  height: 80px;
-  background: #333;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.grid-wrapper {
-  height: 100vh;       /* viewport hoogte */
-  overflow-y: auto;    /* scroll enkel binnen deze wrapper */
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  width: 100%;
+  gap: 10px;
+  padding: 10px;
 }
 
 .product {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s, transform 0.5s;
-  min-height: 300px;  /* basis producthoogte, kan je aanpassen */
-}
-
-.product img {
-  width: 90%;
-  height: auto;
-}
-
-.product-label {
-  margin-top: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-align: center;
 }
 
 .product.loaded {
   opacity: 1;
   transform: translateY(0);
+}
+
+.product img {
+  width: 100%;
+  height: auto;
+}
+
+.product-label {
+  margin-top: 5px;
+  font-weight: bold;
+  text-align: center;
 }
