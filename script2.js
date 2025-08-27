@@ -45,6 +45,41 @@ const products = [
   { img: "afbeeldingen/model1.JPG", label: "12" }
 ];
 
+// const grid = document.getElementById('productGrid');
+// let index = 0;
+// const batchSize = 4;
+
+// function loadProducts() {
+//   const slice = products.slice(index, index + batchSize);
+
+//   slice.forEach(p => {
+//     const productDiv = document.createElement('div');
+//     productDiv.classList.add('product');
+//     productDiv.innerHTML = `
+//       <img src="${p.img}" alt="${p.label}">
+//       <div class="product-label">${p.label}</div>
+//     `;
+//     grid.appendChild(productDiv);
+
+    // fade-in animatie
+//     setTimeout(() => productDiv.classList.add('loaded'), 50);
+//   });
+
+//   index += batchSize;
+// }
+
+// Scroll-event
+// window.addEventListener('scroll', () => {
+//   if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10) {
+//     if (index < products.length) {
+//       loadProducts();
+//     }
+//   }
+// });
+
+// Eerste batch laden
+// loadProducts();
+
 const grid = document.getElementById('productGrid');
 let index = 0;
 const batchSize = 4;
@@ -56,26 +91,25 @@ function loadProducts() {
     const productDiv = document.createElement('div');
     productDiv.classList.add('product');
     productDiv.innerHTML = `
-      <img src="${p.img}" alt="${p.label}">
+      <img src="${p.img}" alt="Product ${p.label}">
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(productDiv);
 
     // fade-in animatie
-    setTimeout(() => productDiv.classList.add('loaded'), 50);
+    requestAnimationFrame(() => productDiv.classList.add('loaded'));
   });
 
   index += batchSize;
 }
 
-// Scroll-event
+// ✅ Alleen de eerste batch tonen
+loadProducts();
+
+// ✅ Alleen bij scroll naar onderkant volgende batch
 window.addEventListener('scroll', () => {
-  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10) {
-    if (index < products.length) {
-      loadProducts();
-    }
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight;
+  if (atBottom && index < products.length) {
+    loadProducts();
   }
 });
-
-// Eerste batch laden
-loadProducts();
