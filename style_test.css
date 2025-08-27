@@ -1,272 +1,53 @@
-/* Touwen en balken gecentreerd
-
 body {
   margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;    centreert horizontaal 
-  align-items: flex-start;    start bovenaan 
-  min-height: 100vh;
-  background: #eee;
-}
-
-.strings-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 120px;
-  margin: 0 auto;
-  padding: 100px 0;
-  background: #fff;
-}
-
-.string {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 200px;
-  position: relative;
-}
-
-.string::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  background: repeating-linear-gradient(
-    to bottom,
-    #8B5A2B 0,
-    #8B5A2B 6px,
-    #A0522D 6px,
-    #A0522D 12px
-  );
-  border-radius: 2px;
-  z-index: 0;
-}
-
-.board {
-  background: #ddd; 
-  color: #243A8F;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 20px 40px;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px rgba(0,0,0,.3);
-  min-width: 220px;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-} */
-
-/* body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
 header {
-  height: 150px;
+  height: 80px;
+  background: #333;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #222;
-  color: #fff;
 }
 
-header h1 {
-  font-size: 2rem;
+.grid-wrapper {
+  height: 100vh;       /* viewport hoogte */
+  overflow-y: auto;    /* scroll enkel binnen deze wrapper */
 }
 
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  width: 90%;
-  margin: 20px auto;
-}
-
-.product {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-}
-
-.product.loaded {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.product img {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  display: block;
-}
-
-.product-label {
-  text-align: center;
-  font-size: 1rem;
-  margin-top: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-} */
-
-/* Skeleton loader voor visuele feedback tijdens laden */
-/* .skeleton-loader {
-  width: 100%;
-  height: 250px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-Hier begint wat nieuws: */
-
-/* Algemene styling */
-body {
-  font-family: 'Special Elite', Arial, sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-  color: #333;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-html, body {
-  height: 100%;
-}
-
-/* Info-bar */
-.info-bar {
-  width: 100%;
-  background-color: #C3A580;
-  color: white;
-  font-size: 0.9rem;
-  padding: 4px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-.info-left {
-  flex: 1;
-  text-align: left;
-}
-
-.info-center {
-  flex: 1;
-  text-align: center;
-  transition: opacity 0.5s ease; /* voor fade-out */
-}
-
-.info-center.hidden {
-  opacity: 0;
-}
-
-.info-right {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-}
-
-.info-right a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-.info-right a:hover {
-  color: #fffce0;
-}
-
-/* Responsive info-bar */
-@media (max-width: 600px) {
-  .info-bar {
-    flex-direction: column;
-    text-align: center;
-    gap: 5px;
-    padding: 6px 10px;
-  }
-
-  .info-left,
-  .info-center,
-  .info-right {
-    flex: unset;
-  }
-}
-
-/* Header */
-header {
-  margin-top: 28px; /* ruimte voor de info-bar */
-  height: 170px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #222;
-  color: #fff;
-}
-
-header h1 {
-  font-size: 2rem;
-}
-
-/* Product grid (4 kolommen) */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 0;
   width: 100%;
-  margin: 20px auto;
 }
 
 .product {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.5s ease;
+  transition: opacity 0.5s, transform 0.5s;
+  min-height: 300px;  /* basis producthoogte, kan je aanpassen */
+}
+
+.product img {
+  width: 90%;
+  height: auto;
+}
+
+.product-label {
+  margin-top: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .product.loaded {
   opacity: 1;
   transform: translateY(0);
-}
-
-.product img {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  display: block;
-}
-
-.product-label {
-  text-align: center;
-  font-size: 1.2rem;
-  margin-top: 10px;
-  font-family: Arial, sans-serif;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-/* Footer */
-footer {
-  text-align: left;
-  padding: 20px;
-  color: #333;
-  margin-top: 40px;
 }
