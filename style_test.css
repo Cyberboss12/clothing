@@ -31,3 +31,7 @@
   font-weight: bold;
   text-align: center;
 }
+
+#scrollSpacer {
+  height: 100vh; /* altijd minstens 1 schermhoogte om te kunnen scrollen */
+}
