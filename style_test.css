@@ -3,22 +3,26 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.grid-wrapper {
+  height: 100vh;        /* altijd 1 viewport hoog */
+  overflow-y: auto;     /* scroll binnen deze wrapper */
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  width: 100%;
+  padding: 10px;
 }
 
 .product {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s, transform 0.5s;
-  height: 250px; /* geforceerde hoogte, zodat 4 producten zichtbaar */
+  height: 250px;
 }
 
 .product.loaded {
