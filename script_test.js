@@ -13,46 +13,54 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "12" }
 ];
 
-const grid = document.getElementById("productGrid");
-const spacer = document.getElementById("scrollSpacer");
+const grid = document.getElementById('productGrid');
+const spacer = document.getElementById('scrollSpacer');
 
 let index = 0;
 const batchSize = 4;
-let currentStep = 0; // bepaalt welke batch we al getoond hebben
+let lastScroll = 0;
+let loading = false; // lock zodat niet alles tegelijk laadt
 
 function loadProducts() {
   const slice = products.slice(index, index + batchSize);
-  slice.forEach((p) => {
-    const div = document.createElement("div");
-    div.classList.add("product");
+  slice.forEach(p => {
+    const div = document.createElement('div');
+    div.classList.add('product');
     div.innerHTML = `
       <img src="${p.img}" alt="${p.label}">
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(div);
-    requestAnimationFrame(() => div.classList.add("loaded"));
+
+    requestAnimationFrame(() => div.classList.add('loaded'));
   });
   index += batchSize;
 
-  // als alles geladen is → spacer weghalen
   if (index >= products.length) {
-    spacer.style.display = "none";
+    spacer.style.display = "none"; // geen extra ruimte meer nodig
   }
 }
 
-// eerste batch
+// Eerste batch tonen
 loadProducts();
 
-// bij scroll bepalen in welke 'stap' we zitten
-window.addEventListener("scroll", () => {
-  if (index >= products.length) return; // niets meer te laden
+window.addEventListener('scroll', () => {
+  if (loading || index >= products.length) return;
 
-  // hoeveel volledige schermhoogtes zijn gescrold
-  const step = Math.floor(window.scrollY / window.innerHeight);
+  const currentScroll = window.scrollY;
 
-  if (step > currentStep) {
-    currentStep = step; // ga naar volgende stap
-    loadProducts(); // laad volgende batch
+  // alleen bij naar beneden scrollen en minstens 100px verschil
+  if (currentScroll > lastScroll + 100) {
+    loading = true;
+    loadProducts();
+
+    // cooldown van 300ms om meerdere triggers tegelijk te voorkomen
+    setTimeout(() => {
+      loading = false;
+    }, 300);
   }
+
+  lastScroll = currentScroll;
 });
+
 
