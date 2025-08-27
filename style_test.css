@@ -1,9 +1,9 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  overflow-y: scroll; /* altijd scrollbar tonen */
 }
 
-/* 4 kolommen, altijd 4 per rij */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -11,6 +11,7 @@ body {
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
+  height: 100vh; /* grid vult altijd schermhoogte */
 }
 
 .product {
@@ -40,8 +41,7 @@ body {
   text-transform: uppercase;
 }
 
-/* Altijd scrollruimte, zodat je meteen kunt scrollen */
 #scrollSpacer {
-  height: 120vh;           /* genoeg om te kunnen scrollen met slechts 4 items */
-  pointer-events: none;    /* geen interactie */
+  display: none; /* niet meer nodig nu */
 }
+

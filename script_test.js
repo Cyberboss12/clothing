@@ -13,21 +13,16 @@ const products = [
   { img: "afbeeldingen/model1.JPG", label: "12" }
 ];
 
-// --- Elementen & state ---
-const grid   = document.getElementById("productGrid");
-const spacer = document.getElementById("scrollSpacer");
+const grid = document.getElementById("productGrid");
 
-let index = 0;              // volgende startindex in products
-const batchSize = 4;        // altijd 4 per keer
-let gestureLock = false;    // voorkomt meerdere batches per scroll-actie
-let wheelIdleTimer = null;  // om "actie afgelopen" te detecteren
-let touchStartY = null;     // voor touch richting
+let index = 0;
+const batchSize = 4;
+let lock = false;
 
-// --- Batch laden (exact 4) ---
-function loadBatch() {
-  if (index >= products.length) return;
-
-  const slice = products.slice(index, index + batchSize);
+// toon een batch (vervangt vorige!)
+function showBatch(startIndex) {
+  grid.innerHTML = ""; // oude producten weghalen
+  const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
@@ -38,69 +33,24 @@ function loadBatch() {
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
-
-  index += batchSize;
-
-  // Als alles geladen is, spacer weghalen (dan stopt de pagina netjes)
-  if (index >= products.length) {
-    spacer.style.display = "none";
-  }
 }
 
-// --- Init: begin met 4 ---
-loadBatch();
+// eerste batch tonen
+showBatch(index);
 
-// --- Helper: één batch per scroll-actie ---
-function triggerNextBatchOnce() {
-  if (index >= products.length) return;
-  if (gestureLock) return;
-
-  gestureLock = true;
-  loadBatch();
-
-  // "actie is voorbij" zodra er even geen scroll/wheel meer komt
-  clearTimeout(wheelIdleTimer);
-  wheelIdleTimer = setTimeout(() => {
-    gestureLock = false;
-  }, 250); // 250ms zonder input = volgende actie toegestaan
-}
-
-// --- Muiswiel (desktop/trackpad) ---
+// event: scroll = volgende batch
 window.addEventListener("wheel", (e) => {
-  // Alleen bij naar beneden scrollen
-  if (e.deltaY > 0) {
-    triggerNextBatchOnce();
+  if (lock) return;
+  if (e.deltaY > 0) { // naar beneden
+    index = (index + batchSize) % products.length; 
+    showBatch(index);
+  } else if (e.deltaY < 0) { // naar boven
+    index = (index - batchSize + products.length) % products.length;
+    showBatch(index);
   }
+
+  // lock zodat 1 scroll = 1 batch
+  lock = true;
+  setTimeout(() => lock = false, 400);
 }, { passive: true });
 
-// --- Toetsenbord: PgDown, Space, ArrowDown (= ook "1 scroll-actie") ---
-window.addEventListener("keydown", (e) => {
-  const keys = ["PageDown", "ArrowDown", " ", "Spacebar"]; // " " voor sommige browsers
-  if (keys.includes(e.key)) {
-    triggerNextBatchOnce();
-  }
-});
-
-// --- Touch (mobiel): swipe omhoog = naar beneden scrollen ---
-window.addEventListener("touchstart", (e) => {
-  if (e.touches && e.touches.length) {
-    touchStartY = e.touches[0].clientY;
-  }
-}, { passive: true });
-
-window.addEventListener("touchend", (e) => {
-  if (touchStartY == null) return;
-  const endY = (e.changedTouches && e.changedTouches.length)
-    ? e.changedTouches[0].clientY
-    : touchStartY;
-
-  const delta = touchStartY - endY; // positief = swipe omhoog (naar beneden scrollen)
-  if (delta > 15) { // kleine drempel om tikjes te negeren
-    triggerNextBatchOnce();
-  }
-  touchStartY = null;
-}, { passive: true });
-
-// --- (optioneel) pijltjes omhoog/omlaag onderscheid ---
-// Als je ECHT alleen bij omlaag wil laden, laat bovenstaande zo.
-// Wil je ook bij omhoog niets doen: huidige code doet al niets bij omhoog.
