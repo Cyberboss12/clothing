@@ -67,7 +67,7 @@ const batchSize = 4;
 let lock = false;
 let active = false;
 const ANIM_MS = 320;
-const WHEEL_THRESHOLD = 60; // minimaal deltaY om batch te wisselen
+const WHEEL_THRESHOLD = 30; // minimaal deltaY om batch te wisselen
 let wheelBuffer = 0;
 
 // render helpers
