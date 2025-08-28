@@ -4,6 +4,12 @@ body {
   overflow-y: scroll; /* altijd scrollbar tonen */
 }
 
+#productSection {
+  height: 100vh;           /* neemt een “viewport” blok in */
+  overflow: hidden;        /* geen interne scrollbar */
+  position: relative;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -11,7 +17,7 @@ body {
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
-  height: 100vh; /* grid vult altijd schermhoogte */
+  height: 100%; /* grid vult altijd schermhoogte */
 }
 
 .product {

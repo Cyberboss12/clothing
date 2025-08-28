@@ -13,15 +13,15 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "12" }
 ];
 
+const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
 
 let index = 0;
 const batchSize = 4;
 let lock = false;
 
-// toon een batch (vervangt vorige!)
 function showBatch(startIndex) {
-  grid.innerHTML = ""; // oude producten weghalen
+  grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
     const div = document.createElement("div");
@@ -35,22 +35,27 @@ function showBatch(startIndex) {
   });
 }
 
-// eerste batch tonen
 showBatch(index);
 
-// event: scroll = volgende batch
-window.addEventListener("wheel", (e) => {
+// alleen scroll blokkeren binnen productSection
+section.addEventListener("wheel", (e) => {
   if (lock) return;
-  if (e.deltaY > 0) { // naar beneden
-    index = (index + batchSize) % products.length; 
-    showBatch(index);
-  } else if (e.deltaY < 0) { // naar boven
-    index = (index - batchSize + products.length) % products.length;
-    showBatch(index);
+
+  if (e.deltaY > 0) {
+    if (index + batchSize < products.length) {
+      e.preventDefault(); // blokkeer pagina-scroll alleen als batch wisselt
+      index += batchSize;
+      showBatch(index);
+    }
+  } else if (e.deltaY < 0) {
+    if (index - batchSize >= 0) {
+      e.preventDefault();
+      index -= batchSize;
+      showBatch(index);
+    }
   }
 
-  // lock zodat 1 scroll = 1 batch
   lock = true;
   setTimeout(() => lock = false, 400);
-}, { passive: true });
+}, { passive: false });
 
