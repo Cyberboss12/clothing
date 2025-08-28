@@ -1,12 +1,12 @@
-body {
+/* body {
   margin: 0;
   font-family: Arial, sans-serif;
-  overflow-y: scroll; /* altijd scrollbar tonen */
+  overflow-y: scroll;  altijd scrollbar tonen 
 }
 
 #productSection {
-  height: 100vh;           /* neemt een “viewport” blok in */
-  overflow: hidden;        /* geen interne scrollbar */
+  height: 100vh;            neemt een “viewport” blok in 
+  overflow: hidden;         geen interne scrollbar 
   position: relative;
 }
 
@@ -17,7 +17,7 @@ body {
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
-  height: 100%; /* grid vult altijd schermhoogte */
+  height: 100%;  grid vult altijd schermhoogte 
 }
 
 .product {
@@ -48,6 +48,72 @@ body {
 }
 
 #scrollSpacer {
-  display: none; /* niet meer nodig nu */
+  display: none;  niet meer nodig nu 
+} */
+
+/* body blijft normale pagina-scroll hebben */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow-y: auto; /* normale pagina scrollbar */
 }
 
+/* SECTION met custom scroll gedrag */
+#productSection {
+  height: 100vh;       /* neemt viewport in */
+  overflow: hidden;    /* verberg interne scroll */
+  position: relative;
+  touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
+}
+
+/* grid - 1 rij van 4 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 24px;
+  height: 100%;
+  box-sizing: border-box;
+  align-content: center;
+}
+
+/* product cards */
+.product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.product.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* exit animations (voor vloeiend wisselen) */
+.product.exit-up {
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+.product.exit-down {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.product img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.product-label {
+  margin-top: 8px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}

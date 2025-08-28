@@ -69,9 +69,9 @@
     <p>Men's wear for you</p>
   </div> -->
 
-  <header>
+  <!-- <header>
     <h1>Welcome to my collection</h1>
-  </header>
+  </header> -->
 
 
   <!-- <section class="grid" id="productGrid"> -->
@@ -102,14 +102,31 @@
 <!--  
   </section> -->
 
-<!-- <section class="grid" id="productGrid"></section>
-<div id="scrollSpacer" aria-hidden="true"></div> -->
-
-<main>
+<!-- <main>
   <section id="productSection">
     <div class="grid" id="productGrid"></div>
   </section>
-</main>
+</main> -->
+
+  <header style="height:80px;background:#222;color:#fff;display:flex;align-items:center;padding:0 16px;">
+    <h1>Header</h1>
+  </header>
+
+  <main>
+    <!-- Productsectie: vult 1 viewport en heeft custom scroll -->
+    <section id="productSection">
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+    <!-- andere content zodat page kan scrollen naar footer -->
+    <section style="height:120vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
+      <p>Extra content onder de productsectie — hier mag de pagina scrollen.</p>
+    </section>
+  </main>
+
+  <footer style="height:200px;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;">
+    <p>Footer</p>
+  </footer>
 
 <script src="script_test.js"></script>
 </body>
