@@ -65,10 +65,12 @@ const grid = document.getElementById("productGrid");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-let active = false; // is de sectie 'dominant zichtbaar' -> dan nemen we wheel over
-const ANIM_MS = 320; // moet matchen met CSS-transition tijd (300ms + marge)
+let active = false;
+const ANIM_MS = 320;
+const WHEEL_THRESHOLD = 60; // minimaal deltaY om batch te wisselen
+let wheelBuffer = 0;
 
-// render (direct - zonder exit anim)
+// render helpers
 function renderBatchImmediate(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -80,27 +82,22 @@ function renderBatchImmediate(startIndex) {
       <div class="product-label">${p.label}</div>
     `;
     grid.appendChild(div);
-    // trigger load animation
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 
-// render met exit animatie (direction: 'down' of 'up')
 function showBatch(startIndex, direction) {
   if (lock) return;
   lock = true;
 
   const current = Array.from(grid.children);
   if (current.length) {
-    // outgoing anim
     current.forEach(el => {
       el.classList.remove("loaded");
       el.classList.add(direction === "down" ? "exit-up" : "exit-down");
     });
-    // na anim -> vervang DOM
     setTimeout(() => {
       renderBatchImmediate(startIndex);
-      // korte extra delay om swipes/inertia te dempen
       setTimeout(() => lock = false, 80);
     }, ANIM_MS);
   } else {
@@ -109,99 +106,70 @@ function showBatch(startIndex, direction) {
   }
 }
 
-// init eerste batch
+// init
 renderBatchImmediate(index);
 
-// --- Intersectie: active alleen als sectie >= 60% in view ---
+// observer → sectie actief wanneer 100% in beeld
 const io = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    active = entry.intersectionRatio >= 0.6;
+    active = entry.intersectionRatio >= 0.99;
   });
-}, { threshold: [0, 0.25, 0.5, 0.6, 0.75, 1] });
+}, { threshold: [0, 0.25, 0.5, 0.75, 0.99, 1] });
 io.observe(section);
 
-// --- wheel handler (op section) ---
+// wheel handler
 function onWheel(e) {
-  // Als sectie niet actief => laat browser gewoon scrollen
-  if (!active) return;
+  if (!active) return; // laat pagina vrij scrollen
 
-  // Als we locked zijn: voorkomen we standaard scroll zodat inertie niet doorloopt
-  if (lock) {
+  // buffer voor gevoelige scrollwielen/trackpads
+  wheelBuffer += e.deltaY;
+
+  if (Math.abs(wheelBuffer) >= WHEEL_THRESHOLD) {
     e.preventDefault();
     e.stopPropagation();
-    return;
-  }
 
-  const delta = e.deltaY;
-
-  // scroll naar beneden => next batch (als mogelijk), anders laat page scrollen
-  if (delta > 0) {
-    if (index + batchSize < products.length) {
-      e.preventDefault();
-      e.stopPropagation();
+    if (wheelBuffer > 0 && index + batchSize < products.length) {
       index += batchSize;
       showBatch(index, "down");
-    } else {
-      // laatste batch: NIET preventDefault -> laat page doorrollen naar volgende sectie/footer
-      return;
-    }
-
-  // scroll naar boven => prev batch (als mogelijk), anders laat page scrollen
-  } else if (delta < 0) {
-    if (index - batchSize >= 0) {
-      e.preventDefault();
-      e.stopPropagation();
+    } else if (wheelBuffer < 0 && index - batchSize >= 0) {
       index -= batchSize;
       showBatch(index, "up");
-    } else {
-      // eerste batch: laat page scrollen terug naar header
-      return;
     }
+
+    wheelBuffer = 0; // reset buffer na wissel
   }
 }
 
-// attach wheel op section en zorg voor passive:false zodat preventDefault werkt
+// alleen op sectie luisteren
 section.addEventListener("wheel", onWheel, { passive: false });
 
-// --- touch support (mobile) ---
+// touch support (idem met threshold)
 let touchStartY = null;
+const TOUCH_THRESHOLD = 40;
 
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 section.addEventListener("touchmove", (e) => {
-  if (!active) return;
-  if (!touchStartY) return;
+  if (!active || !touchStartY) return;
 
   const y = e.touches[0].clientY;
-  const dy = touchStartY - y; // positief = swipe up (we want next batch)
-  const THRESH = 30; // px
-  if (Math.abs(dy) < THRESH) return;
+  const dy = touchStartY - y;
 
-  // voorkom page scroll als we gaan handelen
-  if (dy > 0) { // swipe up -> next
-    if (index + batchSize < products.length) {
-      e.preventDefault();
-      e.stopPropagation();
+  if (Math.abs(dy) >= TOUCH_THRESHOLD) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (dy > 0 && index + batchSize < products.length) {
       index += batchSize;
       showBatch(index, "down");
-    } else {
-      // do nothing -> laat page scrollen
-    }
-  } else { // swipe down -> prev
-    if (index - batchSize >= 0) {
-      e.preventDefault();
-      e.stopPropagation();
+    } else if (dy < 0 && index - batchSize >= 0) {
       index -= batchSize;
       showBatch(index, "up");
-    } else {
-      // do nothing -> laat page scrollen
     }
+    touchStartY = null; // reset
   }
-
-  // reset start y zodat meerdere moves niet triggeren herhaald
-  touchStartY = null;
 }, { passive: false });
 
 section.addEventListener("touchend", () => touchStartY = null, { passive: true });
