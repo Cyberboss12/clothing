@@ -20,12 +20,11 @@ let index = 0;
 const batchSize = 4;
 let lock = false;
 
-// instellingen: zeer gevoelig maar single-step
-const SCROLL_THRESHOLD = 6;   // klein = zeer gevoelig
-const LOCK_MS = 300;         // na trigger korte lock zodat niet meerdere batches geskippt worden
-const TOUCH_THRESHOLD = 20;  // swipe gevoelige drempel (px)
+// instellingen
+const SCROLL_THRESHOLD = 6;   // zeer gevoelig
+const LOCK_MS = 300;          // voorkomt overslaan
+const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid
 
-// showBatch blijft hetzelfde
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -41,19 +40,17 @@ function showBatch(startIndex) {
   });
 }
 
-// init eerste batch
 showBatch(index);
 
-// helper: trigger één stap (down of up)
 function triggerStep(direction) {
-  if (lock) return;
-  if (direction === 'down' && index + batchSize < products.length) {
+  if (lock) return false;
+  if (direction === "down" && index + batchSize < products.length) {
     index += batchSize;
     showBatch(index);
     lock = true;
     setTimeout(() => lock = false, LOCK_MS);
     return true;
-  } else if (direction === 'up' && index - batchSize >= 0) {
+  } else if (direction === "up" && index - batchSize >= 0) {
     index -= batchSize;
     showBatch(index);
     lock = true;
@@ -63,34 +60,34 @@ function triggerStep(direction) {
   return false;
 }
 
-// wheel handler (op sectie)
+// wheel handler
 section.addEventListener("wheel", (e) => {
-  // normaliseer deltaY voor deltaMode (lines vs pixels)
-  const PIXEL_PER_LINE = 16; // grove vuistregel
+  const PIXEL_PER_LINE = 16;
   const deltaY = (e.deltaMode === 1) ? e.deltaY * PIXEL_PER_LINE : e.deltaY;
 
-  // als we al locked zijn, negeren we (voorkomt skip door inertie)
-  if (lock) return;
+  if (lock) {
+    e.preventDefault();
+    return;
+  }
 
-  // zeer gevoelig: kleine bewegingen tellen, maar we triggeren slechts 1 step per lock
+  let didSwitch = false;
+
   if (deltaY > SCROLL_THRESHOLD) {
-    // probeer next batch; als dat lukt, blokkeer page scroll
-    const did = triggerStep('down');
-    if (did) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    didSwitch = triggerStep("down");
   } else if (deltaY < -SCROLL_THRESHOLD) {
-    const did = triggerStep('up');
-    if (did) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    didSwitch = triggerStep("up");
+  }
+
+  // alleen blokkeren als er echt een batch is gewisseld
+  if (didSwitch) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 }, { passive: false });
 
-// touch support: 1 swipe = 1 rij
+// touch support
 let touchStartY = null;
+
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
@@ -99,22 +96,20 @@ section.addEventListener("touchmove", (e) => {
   if (!touchStartY || lock) return;
 
   const y = e.touches[0].clientY;
-  const dy = touchStartY - y; // positief = swipe up
+  const dy = touchStartY - y;
+  let didSwitch = false;
 
   if (dy > TOUCH_THRESHOLD) {
-    const did = triggerStep('down');
-    if (did) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    didSwitch = triggerStep("down");
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) {
-    const did = triggerStep('up');
-    if (did) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    didSwitch = triggerStep("up");
     touchStartY = null;
+  }
+
+  if (didSwitch) {
+    e.preventDefault();
+    e.stopPropagation();
   }
 }, { passive: false });
 
