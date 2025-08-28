@@ -67,8 +67,8 @@ const batchSize = 4;
 let lock = false;
 let active = false;
 const ANIM_MS = 320;
-const WHEEL_THRESHOLD = 30; // minimaal deltaY om batch te wisselen
-let wheelBuffer = 0;
+const WHEEL_THRESHOLD = 15;   // gevoeligheid muiswiel/trackpad
+const TOUCH_THRESHOLD = 25;   // gevoeligheid touch (px)
 
 // render helpers
 function renderBatchImmediate(startIndex) {
@@ -98,54 +98,54 @@ function showBatch(startIndex, direction) {
     });
     setTimeout(() => {
       renderBatchImmediate(startIndex);
-      setTimeout(() => lock = false, 80);
+      setTimeout(() => lock = false, 100);
     }, ANIM_MS);
   } else {
     renderBatchImmediate(startIndex);
-    setTimeout(() => lock = false, 80);
+    setTimeout(() => lock = false, 100);
   }
 }
 
 // init
 renderBatchImmediate(index);
 
-// observer → sectie actief wanneer 100% in beeld
+// sectie is actief als hij volledig in beeld is
 const io = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     active = entry.intersectionRatio >= 0.99;
   });
-}, { threshold: [0, 0.25, 0.5, 0.75, 0.99, 1] });
+}, { threshold: [0, 0.5, 0.99, 1] });
 io.observe(section);
 
 // wheel handler
 function onWheel(e) {
-  if (!active) return; // laat pagina vrij scrollen
+  if (!active) return; // pagina mag gewoon scrollen
 
-  // buffer voor gevoelige scrollwielen/trackpads
-  wheelBuffer += e.deltaY;
-
-  if (Math.abs(wheelBuffer) >= WHEEL_THRESHOLD) {
+  if (lock) {
     e.preventDefault();
     e.stopPropagation();
+    return;
+  }
 
-    if (wheelBuffer > 0 && index + batchSize < products.length) {
-      index += batchSize;
-      showBatch(index, "down");
-    } else if (wheelBuffer < 0 && index - batchSize >= 0) {
-      index -= batchSize;
-      showBatch(index, "up");
-    }
+  const delta = e.deltaY;
 
-    wheelBuffer = 0; // reset buffer na wissel
+  if (delta > WHEEL_THRESHOLD && index + batchSize < products.length) {
+    e.preventDefault();
+    e.stopPropagation();
+    index += batchSize;
+    showBatch(index, "down");
+  } else if (delta < -WHEEL_THRESHOLD && index - batchSize >= 0) {
+    e.preventDefault();
+    e.stopPropagation();
+    index -= batchSize;
+    showBatch(index, "up");
   }
 }
 
-// alleen op sectie luisteren
 section.addEventListener("wheel", onWheel, { passive: false });
 
-// touch support (idem met threshold)
+// touch support
 let touchStartY = null;
-const TOUCH_THRESHOLD = 40;
 
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
@@ -153,22 +153,27 @@ section.addEventListener("touchstart", (e) => {
 
 section.addEventListener("touchmove", (e) => {
   if (!active || !touchStartY) return;
+  if (lock) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
 
   const y = e.touches[0].clientY;
   const dy = touchStartY - y;
 
-  if (Math.abs(dy) >= TOUCH_THRESHOLD) {
+  if (dy > TOUCH_THRESHOLD && index + batchSize < products.length) {
     e.preventDefault();
     e.stopPropagation();
-
-    if (dy > 0 && index + batchSize < products.length) {
-      index += batchSize;
-      showBatch(index, "down");
-    } else if (dy < 0 && index - batchSize >= 0) {
-      index -= batchSize;
-      showBatch(index, "up");
-    }
-    touchStartY = null; // reset
+    index += batchSize;
+    showBatch(index, "down");
+    touchStartY = null;
+  } else if (dy < -TOUCH_THRESHOLD && index - batchSize >= 0) {
+    e.preventDefault();
+    e.stopPropagation();
+    index -= batchSize;
+    showBatch(index, "up");
+    touchStartY = null;
   }
 }, { passive: false });
 
