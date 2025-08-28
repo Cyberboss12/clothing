@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     overflow-y: auto;
 }
 
@@ -320,25 +320,36 @@ header h1 {
   font-size: 2rem;
 }
 
+/* SECTION met custom scroll gedrag */
+#productSection {
+  height: 100vh;       /* neemt viewport in */
+  overflow: hidden;    /* verberg interne scroll */
+  position: relative;
+  touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
-  width: 100%;
-  margin: 0 auto;
+  padding: 24px;
+  height: 100%;
+  /*width: 100%;
+  margin: 0 auto;*/
+  align-content: center;
+  box-sizing: border-box; 
 }
 
 .product {
-  height: 100vh;
-  position: relative;
+  /* height: 100vh; */
+  /* position: relative; */
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-  /* height: 400px; */
+  transform: translateY(16px);
+  transition: opacity 300ms ease, transform 300ms ease;
 }
 
 .product.loaded {
@@ -346,15 +357,25 @@ header h1 {
   transform: translateY(0);
 }
 
-/* .product:hover {
-  transform: translateY(-5px);
-} */
+/* exit animations (voor vloeiend wisselen) */
+.product.exit-up {
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+.product.exit-down {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
 
 .product img {
   width: 100%;
   /* aspect-ratio: 3 / 4; */
+  height: auto;
   object-fit: cover;
-  display: block;
+  /* display: block; */
+  border-radius: 6px; 
 }
 
 .product-label {
@@ -364,6 +385,8 @@ header h1 {
   font-family: Arial, sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
+  /* margin-top: 8px;
+  font-weight: bold; */
 }
 
 .product h3 {
