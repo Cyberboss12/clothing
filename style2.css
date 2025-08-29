@@ -334,8 +334,8 @@ header h1 {
   gap: 0;
   padding: 24px;
   height: 100%;
-  /*width: 100%;
-  margin: 0 auto;*/
+  width: 100%;
+  /* margin: 0 auto; */
   align-content: center;
   box-sizing: border-box; 
 }
