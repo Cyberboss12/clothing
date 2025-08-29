@@ -101,40 +101,39 @@ let pointerInside = false;
 section.addEventListener('pointerenter', () => pointerInside = true);
 section.addEventListener('pointerleave', () => pointerInside = false);
 
-// WHEEL: luister op window zodat trackpad/muiswiel events worden opgevangen
-// maar handel alleen als pointerInside === true
-function onWindowWheel(e) {
-  // alleen ageren als cursor/focus in de sectie is
-  if (!pointerInside) return;
+section.addEventListener("wheel", (e) => {
+  // Altijd scroll blokkeren binnen de product sectie
+  e.preventDefault();
 
-  // als we locked zijn, voorkom extra triggers (en voorkom dat pagina meebeweegt)
-  if (lock) {
-    // we voorkomen scroll-vernieling tijdens lock zodat inertie niet doorloopt
-    e.preventDefault();
-    e.stopPropagation();
-    return;
-  }
+  if (lock) return;
 
-  // normaliseer deltaY als browser gebruikt 'lines' in deltaMode
-  const PIXEL_PER_LINE = 16;
-  const deltaY = (e.deltaMode === 1) ? e.deltaY * PIXEL_PER_LINE : e.deltaY;
-
-  if (deltaY > SCROLL_THRESHOLD) {
-    const switched = triggerStep('down');
-    if (switched) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  } else if (deltaY < -SCROLL_THRESHOLD) {
-    const switched = triggerStep('up');
-    if (switched) {
-      e.preventDefault();
-      e.stopPropagation();
+  // Scrol naar beneden
+  if (e.deltaY > SCROLL_THRESHOLD) {
+    if (index + batchSize < products.length) {
+      // nog meer batches → toon volgende
+      triggerStep("down");
+    } else {
+      // laatste batch → laat pagina daarna pas scrollen
+      section.style.pointerEvents = "none"; 
+      window.scrollBy({ top: 1 }); // 1px kick zodat body scroll weer overneemt
+      setTimeout(() => section.style.pointerEvents = "auto", 200);
     }
   }
-}
-// passive: false zodat preventDefault werkt
-window.addEventListener('wheel', onWindowWheel, { passive: false });
+
+  // Scrol naar boven
+  else if (e.deltaY < -SCROLL_THRESHOLD) {
+    if (index - batchSize >= 0) {
+      // vorige batch tonen
+      triggerStep("up");
+    } else {
+      // eerste batch → laat pagina omhoog scrollen
+      section.style.pointerEvents = "none";
+      window.scrollBy({ top: -1 });
+      setTimeout(() => section.style.pointerEvents = "auto", 200);
+    }
+  }
+}, { passive: false });
+
 
 // TOUCH: binnen de sectie swipen = 1 rij per swipe
 let touchStartY = null;
