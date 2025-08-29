@@ -13,7 +13,7 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "12" }
 ];
 
-// veronderstelt: products + showBatch() zijn al gedefinieerd
+// aannemende dat `products` al gedefinieerd is
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
 
@@ -21,15 +21,31 @@ let index = 0;
 const batchSize = 4;
 let lock = false;
 
-// instellingen
-const SCROLL_THRESHOLD = 6;   // gevoelig maar single-step
-const LOCK_MS = 350;          // korte lock om inertie te blokkeren
-const TOUCH_THRESHOLD = 20;   // swipe drempel (px)
+// instellingen: zeer gevoelig maar single-step
+const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
+const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
+const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
 
-// init eerste batch (gebruik jouw bestaande showBatch invocatie)
+// render (je bestaande showBatch behouden/overgenomen)
+function showBatch(startIndex) {
+  grid.innerHTML = "";
+  const slice = products.slice(startIndex, startIndex + batchSize);
+  slice.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.label}">
+      <div class="product-label">${p.label}</div>
+    `;
+    grid.appendChild(div);
+    requestAnimationFrame(() => div.classList.add("loaded"));
+  });
+}
+
+// init eerste batch
 showBatch(index);
 
-// helper: één stap triggeren (down/up)
+// helper: probeer één stap (down of up)
 function triggerStep(direction) {
   if (lock) return false;
   if (direction === 'down' && index + batchSize < products.length) {
@@ -48,131 +64,72 @@ function triggerStep(direction) {
   return false;
 }
 
-/* -------------------------
-   Robuuste "pointer inside" state
-   ------------------------- */
+// pointer flag: true wanneer cursor/focus zich over de sectie bevindt
 let pointerInside = false;
-let pointerTimeout = null;
+section.addEventListener('pointerenter', () => pointerInside = true);
+section.addEventListener('pointerleave', () => pointerInside = false);
 
-function setPointerInside(val) {
-  pointerInside = val;
-  if (pointerTimeout) {
-    clearTimeout(pointerTimeout);
-    pointerTimeout = null;
-  }
-  if (val === false) {
-    // houd korte grace periode zodat kleine pointer-overs gaan niet meteen false maken
-    pointerTimeout = setTimeout(() => pointerInside = false, 120);
-  }
-}
-
-// pointer events
-section.addEventListener('pointerenter', () => setPointerInside(true));
-section.addEventListener('pointerleave', () => setPointerInside(false));
-
-// mousemove fallback: als gebruiker beweegt binnen sectie, refresh de state
-// (soms pointerenter/leave kunnen raar gedrag geven bij iframes/scrollbars)
-section.addEventListener('mousemove', () => setPointerInside(true), { passive: true });
-
-/* -------------------------
-   Wheel handler (globaal) — maar handelen alleen wanneer event 'inside' is
-   ------------------------- */
-function isEventInsideSection(e) {
-  // 1) pointerInside flag
-  if (pointerInside) return true;
-
-  // 2) target in path
-  try {
-    if (e && e.composedPath) {
-      const path = e.composedPath();
-      if (path && path.indexOf && path.indexOf(section) !== -1) return true;
-    }
-  } catch (err) { /* ignore */ }
-
-  // 3) target is child of section
-  if (e.target && section.contains(e.target)) return true;
-
-  // 4) elementFromPoint fallback (works for trackpad/mouse)
-  if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    if (el && section.contains(el)) return true;
-  }
-
-  // 5) keyboard-focus fallback: als een child van section gefocust is
-  if (document.activeElement && section.contains(document.activeElement)) return true;
-
-  return false;
-}
-
+// WHEEL: luister op window zodat trackpad/muiswiel events worden opgevangen
+// maar handel alleen als pointerInside === true
 function onWindowWheel(e) {
-  // alleen relevant als event binnen sectie is (robuste check)
-  if (!isEventInsideSection(e)) return;
+  // alleen ageren als cursor/focus in de sectie is
+  if (!pointerInside) return;
 
-  // normaliseer delta
-  const PIXEL_PER_LINE = 16;
-  const deltaY = (e.deltaMode === 1) ? e.deltaY * PIXEL_PER_LINE : e.deltaY;
-
-  // als we locked zijn: blokkeer inertie zodat de pagina niet mee beweegt
+  // als we locked zijn, voorkom extra triggers (en voorkom dat pagina meebeweegt)
   if (lock) {
+    // we voorkomen scroll-vernieling tijdens lock zodat inertie niet doorloopt
     e.preventDefault();
     e.stopPropagation();
     return;
   }
 
-  // heel kleine waardes negeren
-  if (Math.abs(deltaY) < 0.5) return;
+  // normaliseer deltaY als browser gebruikt 'lines' in deltaMode
+  const PIXEL_PER_LINE = 16;
+  const deltaY = (e.deltaMode === 1) ? e.deltaY * PIXEL_PER_LINE : e.deltaY;
 
-  // richting bepalen en 1 stap triggeren (single-step)
-  let didSwitch = false;
   if (deltaY > SCROLL_THRESHOLD) {
-    didSwitch = triggerStep('down');
+    const switched = triggerStep('down');
+    if (switched) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   } else if (deltaY < -SCROLL_THRESHOLD) {
-    didSwitch = triggerStep('up');
-  }
-
-  // alleen blokkeren als we daadwerkelijk wisselen — anders mag de pagina doorscrollen
-  if (didSwitch) {
-    e.preventDefault();
-    e.stopPropagation();
+    const switched = triggerStep('up');
+    if (switched) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   }
 }
-// luister op window om ook trackpad-inertie te vangen
+// passive: false zodat preventDefault werkt
 window.addEventListener('wheel', onWindowWheel, { passive: false });
 
-/* -------------------------
-   Touch handling (mobile)
-   ------------------------- */
+// TOUCH: binnen de sectie swipen = 1 rij per swipe
 let touchStartY = null;
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) {
     touchStartY = e.touches[0].clientY;
-    setPointerInside(true); // assume user interacts with section
+    // assume touch means user is interacting with section
+    pointerInside = true;
   }
 }, { passive: true });
 
 section.addEventListener("touchmove", (e) => {
-  if (lock || touchStartY === null) {
-    // als locked: blokkeren we inertie
-    if (lock) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    return;
-  }
+  if (lock || touchStartY === null) return;
 
   const y = e.touches[0].clientY;
-  const dy = touchStartY - y;
+  const dy = touchStartY - y; // positief = swipe up
 
   if (dy > TOUCH_THRESHOLD) {
-    const did = triggerStep('down');
-    if (did) {
+    const switched = triggerStep('down');
+    if (switched) {
       e.preventDefault();
       e.stopPropagation();
     }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) {
-    const did = triggerStep('up');
-    if (did) {
+    const switched = triggerStep('up');
+    if (switched) {
       e.preventDefault();
       e.stopPropagation();
     }
@@ -182,6 +139,7 @@ section.addEventListener("touchmove", (e) => {
 
 section.addEventListener("touchend", () => {
   touchStartY = null;
-  // allow pointerInside to decay via timeout
+  // pointerInside blijft true until pointerleave — mobile browsers will naturally change view when user scrolls away
 }, { passive: true });
+
 
