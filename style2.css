@@ -328,9 +328,7 @@ header h1 {
   box-sizing: border-box;  */
 }
 
-.product {
-  width: 25vw;
-  height: 320px; 
+.product { 
   /* position: relative; */
   display: flex;
   align-items: center;
