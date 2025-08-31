@@ -299,8 +299,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #222;
-  color: #fff;
+  background: #fff;
+  color: #222;
 }
 
 header h1 {
