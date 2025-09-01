@@ -395,21 +395,20 @@ header h1 {
 
 /* test voor een volledige scrolervaring */
 /* verwijder de globale regel voor alle sections */
+/* normale pagina scroll */
 html, body {
-  height: 100%;
-  scroll-behavior: smooth; /* eventueel voor vloeiend scrollen */
+  height: auto;             /* niet forceren op 100% */
+  scroll-behavior: smooth;  /* optioneel, voor vloeiende beweging */
 }
 
-/* alleen productSection laten snappen */
+/* alleen de product sectie heeft snap */
 #productSection {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y mandatory; /* activeer snap alleen hier */
+  overflow-y: scroll;            /* eigen scroll voor deze sectie */
+  max-height: 100vh;             /* viewport-hoogte */
 }
 
-#productSection .grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-
-#productSection .product {
+/* elke rij / product "plakt" */
+.product {
   scroll-snap-align: start;
 }
