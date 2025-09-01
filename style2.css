@@ -6,7 +6,7 @@ body {
     padding: 0;
     color: #333;
     /* overflow-x: hidden; */
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 /* Hier moest de header styling komen: */
@@ -310,7 +310,7 @@ header h1 {
 /* SECTION met custom scroll gedrag */
 #productSection {
   height: 100vh;       /* neemt viewport in */
-  overflow: hidden;    /* verberg interne scroll */
+  overflow: visible;    /* verberg interne scroll */
   position: relative;
   touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
 
@@ -324,6 +324,7 @@ header h1 {
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+  min-height: auto;
 }
 
 .grid {
