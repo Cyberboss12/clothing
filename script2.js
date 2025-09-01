@@ -45,21 +45,16 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "12" }
 ];
 
-// aannemende dat `products` al gedefinieerd is
+// === Carousel basis (laat je eigen products + showBatch zoals je had) ===
 const section = document.getElementById("productSection");
-const grid = document.getElementById("productGrid");
+const grid    = document.getElementById("productGrid");
 
-let index = 0;
 const batchSize = 4;
+let index = 0;
 let lock = false;
+let engaged = false; // zitten we in "carousel-modus"?
 
-// instellingen: zeer gevoelig maar single-step
-const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
-const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
-const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
-
-// render (je bestaande showBatch behouden/overgenomen)
-function showBatch(startIndex) {
+function showBatch(startIndex){
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
@@ -73,102 +68,98 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
-
-// init eerste batch
 showBatch(index);
 
-// helper: probeer één stap (down of up)
-function triggerStep(direction) {
+function triggerStep(dir){
   if (lock) return false;
-  if (direction === 'down' && index + batchSize < products.length) {
-    index += batchSize;
-    showBatch(index);
-    lock = true;
-    setTimeout(() => lock = false, LOCK_MS);
-    return true;
-  } else if (direction === 'up' && index - batchSize >= 0) {
-    index -= batchSize;
-    showBatch(index);
-    lock = true;
-    setTimeout(() => lock = false, LOCK_MS);
-    return true;
+  if (dir === 'down'){
+    if (index + batchSize < products.length){
+      index += batchSize;
+      showBatch(index);
+      lock = true; setTimeout(()=>lock=false, 320);
+      return true;
+    } else {
+      // bij laatste batch -> verlaat modus zodat pagina verder scrolt
+      engaged = false;
+      return false;
+    }
+  } else {
+    if (index - batchSize >= 0){
+      index -= batchSize;
+      showBatch(index);
+      lock = true; setTimeout(()=>lock=false, 320);
+      return true;
+    } else {
+      // bij eerste batch omhoog -> verlaat modus zodat pagina omhoog kan
+      engaged = false;
+      return false;
+    }
   }
-  return false;
 }
 
-// pointer flag: true wanneer cursor/focus zich over de sectie bevindt
-let pointerInside = false;
-section.addEventListener('pointerenter', () => pointerInside = true);
-section.addEventListener('pointerleave', () => pointerInside = false);
+function sectionTop(){
+  return section.getBoundingClientRect().top + window.scrollY;
+}
+function sectionBottom(){
+  return sectionTop() + section.offsetHeight;
+}
+function enterCarousel(){
+  engaged = true;
+  // zorg dat de sectie in beeld staat
+  window.scrollTo({ top: sectionTop(), behavior: 'smooth' });
+}
 
-section.addEventListener("wheel", (e) => {
-  // Altijd scroll blokkeren binnen de product sectie
+window.addEventListener('wheel', (e) => {
+  const PIXEL_PER_LINE = 16;
+  const dy = (e.deltaMode === 1) ? e.deltaY * PIXEL_PER_LINE : e.deltaY;
+
+  const top    = window.scrollY;
+  const vh     = window.innerHeight;
+  const sTop   = sectionTop();
+  const sBot   = sectionBottom();
+  const above  = top + 10 < sTop;            // viewport duidelijk boven sectie
+  const below  = top > sBot - vh - 10;       // viewport duidelijk onder sectie
+  const inside = !above && !below;           // overlap met sectie
+
+  // Nog niet in carousel-modus?
+  if (!engaged){
+    if (dy > 0 && above){
+      // van boven naar beneden -> ga eerst naar de sectie en engage
+      e.preventDefault();
+      enterCarousel();
+      return;
+    }
+    if (dy < 0 && below){
+      // van onder naar boven -> ga naar sectie en start bij laatste batch
+      e.preventDefault();
+      index = Math.max(0, products.length - batchSize);
+      showBatch(index);
+      enterCarousel();
+      return;
+    }
+    if (inside){
+      // al op de sectie: ga de modus in en hou pagina stil
+      engaged = true;
+      e.preventDefault();
+    } else {
+      // ergens anders op de pagina -> normale scroll
+      return;
+    }
+  }
+
+  // In carousel-modus: hou pagina stil en stap max 1 batch per wheel
   e.preventDefault();
-
-  if (lock) return;
-
-  // Scrol naar beneden
-  if (e.deltaY > SCROLL_THRESHOLD) {
-    if (index + batchSize < products.length) {
-      // nog meer batches → toon volgende
-      triggerStep("down");
-    } else {
-      // laatste batch → laat pagina daarna pas scrollen
-      section.style.pointerEvents = "none"; 
-      window.scrollBy({ top: 1 }); // 1px kick zodat body scroll weer overneemt
-      setTimeout(() => section.style.pointerEvents = "auto", 200);
+  if (dy > 0){
+    const moved = triggerStep('down');
+    if (!moved){
+      // klaar onder: laat pagina door naar content/footer
+      window.scrollTo({ top: sBot, behavior: 'smooth' });
     }
-  }
-
-  // Scrol naar boven
-  else if (e.deltaY < -SCROLL_THRESHOLD) {
-    if (index - batchSize >= 0) {
-      // vorige batch tonen
-      triggerStep("up");
-    } else {
-      // eerste batch → laat pagina omhoog scrollen
-      section.style.pointerEvents = "none";
-      window.scrollBy({ top: -1 });
-      setTimeout(() => section.style.pointerEvents = "auto", 200);
+  } else if (dy < 0){
+    const moved = triggerStep('up');
+    if (!moved){
+      // klaar boven: laat pagina terug naar header/infobar
+      window.scrollTo({ top: sTop - 1, behavior: 'smooth' });
     }
   }
 }, { passive: false });
-
-
-// TOUCH: binnen de sectie swipen = 1 rij per swipe
-let touchStartY = null;
-section.addEventListener("touchstart", (e) => {
-  if (e.touches && e.touches[0]) {
-    touchStartY = e.touches[0].clientY;
-    // assume touch means user is interacting with section
-    pointerInside = true;
-  }
-}, { passive: true });
-
-section.addEventListener("touchmove", (e) => {
-  if (lock || touchStartY === null) return;
-
-  const y = e.touches[0].clientY;
-  const dy = touchStartY - y; // positief = swipe up
-
-  if (dy > TOUCH_THRESHOLD) {
-    const switched = triggerStep('down');
-    if (switched) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) {
-    const switched = triggerStep('up');
-    if (switched) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    touchStartY = null;
-  }
-}, { passive: false });
-
-section.addEventListener("touchend", () => {
-  touchStartY = null;
-  // pointerInside blijft true until pointerleave — mobile browsers will naturally change view when user scrolls away
-}, { passive: true });
