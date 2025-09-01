@@ -394,12 +394,22 @@ header h1 {
 }
 
 /* test voor een volledige scrolervaring */
+/* verwijder de globale regel voor alle sections */
 html, body {
   height: 100%;
+  scroll-behavior: smooth; /* eventueel voor vloeiend scrollen */
+}
+
+/* alleen productSection laten snappen */
+#productSection {
   scroll-snap-type: y mandatory;
 }
 
-section {
+#productSection .grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+#productSection .product {
   scroll-snap-align: start;
-  min-height: 100vh;
 }
