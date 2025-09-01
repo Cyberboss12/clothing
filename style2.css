@@ -6,7 +6,7 @@ body {
     padding: 0;
     color: #333;
     /* overflow-x: hidden; */
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* Hier moest de header styling komen: */
@@ -310,21 +310,14 @@ header h1 {
 /* SECTION met custom scroll gedrag */
 #productSection {
   height: 100vh;       /* neemt viewport in */
-  overflow: visible;    /* verberg interne scroll */
+  overflow: hidden;    /* verberg interne scroll */
   position: relative;
   touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
 
   /* full-bleed hack */
-  /* margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw); */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   width: 100vw;
-
-  /* nieuw */
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  min-height: auto;
 }
 
 .grid {
@@ -334,10 +327,10 @@ header h1 {
   gap: 0;
   /* padding: 24px; */
   /* height: 100%; */
-  /* width: 100%; */
+  width: 100%;
   padding: 0;
   margin: 0;
-  align-content: center; 
+  /* align-content: center; */
   box-sizing: border-box;   
 }
 
@@ -351,7 +344,6 @@ header h1 {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 300ms ease, transform 300ms ease; 
-  overflow: hidden;
 }
 
 .product.loaded {
