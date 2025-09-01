@@ -309,8 +309,8 @@ header h1 {
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  height: 100vh;       /* neemt viewport in */
-  overflow: hidden;    /* verberg interne scroll */
+  min-height: 100vh;       /* neemt viewport in */
+  overflow: visible;    /* verberg interne scroll */
   position: relative;
   touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
 
