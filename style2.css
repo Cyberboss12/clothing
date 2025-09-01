@@ -392,3 +392,14 @@ header h1 {
   font-size: 0.9rem;
   color: #666;
 }
+
+/* test voor een volledige scrolervaring */
+html, body {
+  height: 100%;
+  scroll-snap-type: y mandatory;
+}
+
+section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
