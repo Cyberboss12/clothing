@@ -66,6 +66,16 @@ function atStartOfCarousel() {
   return index === 0;
 }
 
+// smooth scroll helpers
+function scrollToFooter() {
+  document.querySelector("footer")
+    .scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function scrollToHeader() {
+  document.querySelector("header")
+    .scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 // render batch
 function showBatch(startIndex) {
   grid.innerHTML = "";
@@ -114,9 +124,7 @@ function handleCarouselScroll(deltaY) {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
-      // laatste batch → scroll naar footer
-      document.querySelector("footer")
-        .scrollIntoView({ behavior: "smooth" });
+      scrollToFooter();
     }
   }
 
@@ -125,9 +133,7 @@ function handleCarouselScroll(deltaY) {
     if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
-      // eerste batch → terug naar header
-      document.querySelector("header")
-        .scrollIntoView({ behavior: "smooth" });
+      scrollToHeader();
     }
   }
 }
@@ -139,7 +145,6 @@ function handleCarouselScroll(deltaY) {
 
 // WHEEL → overal op de pagina besturen
 window.addEventListener("wheel", (e) => {
-  // alleen ingrijpen als we nog niet "buiten" de carousel zijn
   if (e.deltaY > 0 && !atEndOfCarousel()) {
     e.preventDefault();
     handleCarouselScroll(e.deltaY);
@@ -147,11 +152,11 @@ window.addEventListener("wheel", (e) => {
     e.preventDefault();
     handleCarouselScroll(e.deltaY);
   } else if (e.deltaY > 0 && atEndOfCarousel()) {
-    // laat normale body scrollen naar footer
-    return;
+    // laat body gewoon door naar footer
+    scrollToFooter();
   } else if (e.deltaY < 0 && atStartOfCarousel()) {
-    // laat normale body scrollen naar header
-    return;
+    // laat body gewoon terug naar header
+    scrollToHeader();
   }
 }, { passive: false });
 
@@ -175,8 +180,7 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("down");
       e.preventDefault();
     } else {
-      document.querySelector("footer")
-        .scrollIntoView({ behavior: "smooth" });
+      scrollToFooter();
     }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) {
@@ -184,8 +188,7 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("up");
       e.preventDefault();
     } else {
-      document.querySelector("header")
-        .scrollIntoView({ behavior: "smooth" });
+      scrollToHeader();
     }
     touchStartY = null;
   }
