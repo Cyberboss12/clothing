@@ -48,41 +48,21 @@ const products = [
 // aannemende dat `products` al gedefinieerd is
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
+const extraContent = document.getElementById("extraContent");
 
 let index = 0;
 const batchSize = 4;
-let lock = false;
-let carouselActive = true; // bepaalt of carousel scroll blokkeert
+let lock = false;               // throttle per scroll/swipe
+let carouselActive = true;      // bepaalt of de carousel momenteel scrollt
 
-// instellingen
-const SCROLL_THRESHOLD = 6;
-const LOCK_MS = 300;
-const TOUCH_THRESHOLD = 20;
+const SCROLL_THRESHOLD = 6;     // muis scroll gevoeligheid
+const LOCK_MS = 300;            // throttle tijd
+const TOUCH_THRESHOLD = 20;     // swipe gevoeligheid
 
-// helpers: check posities
-function atEndOfCarousel() {
-  return index + batchSize >= products.length;
-}
-function atStartOfCarousel() {
-  return index === 0;
-}
 
-// smooth scroll helpers
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-function scrollToExtraContent() {
-  document.querySelector("#extraContent")
-    .scrollIntoView({ behavior: "smooth", block: "start" });
-}
-function scrollToCarousel(onDone) {
-  section.scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(() => {
-    if (typeof onDone === "function") onDone();
-  }, 600); // duur van smooth scroll
-}
-
-// render batch
+// ====================
+// 4. Helper functies
+// ====================
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -99,16 +79,24 @@ function showBatch(startIndex) {
 }
 showBatch(index);
 
-// trigger step
+function atEndOfCarousel() {
+  return index + batchSize >= products.length;
+}
+
+function atStartOfCarousel() {
+  return index === 0;
+}
+
 function triggerStep(direction) {
   if (lock) return false;
-  if (direction === 'down' && !atEndOfCarousel()) {
+
+  if (direction === "down" && !atEndOfCarousel()) {
     index += batchSize;
     showBatch(index);
     lock = true;
     setTimeout(() => lock = false, LOCK_MS);
     return true;
-  } else if (direction === 'up' && !atStartOfCarousel()) {
+  } else if (direction === "up" && !atStartOfCarousel()) {
     index -= batchSize;
     showBatch(index);
     lock = true;
@@ -118,100 +106,116 @@ function triggerStep(direction) {
   return false;
 }
 
+// smooth scroll naar extra content
+function scrollToExtraContent() {
+  extraContent.scrollIntoView({ behavior: "smooth" });
+}
 
-// ==============================
-// 4. Scroll handler
-// ==============================
-function handleCarouselScroll(deltaY) {
-  if (lock || !carouselActive) return;
+// smooth scroll naar boven (header + info-bar + carousel)
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
-  // scroll down
-  if (deltaY > SCROLL_THRESHOLD) {
+
+// ====================
+// 5. Wheel event
+// ====================
+section.addEventListener("wheel", (e) => {
+  e.preventDefault();
+
+  if (!carouselActive) return;
+
+  if (lock) return;
+
+  if (e.deltaY > SCROLL_THRESHOLD) {
+    // scroll naar beneden
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
+      // laatste batch → smooth naar extra content
       carouselActive = false;
       scrollToExtraContent();
     }
-  }
-
-  // scroll up
-  if (deltaY < -SCROLL_THRESHOLD) {
+  } else if (e.deltaY < -SCROLL_THRESHOLD) {
+    // scroll naar boven
     if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
       scrollToTop();
     }
   }
-}
+}, { passive: false });
 
 
-// ==============================
-// 5. Events
-// ==============================
-
-// WHEEL
-window.addEventListener("wheel", (e) => {
-  if (carouselActive) {
+// ====================
+// 6. Scroll omhoog vanuit extra content
+// ====================
+extraContent.addEventListener("wheel", (e) => {
+  if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= extraContent.offsetTop) {
     e.preventDefault();
-    handleCarouselScroll(e.deltaY);
-  } else {
-    // Carousel uit → check of we omhoog terugkomen
-    if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
-      e.preventDefault();
-      carouselActive = true;
-      scrollToCarousel(() => {
-        index = products.length - batchSize; // laatste batch (9–12)
-        showBatch(index);
-      });
-    }
+    // smooth terug naar carousel + batch 9-12
+    index = products.length - batchSize;
+    showBatch(index);
+    carouselActive = true;
+    section.scrollIntoView({ behavior: "smooth" });
   }
 }, { passive: false });
 
 
-// TOUCH
+// ====================
+// 7. Touch events (mobiel/tablet)
+// ====================
 let touchStartY = null;
+
 section.addEventListener("touchstart", (e) => {
-  if (e.touches && e.touches[0]) {
-    touchStartY = e.touches[0].clientY;
-  }
+  if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
-
   const y = e.touches[0].clientY;
   const dy = touchStartY - y;
 
-  if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (carouselActive && !atEndOfCarousel()) {
+  if (dy > TOUCH_THRESHOLD) {
+    // swipe omhoog → scroll naar beneden
+    if (!atEndOfCarousel()) {
       triggerStep("down");
       e.preventDefault();
-    } else if (carouselActive && atEndOfCarousel()) {
+    } else {
       carouselActive = false;
       scrollToExtraContent();
       e.preventDefault();
     }
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
-    if (carouselActive && !atStartOfCarousel()) {
+  } else if (dy < -TOUCH_THRESHOLD) {
+    // swipe omlaag → scroll naar boven
+    if (!atStartOfCarousel()) {
       triggerStep("up");
       e.preventDefault();
-    } else if (carouselActive && atStartOfCarousel()) {
+    } else {
       scrollToTop();
-      e.preventDefault();
-    } else if (!carouselActive && window.scrollY <= section.offsetTop) {
-      carouselActive = true;
-      scrollToCarousel(() => {
-        index = products.length - batchSize;
-        showBatch(index);
-      });
       e.preventDefault();
     }
     touchStartY = null;
   }
 }, { passive: false });
 
-section.addEventListener("touchend", () => {
-  touchStartY = null;
-}, { passive: true });
+extraContent.addEventListener("touchmove", (e) => {
+  if (!touchStartY && e.touches[0]) touchStartY = e.touches[0].clientY;
+  if (!touchStartY) return;
+
+  const y = e.touches[0].clientY;
+  const dy = touchStartY - y;
+
+  if (dy < -TOUCH_THRESHOLD && window.scrollY <= extraContent.offsetTop) {
+    e.preventDefault();
+    index = products.length - batchSize;
+    showBatch(index);
+    carouselActive = true;
+    section.scrollIntoView({ behavior: "smooth" });
+    touchStartY = null;
+  }
+}, { passive: false });
+
+section.addEventListener("touchend", () => { touchStartY = null; }, { passive: true });
+extraContent.addEventListener("touchend", () => { touchStartY = null; }, { passive: true });
