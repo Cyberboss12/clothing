@@ -307,6 +307,17 @@ header h1 {
   font-size: 2rem;
 }
 
+/* Scroll stages */
+.scroll-stage {
+  height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
 /* SECTION met custom scroll gedrag */
 #productSection {
   height: 100vh;       /* neemt viewport in */

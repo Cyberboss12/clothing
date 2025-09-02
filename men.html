@@ -17,14 +17,15 @@
   </div>
 </div> -->
 
-<div class="info-bar">
+<!-- gepauzeerd: -->
+<!-- <div class="info-bar">
   <div class="info-left">Gratis verzending vanaf €50</div>
   <div class="info-center" id="infoMessage">Welkom bij onze webshop!</div>
   <div class="info-right">
     <a href="#">Contact</a>
     <a href="#">Help</a>
   </div>
-</div>
+</div> -->
 
 <!-- Hoofdnavigatie -->
 <!-- <div class="topbar">
@@ -108,15 +109,16 @@
   </section>
 </main> -->
 
-  <header style="height:80px;display:flex;align-items:center;padding:0 16px;">
+<!-- gepauzeerd: -->
+  <!-- <header style="height:80px;display:flex;align-items:center;padding:0 16px;">
     <h1>Header</h1>
   </header>
 
-  <main>
+  <main> -->
     <!-- Productsectie: vult 1 viewport en heeft custom scroll -->
-    <section id="productSection">
+    <!-- <section id="productSection">
       <div class="grid" id="productGrid"></div>
-    </section>
+    </section> -->
 
   <!-- andere content zodat page kan scrollen naar footer -->
     <!-- <section style="height:120vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
@@ -124,13 +126,49 @@
     </section>
   </main> -->
 
-  <section id="extraContent" style="height:120vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
+  <!-- gepauzeerd: -->
+  <!-- <section id="extraContent" style="height:120vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
   <p>Extra content onder de productsectie — hier mag de pagina scrollen.</p>
 </section>
 
   <footer style="height:200px;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;">
     <p>Footer</p>
+  </footer> -->
+
+  <!-- ===== Scroll Stage 1 ===== -->
+<div id="scrollStage1" class="scroll-stage">
+  <header style="height:80px;display:flex;align-items:center;padding:0 16px;">
+    <h1>Header</h1>
+  </header>
+
+  <!-- Info-bar (voorbeeld) -->
+  <div class="info-bar">
+    <div class="info-center" id="infoMessage">Welkom bij onze webshop!</div>
+    <div class="info-right">
+      <span>Link</span>
+      <span>Account</span>
+    </div>
+  </div>
+
+  <main>
+    <!-- Productsectie vult viewport -->
+    <section id="productSection">
+      <div class="grid" id="productGrid"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ===== Scroll Stage 2 ===== -->
+<div id="scrollStage2" class="scroll-stage hidden">
+  <section id="extraContent" style="height:120vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
+    <p>Extra content onder de productsectie — hier mag de pagina scrollen.</p>
+  </section>
+
+  <footer style="height:200px;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;">
+    <p>Footer</p>
   </footer>
+</div>
+
 
 <script src="script2.js"></script>
 </body>

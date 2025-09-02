@@ -52,14 +52,16 @@ const grid = document.getElementById("productGrid");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-let carouselActive = true; // bepaalt of carousel scroll blokkeert
+let carouselActive = true;
 
-// instellingen
 const SCROLL_THRESHOLD = 6;
 const LOCK_MS = 300;
 const TOUCH_THRESHOLD = 20;
 
-// helpers: check posities
+// stages
+const stage1 = document.getElementById("scrollStage1");
+const stage2 = document.getElementById("scrollStage2");
+
 function atEndOfCarousel() {
   return index + batchSize >= products.length;
 }
@@ -67,22 +69,7 @@ function atStartOfCarousel() {
   return index === 0;
 }
 
-// smooth scroll helpers
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-function scrollToExtraContent() {
-  document.querySelector("#extraContent")
-    .scrollIntoView({ behavior: "smooth", block: "start" });
-}
-function scrollToCarousel(onDone) {
-  section.scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(() => {
-    if (typeof onDone === "function") onDone();
-  }, 600); // duur van smooth scroll
-}
-
-// render batch
+// batch rendering
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -99,72 +86,71 @@ function showBatch(startIndex) {
 }
 showBatch(index);
 
-// trigger step
 function triggerStep(direction) {
   if (lock) return false;
-  if (direction === 'down' && !atEndOfCarousel()) {
+  if (direction === "down" && !atEndOfCarousel()) {
     index += batchSize;
     showBatch(index);
     lock = true;
-    setTimeout(() => lock = false, LOCK_MS);
+    setTimeout(() => (lock = false), LOCK_MS);
     return true;
-  } else if (direction === 'up' && !atStartOfCarousel()) {
+  } else if (direction === "up" && !atStartOfCarousel()) {
     index -= batchSize;
     showBatch(index);
     lock = true;
-    setTimeout(() => lock = false, LOCK_MS);
+    setTimeout(() => (lock = false), LOCK_MS);
     return true;
   }
   return false;
 }
 
 
-// ==============================
-// 4. Scroll handler
-// ==============================
-function handleCarouselScroll(deltaY) {
-  if (lock || !carouselActive) return;
+// ====================
+// Stage switching
+// ====================
+function switchToStage2() {
+  stage1.classList.add("hidden");
+  stage2.classList.remove("hidden");
+  stage2.scrollTo({ top: 0, behavior: "instant" });
+  carouselActive = false;
+}
 
-  // scroll down
-  if (deltaY > SCROLL_THRESHOLD) {
-    if (!atEndOfCarousel()) {
-      triggerStep("down");
-    } else {
-      carouselActive = false;
-      scrollToExtraContent();
-    }
-  }
-
-  // scroll up
-  if (deltaY < -SCROLL_THRESHOLD) {
-    if (!atStartOfCarousel()) {
-      triggerStep("up");
-    } else {
-      scrollToTop();
-    }
-  }
+function switchToStage1() {
+  stage2.classList.add("hidden");
+  stage1.classList.remove("hidden");
+  stage1.scrollTo({ top: section.offsetTop, behavior: "instant" });
+  carouselActive = true;
+  index = products.length - batchSize;
+  showBatch(index);
 }
 
 
-// ==============================
-// 5. Events
-// ==============================
-
-// WHEEL
-window.addEventListener("wheel", (e) => {
+// ====================
+// Events
+// ====================
+stage1.addEventListener("wheel", (e) => {
   if (carouselActive) {
     e.preventDefault();
-    handleCarouselScroll(e.deltaY);
-  } else {
-    // Carousel uit → check of we omhoog terugkomen
-    if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
-      e.preventDefault();
-      carouselActive = true;
-      scrollToCarousel(() => {
-        index = products.length - batchSize; // laatste batch (9–12)
-        showBatch(index);
-      });
+    if (e.deltaY > SCROLL_THRESHOLD) {
+      if (!atEndOfCarousel()) {
+        triggerStep("down");
+      } else {
+        switchToStage2();
+      }
+    } else if (e.deltaY < -SCROLL_THRESHOLD) {
+      if (!atStartOfCarousel()) {
+        triggerStep("up");
+      } else {
+        stage1.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
+  }
+}, { passive: false });
+
+stage2.addEventListener("wheel", (e) => {
+  if (e.deltaY < -SCROLL_THRESHOLD && stage2.scrollTop === 0) {
+    e.preventDefault();
+    switchToStage1();
   }
 }, { passive: false });
 
@@ -179,7 +165,6 @@ section.addEventListener("touchstart", (e) => {
 
 section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
-
   const y = e.touches[0].clientY;
   const dy = touchStartY - y;
 
@@ -188,8 +173,7 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("down");
       e.preventDefault();
     } else if (carouselActive && atEndOfCarousel()) {
-      carouselActive = false;
-      scrollToExtraContent();
+      switchToStage2();
       e.preventDefault();
     }
     touchStartY = null;
@@ -198,17 +182,20 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("up");
       e.preventDefault();
     } else if (carouselActive && atStartOfCarousel()) {
-      scrollToTop();
-      e.preventDefault();
-    } else if (!carouselActive && window.scrollY <= section.offsetTop) {
-      carouselActive = true;
-      scrollToCarousel(() => {
-        index = products.length - batchSize;
-        showBatch(index);
-      });
+      stage1.scrollTo({ top: 0, behavior: "smooth" });
       e.preventDefault();
     }
     touchStartY = null;
+  }
+}, { passive: false });
+
+stage2.addEventListener("touchmove", (e) => {
+  if (touchStartY === null) return;
+  const y = e.touches[0].clientY;
+  const dy = touchStartY - y;
+  if (dy < -TOUCH_THRESHOLD && stage2.scrollTop === 0) {
+    e.preventDefault();
+    switchToStage1();
   }
 }, { passive: false });
 
