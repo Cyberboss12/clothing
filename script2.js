@@ -52,11 +52,12 @@ const grid = document.getElementById("productGrid");
 let index = 0;
 const batchSize = 4;
 let lock = false;
+let carouselActive = true; // bepaalt of carousel scroll blokkeert
 
-// instellingen: zeer gevoelig maar single-step
-const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
-const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
-const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
+// instellingen
+const SCROLL_THRESHOLD = 6;
+const LOCK_MS = 300;
+const TOUCH_THRESHOLD = 20;
 
 // helpers: check posities
 function atEndOfCarousel() {
@@ -116,13 +117,15 @@ function triggerStep(direction) {
 // 4. Scroll handler
 // ==============================
 function handleCarouselScroll(deltaY) {
-  if (lock) return;
+  if (lock || !carouselActive) return;
 
   // scroll down
   if (deltaY > SCROLL_THRESHOLD) {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
+      // laatste batch → active uit en naar extra content
+      carouselActive = false;
       scrollToExtraContent();
     }
   }
@@ -142,23 +145,24 @@ function handleCarouselScroll(deltaY) {
 // 5. Events
 // ==============================
 
-// WHEEL → overal op de pagina besturen
+// WHEEL
 window.addEventListener("wheel", (e) => {
-  if (e.deltaY > 0 && !atEndOfCarousel()) {
+  if (carouselActive) {
     e.preventDefault();
     handleCarouselScroll(e.deltaY);
-  } else if (e.deltaY < 0 && !atStartOfCarousel()) {
-    e.preventDefault();
-    handleCarouselScroll(e.deltaY);
-  } else if (e.deltaY > 0 && atEndOfCarousel()) {
-    scrollToExtraContent();
-  } else if (e.deltaY < 0 && atStartOfCarousel()) {
-    scrollToTop();
+  } else {
+    // Carousel is uit → check of we terug omhoog komen
+    if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
+      e.preventDefault();
+      carouselActive = true;
+      index = products.length - batchSize; // laatste batch (9–12)
+      showBatch(index);
+    }
   }
 }, { passive: false });
 
 
-// TOUCH → swipen binnen de sectie
+// TOUCH
 let touchStartY = null;
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) {
@@ -172,20 +176,28 @@ section.addEventListener("touchmove", (e) => {
   const y = e.touches[0].clientY;
   const dy = touchStartY - y; // positief = swipe up
 
-  if (dy > TOUCH_THRESHOLD) {
-    if (!atEndOfCarousel()) {
+  if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (carouselActive && !atEndOfCarousel()) {
       triggerStep("down");
       e.preventDefault();
-    } else {
+    } else if (carouselActive && atEndOfCarousel()) {
+      carouselActive = false;
       scrollToExtraContent();
+      e.preventDefault();
     }
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) {
-    if (!atStartOfCarousel()) {
+  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    if (carouselActive && !atStartOfCarousel()) {
       triggerStep("up");
       e.preventDefault();
-    } else {
+    } else if (carouselActive && atStartOfCarousel()) {
       scrollToTop();
+      e.preventDefault();
+    } else if (!carouselActive && window.scrollY <= section.offsetTop) {
+      carouselActive = true;
+      index = products.length - batchSize; // laatste batch (9–12)
+      showBatch(index);
+      e.preventDefault();
     }
     touchStartY = null;
   }
