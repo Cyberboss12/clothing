@@ -58,7 +58,7 @@ const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
 const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
 const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
 
-// helpers
+// helpers: check posities
 function atEndOfCarousel() {
   return index + batchSize >= products.length;
 }
@@ -67,12 +67,11 @@ function atStartOfCarousel() {
 }
 
 // smooth scroll helpers
-function scrollToFooter() {
-  document.querySelector("footer")
-    .scrollIntoView({ behavior: "smooth", block: "start" });
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
-function scrollToHeader() {
-  document.querySelector("header")
+function scrollToExtraContent() {
+  document.querySelector("#extraContent")
     .scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -124,7 +123,7 @@ function handleCarouselScroll(deltaY) {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
-      scrollToFooter();
+      scrollToExtraContent();
     }
   }
 
@@ -133,7 +132,7 @@ function handleCarouselScroll(deltaY) {
     if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
-      scrollToHeader();
+      scrollToTop();
     }
   }
 }
@@ -152,11 +151,9 @@ window.addEventListener("wheel", (e) => {
     e.preventDefault();
     handleCarouselScroll(e.deltaY);
   } else if (e.deltaY > 0 && atEndOfCarousel()) {
-    // laat body gewoon door naar footer
-    scrollToFooter();
+    scrollToExtraContent();
   } else if (e.deltaY < 0 && atStartOfCarousel()) {
-    // laat body gewoon terug naar header
-    scrollToHeader();
+    scrollToTop();
   }
 }, { passive: false });
 
@@ -180,7 +177,7 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("down");
       e.preventDefault();
     } else {
-      scrollToFooter();
+      scrollToExtraContent();
     }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) {
@@ -188,7 +185,7 @@ section.addEventListener("touchmove", (e) => {
       triggerStep("up");
       e.preventDefault();
     } else {
-      scrollToHeader();
+      scrollToTop();
     }
     touchStartY = null;
   }
