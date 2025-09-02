@@ -75,6 +75,12 @@ function scrollToExtraContent() {
   document.querySelector("#extraContent")
     .scrollIntoView({ behavior: "smooth", block: "start" });
 }
+function scrollToCarousel(onDone) {
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => {
+    if (typeof onDone === "function") onDone();
+  }, 600); // duur van smooth scroll
+}
 
 // render batch
 function showBatch(startIndex) {
@@ -124,7 +130,6 @@ function handleCarouselScroll(deltaY) {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
-      // laatste batch → active uit en naar extra content
       carouselActive = false;
       scrollToExtraContent();
     }
@@ -151,12 +156,14 @@ window.addEventListener("wheel", (e) => {
     e.preventDefault();
     handleCarouselScroll(e.deltaY);
   } else {
-    // Carousel is uit → check of we terug omhoog komen
+    // Carousel uit → check of we omhoog terugkomen
     if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
       e.preventDefault();
       carouselActive = true;
-      index = products.length - batchSize; // laatste batch (9–12)
-      showBatch(index);
+      scrollToCarousel(() => {
+        index = products.length - batchSize; // laatste batch (9–12)
+        showBatch(index);
+      });
     }
   }
 }, { passive: false });
@@ -174,7 +181,7 @@ section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
 
   const y = e.touches[0].clientY;
-  const dy = touchStartY - y; // positief = swipe up
+  const dy = touchStartY - y;
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
     if (carouselActive && !atEndOfCarousel()) {
@@ -195,8 +202,10 @@ section.addEventListener("touchmove", (e) => {
       e.preventDefault();
     } else if (!carouselActive && window.scrollY <= section.offsetTop) {
       carouselActive = true;
-      index = products.length - batchSize; // laatste batch (9–12)
-      showBatch(index);
+      scrollToCarousel(() => {
+        index = products.length - batchSize;
+        showBatch(index);
+      });
       e.preventDefault();
     }
     touchStartY = null;
