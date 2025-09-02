@@ -52,24 +52,13 @@ const grid = document.getElementById("productGrid");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-let carouselActive = true;
 
-const SCROLL_THRESHOLD = 6;
-const LOCK_MS = 300;
-const TOUCH_THRESHOLD = 20;
+// instellingen: zeer gevoelig maar single-step
+const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
+const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
+const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
 
-// stages
-const stage1 = document.getElementById("scrollStage1");
-const stage2 = document.getElementById("scrollStage2");
-
-function atEndOfCarousel() {
-  return index + batchSize >= products.length;
-}
-function atStartOfCarousel() {
-  return index === 0;
-}
-
-// batch rendering
+// render (je bestaande showBatch behouden/overgenomen)
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -84,121 +73,102 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
+
+// init eerste batch
 showBatch(index);
 
+// helper: probeer één stap (down of up)
 function triggerStep(direction) {
   if (lock) return false;
-  if (direction === "down" && !atEndOfCarousel()) {
+  if (direction === 'down' && index + batchSize < products.length) {
     index += batchSize;
     showBatch(index);
     lock = true;
-    setTimeout(() => (lock = false), LOCK_MS);
+    setTimeout(() => lock = false, LOCK_MS);
     return true;
-  } else if (direction === "up" && !atStartOfCarousel()) {
+  } else if (direction === 'up' && index - batchSize >= 0) {
     index -= batchSize;
     showBatch(index);
     lock = true;
-    setTimeout(() => (lock = false), LOCK_MS);
+    setTimeout(() => lock = false, LOCK_MS);
     return true;
   }
   return false;
 }
 
+// pointer flag: true wanneer cursor/focus zich over de sectie bevindt
+let pointerInside = false;
+section.addEventListener('pointerenter', () => pointerInside = true);
+section.addEventListener('pointerleave', () => pointerInside = false);
 
-// ====================
-// Stage switching
-// ====================
-function switchToStage2() {
-  stage1.classList.add("hidden");
-  stage2.classList.remove("hidden");
-  stage2.scrollTo({ top: 0, behavior: "instant" });
-  carouselActive = false;
-}
+section.addEventListener("wheel", (e) => {
+  // Altijd scroll blokkeren binnen de product sectie
+  e.preventDefault();
 
-function switchToStage1() {
-  stage2.classList.add("hidden");
-  stage1.classList.remove("hidden");
-  stage1.scrollTo({ top: section.offsetTop, behavior: "instant" });
-  carouselActive = true;
-  index = products.length - batchSize;
-  showBatch(index);
-}
+  if (lock) return;
 
+  // Scrol naar beneden
+  if (e.deltaY > SCROLL_THRESHOLD) {
+    if (index + batchSize < products.length) {
+      // nog meer batches → toon volgende
+      triggerStep("down");
+    } else {
+      // laatste batch → laat pagina daarna pas scrollen
+      section.style.pointerEvents = "none"; 
+      window.scrollBy({ top: 1 }); // 1px kick zodat body scroll weer overneemt
+      setTimeout(() => section.style.pointerEvents = "auto", 200);
+    }
+  }
 
-// ====================
-// Events
-// ====================
-stage1.addEventListener("wheel", (e) => {
-  if (carouselActive) {
-    e.preventDefault();
-    if (e.deltaY > SCROLL_THRESHOLD) {
-      if (!atEndOfCarousel()) {
-        triggerStep("down");
-      } else {
-        switchToStage2();
-      }
-    } else if (e.deltaY < -SCROLL_THRESHOLD) {
-      if (!atStartOfCarousel()) {
-        triggerStep("up");
-      } else {
-        stage1.scrollTo({ top: 0, behavior: "smooth" });
-      }
+  // Scrol naar boven
+  else if (e.deltaY < -SCROLL_THRESHOLD) {
+    if (index - batchSize >= 0) {
+      // vorige batch tonen
+      triggerStep("up");
+    } else {
+      // eerste batch → laat pagina omhoog scrollen
+      section.style.pointerEvents = "none";
+      window.scrollBy({ top: -1 });
+      setTimeout(() => section.style.pointerEvents = "auto", 200);
     }
   }
 }, { passive: false });
 
-stage2.addEventListener("wheel", (e) => {
-  if (e.deltaY < -SCROLL_THRESHOLD && stage2.scrollTop === 0) {
-    e.preventDefault();
-    switchToStage1();
-  }
-}, { passive: false });
 
-
-// TOUCH
+// TOUCH: binnen de sectie swipen = 1 rij per swipe
 let touchStartY = null;
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) {
     touchStartY = e.touches[0].clientY;
+    // assume touch means user is interacting with section
+    pointerInside = true;
   }
 }, { passive: true });
 
 section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
-  const y = e.touches[0].clientY;
-  const dy = touchStartY - y;
 
-  if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (carouselActive && !atEndOfCarousel()) {
-      triggerStep("down");
+  const y = e.touches[0].clientY;
+  const dy = touchStartY - y; // positief = swipe up
+
+  if (dy > TOUCH_THRESHOLD) {
+    const switched = triggerStep('down');
+    if (switched) {
       e.preventDefault();
-    } else if (carouselActive && atEndOfCarousel()) {
-      switchToStage2();
-      e.preventDefault();
+      e.stopPropagation();
     }
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
-    if (carouselActive && !atStartOfCarousel()) {
-      triggerStep("up");
+  } else if (dy < -TOUCH_THRESHOLD) {
+    const switched = triggerStep('up');
+    if (switched) {
       e.preventDefault();
-    } else if (carouselActive && atStartOfCarousel()) {
-      stage1.scrollTo({ top: 0, behavior: "smooth" });
-      e.preventDefault();
+      e.stopPropagation();
     }
     touchStartY = null;
-  }
-}, { passive: false });
-
-stage2.addEventListener("touchmove", (e) => {
-  if (touchStartY === null) return;
-  const y = e.touches[0].clientY;
-  const dy = touchStartY - y;
-  if (dy < -TOUCH_THRESHOLD && stage2.scrollTop === 0) {
-    e.preventDefault();
-    switchToStage1();
   }
 }, { passive: false });
 
 section.addEventListener("touchend", () => {
   touchStartY = null;
+  // pointerInside blijft true until pointerleave — mobile browsers will naturally change view when user scrolls away
 }, { passive: true });
