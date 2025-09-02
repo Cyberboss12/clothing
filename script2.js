@@ -52,13 +52,37 @@ const grid = document.getElementById("productGrid");
 let index = 0;
 const batchSize = 4;
 let lock = false;
+let carouselActive = true; // bepaalt of carousel scroll blokkeert
 
-// instellingen: zeer gevoelig maar single-step
-const SCROLL_THRESHOLD = 6;   // klein = gevoelig (muismoves/trackpad)
-const LOCK_MS = 300;          // na trigger korte lock zodat inertie niet skipt
-const TOUCH_THRESHOLD = 20;   // swipe gevoeligheid (px)
+// instellingen
+const SCROLL_THRESHOLD = 6;
+const LOCK_MS = 300;
+const TOUCH_THRESHOLD = 20;
 
-// render (je bestaande showBatch behouden/overgenomen)
+// helpers: check posities
+function atEndOfCarousel() {
+  return index + batchSize >= products.length;
+}
+function atStartOfCarousel() {
+  return index === 0;
+}
+
+// smooth scroll helpers
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function scrollToExtraContent() {
+  document.querySelector("#extraContent")
+    .scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function scrollToCarousel(onDone) {
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => {
+    if (typeof onDone === "function") onDone();
+  }, 600); // duur van smooth scroll
+}
+
+// render batch
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -73,20 +97,18 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
-
-// init eerste batch
 showBatch(index);
 
-// helper: probeer één stap (down of up)
+// trigger step
 function triggerStep(direction) {
   if (lock) return false;
-  if (direction === 'down' && index + batchSize < products.length) {
+  if (direction === 'down' && !atEndOfCarousel()) {
     index += batchSize;
     showBatch(index);
     lock = true;
     setTimeout(() => lock = false, LOCK_MS);
     return true;
-  } else if (direction === 'up' && index - batchSize >= 0) {
+  } else if (direction === 'up' && !atStartOfCarousel()) {
     index -= batchSize;
     showBatch(index);
     lock = true;
@@ -96,52 +118,62 @@ function triggerStep(direction) {
   return false;
 }
 
-// pointer flag: true wanneer cursor/focus zich over de sectie bevindt
-let pointerInside = false;
-section.addEventListener('pointerenter', () => pointerInside = true);
-section.addEventListener('pointerleave', () => pointerInside = false);
 
-section.addEventListener("wheel", (e) => {
-  // Altijd scroll blokkeren binnen de product sectie
-  e.preventDefault();
+// ==============================
+// 4. Scroll handler
+// ==============================
+function handleCarouselScroll(deltaY) {
+  if (lock || !carouselActive) return;
 
-  if (lock) return;
-
-  // Scrol naar beneden
-  if (e.deltaY > SCROLL_THRESHOLD) {
-    if (index + batchSize < products.length) {
-      // nog meer batches → toon volgende
+  // scroll down
+  if (deltaY > SCROLL_THRESHOLD) {
+    if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
-      // laatste batch → laat pagina daarna pas scrollen
-      section.style.pointerEvents = "none"; 
-      window.scrollBy({ top: 1 }); // 1px kick zodat body scroll weer overneemt
-      setTimeout(() => section.style.pointerEvents = "auto", 200);
+      carouselActive = false;
+      scrollToExtraContent();
     }
   }
 
-  // Scrol naar boven
-  else if (e.deltaY < -SCROLL_THRESHOLD) {
-    if (index - batchSize >= 0) {
-      // vorige batch tonen
+  // scroll up
+  if (deltaY < -SCROLL_THRESHOLD) {
+    if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
-      // eerste batch → laat pagina omhoog scrollen
-      section.style.pointerEvents = "none";
-      window.scrollBy({ top: -1 });
-      setTimeout(() => section.style.pointerEvents = "auto", 200);
+      scrollToTop();
+    }
+  }
+}
+
+
+// ==============================
+// 5. Events
+// ==============================
+
+// WHEEL
+window.addEventListener("wheel", (e) => {
+  if (carouselActive) {
+    e.preventDefault();
+    handleCarouselScroll(e.deltaY);
+  } else {
+    // Carousel uit → check of we omhoog terugkomen
+    if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
+      e.preventDefault();
+      carouselActive = true;
+      scrollToCarousel(() => {
+        index = products.length - batchSize; // laatste batch (9–12)
+        showBatch(index);
+      });
     }
   }
 }, { passive: false });
 
 
-// TOUCH: binnen de sectie swipen = 1 rij per swipe
+// TOUCH
 let touchStartY = null;
 section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) {
     touchStartY = e.touches[0].clientY;
-    // assume touch means user is interacting with section
-    pointerInside = true;
   }
 }, { passive: true });
 
@@ -149,20 +181,32 @@ section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
 
   const y = e.touches[0].clientY;
-  const dy = touchStartY - y; // positief = swipe up
+  const dy = touchStartY - y;
 
-  if (dy > TOUCH_THRESHOLD) {
-    const switched = triggerStep('down');
-    if (switched) {
+  if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (carouselActive && !atEndOfCarousel()) {
+      triggerStep("down");
       e.preventDefault();
-      e.stopPropagation();
+    } else if (carouselActive && atEndOfCarousel()) {
+      carouselActive = false;
+      scrollToExtraContent();
+      e.preventDefault();
     }
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) {
-    const switched = triggerStep('up');
-    if (switched) {
+  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    if (carouselActive && !atStartOfCarousel()) {
+      triggerStep("up");
       e.preventDefault();
-      e.stopPropagation();
+    } else if (carouselActive && atStartOfCarousel()) {
+      scrollToTop();
+      e.preventDefault();
+    } else if (!carouselActive && window.scrollY <= section.offsetTop) {
+      carouselActive = true;
+      scrollToCarousel(() => {
+        index = products.length - batchSize;
+        showBatch(index);
+      });
+      e.preventDefault();
     }
     touchStartY = null;
   }
@@ -170,5 +214,4 @@ section.addEventListener("touchmove", (e) => {
 
 section.addEventListener("touchend", () => {
   touchStartY = null;
-  // pointerInside blijft true until pointerleave — mobile browsers will naturally change view when user scrolls away
 }, { passive: true });
