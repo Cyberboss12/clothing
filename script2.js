@@ -46,39 +46,32 @@ const products = [
 ];
 
 // aannemende dat `products` al gedefinieerd is
-const section = document.getElementById("productSection");
-const grid = document.getElementById("productGrid");
-
-const batchSize = 4;
 let index = 0;
-let lock = false;
+const batchSize = 4;
+const grid = document.getElementById("productGrid");
+const section = document.getElementById("productSection");
 
-// Gevoelige instellingen
-const SCROLL_THRESHOLD = 2;   // lager = gevoeliger
-const TOUCH_THRESHOLD = 10;   // minder pixels nodig
-const LOCK_MS = 800;          // langer slot → bijna onmogelijk overslaan
+// scroll accumulatie
+let accumulatedDelta = 0;
+const SCROLL_UNIT = 100; // 1 batch = 100 pixels, past zich aan
+const TOUCH_UNIT = 50;
 
-// Render batch
+// render batch
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
-    div.innerHTML = `
-      <img src="${p.img}" alt="${p.label}">
-      <div class="product-label">${p.label}</div>
-    `;
+    div.innerHTML = `<img src="${p.img}" alt="${p.label}"><div class="product-label">${p.label}</div>`;
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 showBatch(index);
 
-// Stap vooruit of achteruit
+// trigger batch op/af
 function triggerStep(direction) {
-  if (lock) return;
-
   if (direction === "down" && index + batchSize < products.length) {
     index += batchSize;
     showBatch(index);
@@ -86,65 +79,52 @@ function triggerStep(direction) {
     index -= batchSize;
     showBatch(index);
   }
-
-  lock = true;
-  setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// ===================
-// Events
-// ===================
-
+// ==================
 // Muiswiel / touchpad
-section.addEventListener("wheel", (e) => {
+// ==================
+section.addEventListener("wheel", e => {
   e.preventDefault();
-  if (lock) return;
+  accumulatedDelta += e.deltaY;
 
-  if (e.deltaY > SCROLL_THRESHOLD) {
+  while (accumulatedDelta >= SCROLL_UNIT) {
     triggerStep("down");
-  } else if (e.deltaY < -SCROLL_THRESHOLD) {
+    accumulatedDelta -= SCROLL_UNIT;
+  }
+  while (accumulatedDelta <= -SCROLL_UNIT) {
     triggerStep("up");
+    accumulatedDelta += SCROLL_UNIT;
   }
 }, { passive: false });
 
+// ==================
 // Pijltoetsen
-window.addEventListener("keydown", (e) => {
-  if (lock) return;
-
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    triggerStep("down");
-  } else if (e.key === "ArrowUp") {
-    e.preventDefault();
-    triggerStep("up");
-  }
+// ==================
+window.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown") triggerStep("down");
+  if (e.key === "ArrowUp") triggerStep("up");
 });
 
+// ==================
 // Touch
+// ==================
 let touchStartY = null;
-section.addEventListener("touchstart", (e) => {
-  if (e.touches && e.touches[0]) {
-    touchStartY = e.touches[0].clientY;
-  }
+section.addEventListener("touchstart", e => {
+  if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
-section.addEventListener("touchmove", (e) => {
-  if (lock || touchStartY === null) return;
+section.addEventListener("touchmove", e => {
+  if (touchStartY === null) return;
+  const dy = touchStartY - e.touches[0].clientY;
 
-  const y = e.touches[0].clientY;
-  const dy = touchStartY - y;
-
-  if (dy > TOUCH_THRESHOLD) {
-    e.preventDefault();
+  if (dy > TOUCH_UNIT) {
     triggerStep("down");
-    touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) {
-    e.preventDefault();
+    touchStartY = e.touches[0].clientY;
+  } else if (dy < -TOUCH_UNIT) {
     triggerStep("up");
-    touchStartY = null;
+    touchStartY = e.touches[0].clientY;
   }
 }, { passive: false });
 
-section.addEventListener("touchend", () => {
-  touchStartY = null;
-}, { passive: true });
+section.addEventListener("touchend", () => { touchStartY = null; });
