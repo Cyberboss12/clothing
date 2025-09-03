@@ -48,47 +48,27 @@ const products = [
 // aannemende dat `products` al gedefinieerd is
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
-
-// Belangrijk: jouw HTML heeft geen id="extraContent" op die sectie.
-// We vallen daarom automatisch terug op de *volgende* sectie na productSection.
-const extraContent =
-  document.getElementById("extraContent") ||
-  (section ? section.nextElementSibling : null);
-
-const headerEl = document.querySelector("header");
-const infoBarEl = document.querySelector(".info-bar");
+const extraContent = document.querySelector("#extraContent");
 
 let index = 0;
 const batchSize = 4;
+let lock = false;
+let animating = false;
+let carouselActive = true;
 
-let lock = false;          // throttle 1 stap per interactie
-let animating = false;     // tijdens smooth scroll alle input negeren
-let carouselActive = true; // true = in carousel-fase, false = in extra content
-
-// Tunables
-const SCROLL_THRESHOLD = 28; // filtert touchpad-ruis
-const LOCK_MS = 550;         // batch-schakel lock
-const TOUCH_THRESHOLD = 36;  // swipe-drempel
-const SMOOTH_MS = 650;       // duur smooth scroll (ms)
+// settings
+const SCROLL_THRESHOLD = 6;
+const TOUCH_THRESHOLD = 20;
+const LOCK_MS = 400;
+const SMOOTH_MS = 600;
 
 // ==============================
-// 3) Helpers
+// 3. Helpers
 // ==============================
-function getTopY(el) {
-  const rect = el.getBoundingClientRect();
-  return rect.top + window.pageYOffset;
-}
-
-function totalTopBarsHeight() {
-  const h = headerEl ? headerEl.offsetHeight : 0;
-  const i = infoBarEl ? infoBarEl.offsetHeight : 0;
-  return h + i;
-}
-
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
-  slice.forEach((p) => {
+  slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
     div.innerHTML = `
@@ -101,166 +81,139 @@ function showBatch(startIndex) {
 }
 showBatch(index);
 
-function atEndOfCarousel() {
+function atEnd() {
   return index + batchSize >= products.length;
 }
-function atStartOfCarousel() {
+function atStart() {
   return index === 0;
 }
 
-function withLock(cb, ms = LOCK_MS) {
+function withLock(fn, ms = LOCK_MS) {
+  if (lock) return;
   lock = true;
-  try { cb(); } finally {
-    setTimeout(() => (lock = false), ms);
-  }
+  fn();
+  setTimeout(() => (lock = false), ms);
 }
 
-function smoothScrollToY(y) {
+function smoothScrollToY(targetY) {
   animating = true;
-  window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  window.scrollTo({ top: targetY, behavior: "smooth" });
   setTimeout(() => (animating = false), SMOOTH_MS);
 }
 
+function getTopY(el) {
+  return el.getBoundingClientRect().top + window.scrollY;
+}
+
 // ==============================
-// 4) Gedrags-functies (down/up)
+// 4. Scroll logic
 // ==============================
-function stepDownOrToExtra() {
+function stepDown() {
   if (lock || animating) return;
-  if (!atEndOfCarousel()) {
+  if (!atEnd()) {
     withLock(() => {
       index += batchSize;
       showBatch(index);
     });
   } else if (extraContent) {
-    // Smooth naar extra content (FIX: echte sectie selecteren)
     carouselActive = false;
-    const target = getTopY(extraContent); // top van jouw extra content-sectie
+    const target = getTopY(extraContent);
     smoothScrollToY(target);
-    withLock(() => {}, SMOOTH_MS); // blokkeer extra input tijdens animatie
+    withLock(() => {}, SMOOTH_MS);
   }
 }
 
-function stepUpOrToTopOrBackFromExtra() {
+function stepUp() {
   if (lock || animating) return;
 
   if (carouselActive) {
-    if (!atStartOfCarousel()) {
+    if (!atStart()) {
       withLock(() => {
         index -= batchSize;
         showBatch(index);
       });
     } else {
-      // Helemaal terug naar boven (header/infobar)
       smoothScrollToY(0);
       withLock(() => {}, SMOOTH_MS);
     }
   } else {
-    // We zitten in extra content: 1 tik omhoog ⇒ terug naar carousel,
-    // met header + info-bar zichtbaar én batch 9–12.
-    if (!section) return;
-    index = products.length - batchSize; // laatste batch (9–12)
+    // vanaf extra content → terug naar batch 3
+    index = products.length - batchSize;
     showBatch(index);
     carouselActive = true;
 
-    // Scroll zo dat header + info-bar zichtbaar zijn, en direct daaronder de carousel
-    const y = getTopY(section) - totalTopBarsHeight();
-    smoothScrollToY(y);
+    const target = getTopY(section);
+    smoothScrollToY(target);
     withLock(() => {}, SMOOTH_MS);
   }
 }
 
 // ==============================
-// 5) Input handlers
+// 5. Event listeners
 // ==============================
 
-// WHEEL (muis & touchpad)
+// Mouse wheel & touchpad
 window.addEventListener(
   "wheel",
-  (e) => {
-    if (animating) { e.preventDefault(); return; }
-
-    // In carousel-fase: we blokkeren default scroll, we regelen de stappen zelf
-    if (carouselActive) {
-      if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return; // ruis negeren
+  e => {
+    if (e.deltaY > SCROLL_THRESHOLD) {
       e.preventDefault();
-      if (e.deltaY > 0) stepDownOrToExtra();
-      else stepUpOrToTopOrBackFromExtra();
-      return;
-    }
-
-    // In extra-content:
-    // Eén stap omhoog (ongeacht hard/zacht) ⇒ terug naar carousel (smooth)
-    if (e.deltaY < 0) {
-      // Optioneel: alleen als we dicht bij de top van extraContent zitten:
-      const nearTop =
-        extraContent && window.scrollY <= getTopY(extraContent) + 8;
-      if (nearTop) {
-        e.preventDefault();
-        stepUpOrToTopOrBackFromExtra();
-      }
-      // anders: laat normale pagina-scroll naar boven lopen tot je bij de top bent
+      stepDown();
+    } else if (e.deltaY < -SCROLL_THRESHOLD) {
+      e.preventDefault();
+      stepUp();
     }
   },
   { passive: false }
 );
 
-// TOUCH (1 batch per swipe)
-let touchStartY = null;
+// Keyboard arrows
+window.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    stepDown();
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    stepUp();
+  }
+});
 
+// Touch
+let touchStartY = null;
 window.addEventListener(
   "touchstart",
-  (e) => {
-    if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
+  e => {
+    if (e.touches && e.touches[0]) {
+      touchStartY = e.touches[0].clientY;
+    }
   },
   { passive: true }
+);
+
+window.addEventListener(
+  "touchmove",
+  e => {
+    if (touchStartY === null) return;
+    const y = e.touches[0].clientY;
+    const dy = touchStartY - y;
+
+    if (dy > TOUCH_THRESHOLD) {
+      e.preventDefault();
+      stepDown();
+      touchStartY = null;
+    } else if (dy < -TOUCH_THRESHOLD) {
+      e.preventDefault();
+      stepUp();
+      touchStartY = null;
+    }
+  },
+  { passive: false }
 );
 
 window.addEventListener(
   "touchend",
-  (e) => {
-    if (touchStartY == null || animating) return;
-    const y = e.changedTouches[0].clientY;
-    const dy = touchStartY - y;
-
-    if (Math.abs(dy) < TOUCH_THRESHOLD) { touchStartY = null; return; }
-
-    if (dy > 0) {
-      // swipe omhoog (= naar beneden scrollen)
-      stepDownOrToExtra();
-    } else {
-      // swipe omlaag (= naar boven scrollen)
-      // Als we in extra content zitten en (bijna) bovenaan zijn: terug naar carousel
-      if (!carouselActive) {
-        const nearTop =
-          extraContent && window.scrollY <= getTopY(extraContent) + 8;
-        if (nearTop) {
-          stepUpOrToTopOrBackFromExtra();
-        }
-      } else {
-        stepUpOrToTopOrBackFromExtra();
-      }
-    }
+  () => {
     touchStartY = null;
   },
   { passive: true }
 );
-
-// KEYBOARD (pijltjes & PageUp/PageDown)
-window.addEventListener("keydown", (e) => {
-  if (animating || lock) return;
-
-  const key = e.key;
-  if (key === "ArrowDown" || key === "PageDown") {
-    e.preventDefault();
-    stepDownOrToExtra();
-  } else if (key === "ArrowUp" || key === "PageUp") {
-    e.preventDefault();
-    // In extra content: altijd smooth terug naar header+info-bar+batch 3
-    if (!carouselActive) {
-      e.preventDefault();
-      stepUpOrToTopOrBackFromExtra();
-    } else {
-      stepUpOrToTopOrBackFromExtra();
-    }
-  }
-});
