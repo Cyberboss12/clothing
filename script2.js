@@ -56,9 +56,9 @@ let lock = false;
 let carouselActive = true;
 
 // instellingen
-const SCROLL_THRESHOLD = 6;
-const LOCK_MS = 400; // iets langer om overslaan te voorkomen
-const TOUCH_THRESHOLD = 20;
+const SCROLL_THRESHOLD = 30;  // touchpad ruis negeren
+const LOCK_MS = 700;          // geen batches overslaan
+const TOUCH_THRESHOLD = 40;
 
 // helpers
 function atEndOfCarousel() {
@@ -104,39 +104,39 @@ function triggerStep(direction) {
   if (direction === "down" && !atEndOfCarousel()) {
     index += batchSize;
     showBatch(index);
-    lock = true;
-    setTimeout(() => (lock = false), LOCK_MS);
-    return true;
   } else if (direction === "up" && !atStartOfCarousel()) {
     index -= batchSize;
     showBatch(index);
-    lock = true;
-    setTimeout(() => (lock = false), LOCK_MS);
-    return true;
+  } else {
+    return false;
   }
-  return false;
+  lock = true;
+  setTimeout(() => (lock = false), LOCK_MS);
+  return true;
 }
 
 // ==============================
-// 3. Scroll handlers
+// 3. Scroll handler
 // ==============================
-function handleCarouselScroll(deltaY) {
+function handleCarouselScroll(direction) {
   if (lock || !carouselActive) return;
 
-  if (deltaY > SCROLL_THRESHOLD) {
-    // scroll down
+  if (direction === "down") {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
       carouselActive = false;
       scrollToExtraContent();
+      lock = true;
+      setTimeout(() => (lock = false), LOCK_MS);
     }
-  } else if (deltaY < -SCROLL_THRESHOLD) {
-    // scroll up
+  } else if (direction === "up") {
     if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
       scrollToTop();
+      lock = true;
+      setTimeout(() => (lock = false), LOCK_MS);
     }
   }
 }
@@ -145,22 +145,24 @@ function handleCarouselScroll(deltaY) {
 // 4. Events
 // ==============================
 
-// WHEEL
+// WHEEL (muis + touchpad)
 window.addEventListener(
   "wheel",
   (e) => {
     if (carouselActive) {
       e.preventDefault();
-      handleCarouselScroll(e.deltaY);
+      if (e.deltaY > SCROLL_THRESHOLD) handleCarouselScroll("down");
+      else if (e.deltaY < -SCROLL_THRESHOLD) handleCarouselScroll("up");
     } else {
-      // Vanuit extra content terug omhoog
       if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
         e.preventDefault();
         carouselActive = true;
         scrollToCarousel(() => {
-          index = products.length - batchSize; // laatste batch 9–12
+          index = products.length - batchSize;
           showBatch(index);
         });
+        lock = true;
+        setTimeout(() => (lock = false), LOCK_MS);
       }
     }
   },
@@ -181,50 +183,60 @@ window.addEventListener(
 );
 
 window.addEventListener(
-  "touchmove",
+  "touchend",
   (e) => {
-    if (lock || touchStartY === null) return;
-
-    const y = e.touches[0].clientY;
+    if (touchStartY === null) return;
+    const y = e.changedTouches[0].clientY;
     const dy = touchStartY - y;
 
     if (dy > TOUCH_THRESHOLD) {
-      // swipe up (naar beneden scrollen)
       if (carouselActive && !atEndOfCarousel()) {
         triggerStep("down");
-        e.preventDefault();
       } else if (carouselActive && atEndOfCarousel()) {
         carouselActive = false;
         scrollToExtraContent();
-        e.preventDefault();
       }
-      touchStartY = null;
     } else if (dy < -TOUCH_THRESHOLD) {
-      // swipe down (naar boven scrollen)
       if (carouselActive && !atStartOfCarousel()) {
         triggerStep("up");
-        e.preventDefault();
       } else if (carouselActive && atStartOfCarousel()) {
         scrollToTop();
-        e.preventDefault();
       } else if (!carouselActive && window.scrollY <= section.offsetTop) {
         carouselActive = true;
         scrollToCarousel(() => {
-          index = products.length - batchSize; // batch 9–12
+          index = products.length - batchSize;
           showBatch(index);
         });
-        e.preventDefault();
       }
-      touchStartY = null;
     }
-  },
-  { passive: false }
-);
-
-window.addEventListener(
-  "touchend",
-  () => {
     touchStartY = null;
   },
   { passive: true }
 );
+
+// KEYBOARD (pijltjes + PageUp/PageDown)
+window.addEventListener("keydown", (e) => {
+  if (lock) return;
+
+  if (e.key === "ArrowDown" || e.key === "PageDown") {
+    e.preventDefault();
+    if (carouselActive) handleCarouselScroll("down");
+    else if (!carouselActive && window.scrollY <= section.offsetTop) {
+      carouselActive = true;
+      scrollToCarousel(() => {
+        index = products.length - batchSize;
+        showBatch(index);
+      });
+    }
+  } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+    e.preventDefault();
+    if (carouselActive) handleCarouselScroll("up");
+    else if (!carouselActive && window.scrollY <= section.offsetTop) {
+      carouselActive = true;
+      scrollToCarousel(() => {
+        index = products.length - batchSize;
+        showBatch(index);
+      });
+    }
+  }
+});
