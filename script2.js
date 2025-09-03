@@ -48,13 +48,17 @@ const products = [
 // aannemende dat `products` al gedefinieerd is
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
-const extraContent = document.querySelector("#extraContent");
 
-let lock = false;
-let index = 0;
 const batchSize = 4;
+let index = 0;
+let lock = false;
 
-// Batches renderen
+// Gevoelige instellingen
+const SCROLL_THRESHOLD = 2;   // lager = gevoeliger
+const TOUCH_THRESHOLD = 10;   // minder pixels nodig
+const LOCK_MS = 800;          // langer slot → bijna onmogelijk overslaan
+
+// Render batch
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -83,26 +87,22 @@ function triggerStep(direction) {
     showBatch(index);
   }
 
-  // zet lock aan
   lock = true;
   setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// =========================
-// EVENTS
-// =========================
+// ===================
+// Events
+// ===================
 
 // Muiswiel / touchpad
-window.addEventListener("wheel", (e) => {
-  if (lock) {
-    e.preventDefault();
-    return;
-  }
+section.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  if (lock) return;
+
   if (e.deltaY > SCROLL_THRESHOLD) {
-    e.preventDefault();
     triggerStep("down");
   } else if (e.deltaY < -SCROLL_THRESHOLD) {
-    e.preventDefault();
     triggerStep("up");
   }
 }, { passive: false });
@@ -110,6 +110,7 @@ window.addEventListener("wheel", (e) => {
 // Pijltoetsen
 window.addEventListener("keydown", (e) => {
   if (lock) return;
+
   if (e.key === "ArrowDown") {
     e.preventDefault();
     triggerStep("down");
@@ -121,13 +122,13 @@ window.addEventListener("keydown", (e) => {
 
 // Touch
 let touchStartY = null;
-window.addEventListener("touchstart", (e) => {
+section.addEventListener("touchstart", (e) => {
   if (e.touches && e.touches[0]) {
     touchStartY = e.touches[0].clientY;
   }
 }, { passive: true });
 
-window.addEventListener("touchmove", (e) => {
+section.addEventListener("touchmove", (e) => {
   if (lock || touchStartY === null) return;
 
   const y = e.touches[0].clientY;
@@ -144,6 +145,6 @@ window.addEventListener("touchmove", (e) => {
   }
 }, { passive: false });
 
-window.addEventListener("touchend", () => {
+section.addEventListener("touchend", () => {
   touchStartY = null;
 }, { passive: true });
