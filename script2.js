@@ -48,19 +48,18 @@ const products = [
 // aannemende dat `products` al gedefinieerd is
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
-const extraContent = document.getElementById("extraContent");
 
 let index = 0;
 const batchSize = 4;
 let lock = false;
-let carouselActive = true;
+let carouselActive = true; // bepaalt of carousel scroll blokkeert
 
 // instellingen
-const SCROLL_THRESHOLD = 30;  // touchpad ruis negeren
-const LOCK_MS = 700;          // geen batches overslaan
-const TOUCH_THRESHOLD = 40;
+const SCROLL_THRESHOLD = 6;
+const LOCK_MS = 300;
+const TOUCH_THRESHOLD = 20;
 
-// helpers
+// helpers: check posities
 function atEndOfCarousel() {
   return index + batchSize >= products.length;
 }
@@ -68,24 +67,26 @@ function atStartOfCarousel() {
   return index === 0;
 }
 
+// smooth scroll helpers
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 function scrollToExtraContent() {
-  extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector("#extraContent")
+    .scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function scrollToCarousel(onDone) {
   section.scrollIntoView({ behavior: "smooth", block: "start" });
   setTimeout(() => {
     if (typeof onDone === "function") onDone();
-  }, 600);
+  }, 600); // duur van smooth scroll
 }
 
 // render batch
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
-  slice.forEach((p) => {
+  slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
     div.innerHTML = `
@@ -101,142 +102,116 @@ showBatch(index);
 // trigger step
 function triggerStep(direction) {
   if (lock) return false;
-  if (direction === "down" && !atEndOfCarousel()) {
+  if (direction === 'down' && !atEndOfCarousel()) {
     index += batchSize;
     showBatch(index);
-  } else if (direction === "up" && !atStartOfCarousel()) {
+    lock = true;
+    setTimeout(() => lock = false, LOCK_MS);
+    return true;
+  } else if (direction === 'up' && !atStartOfCarousel()) {
     index -= batchSize;
     showBatch(index);
-  } else {
-    return false;
+    lock = true;
+    setTimeout(() => lock = false, LOCK_MS);
+    return true;
   }
-  lock = true;
-  setTimeout(() => (lock = false), LOCK_MS);
-  return true;
+  return false;
 }
 
+
 // ==============================
-// 3. Scroll handler
+// 4. Scroll handler
 // ==============================
-function handleCarouselScroll(direction) {
+function handleCarouselScroll(deltaY) {
   if (lock || !carouselActive) return;
 
-  if (direction === "down") {
+  // scroll down
+  if (deltaY > SCROLL_THRESHOLD) {
     if (!atEndOfCarousel()) {
       triggerStep("down");
     } else {
       carouselActive = false;
       scrollToExtraContent();
-      lock = true;
-      setTimeout(() => (lock = false), LOCK_MS);
     }
-  } else if (direction === "up") {
+  }
+
+  // scroll up
+  if (deltaY < -SCROLL_THRESHOLD) {
     if (!atStartOfCarousel()) {
       triggerStep("up");
     } else {
       scrollToTop();
-      lock = true;
-      setTimeout(() => (lock = false), LOCK_MS);
     }
   }
 }
 
+
 // ==============================
-// 4. Events
+// 5. Events
 // ==============================
 
-// WHEEL (muis + touchpad)
-window.addEventListener(
-  "wheel",
-  (e) => {
-    if (carouselActive) {
+// WHEEL
+window.addEventListener("wheel", (e) => {
+  if (carouselActive) {
+    e.preventDefault();
+    handleCarouselScroll(e.deltaY);
+  } else {
+    // Carousel uit → check of we omhoog terugkomen
+    if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
       e.preventDefault();
-      if (e.deltaY > SCROLL_THRESHOLD) handleCarouselScroll("down");
-      else if (e.deltaY < -SCROLL_THRESHOLD) handleCarouselScroll("up");
-    } else {
-      if (e.deltaY < -SCROLL_THRESHOLD && window.scrollY <= section.offsetTop) {
-        e.preventDefault();
-        carouselActive = true;
-        scrollToCarousel(() => {
-          index = products.length - batchSize;
-          showBatch(index);
-        });
-        lock = true;
-        setTimeout(() => (lock = false), LOCK_MS);
-      }
-    }
-  },
-  { passive: false }
-);
-
-// TOUCH
-let touchStartY = null;
-
-window.addEventListener(
-  "touchstart",
-  (e) => {
-    if (e.touches && e.touches[0]) {
-      touchStartY = e.touches[0].clientY;
-    }
-  },
-  { passive: true }
-);
-
-window.addEventListener(
-  "touchend",
-  (e) => {
-    if (touchStartY === null) return;
-    const y = e.changedTouches[0].clientY;
-    const dy = touchStartY - y;
-
-    if (dy > TOUCH_THRESHOLD) {
-      if (carouselActive && !atEndOfCarousel()) {
-        triggerStep("down");
-      } else if (carouselActive && atEndOfCarousel()) {
-        carouselActive = false;
-        scrollToExtraContent();
-      }
-    } else if (dy < -TOUCH_THRESHOLD) {
-      if (carouselActive && !atStartOfCarousel()) {
-        triggerStep("up");
-      } else if (carouselActive && atStartOfCarousel()) {
-        scrollToTop();
-      } else if (!carouselActive && window.scrollY <= section.offsetTop) {
-        carouselActive = true;
-        scrollToCarousel(() => {
-          index = products.length - batchSize;
-          showBatch(index);
-        });
-      }
-    }
-    touchStartY = null;
-  },
-  { passive: true }
-);
-
-// KEYBOARD (pijltjes + PageUp/PageDown)
-window.addEventListener("keydown", (e) => {
-  if (lock) return;
-
-  if (e.key === "ArrowDown" || e.key === "PageDown") {
-    e.preventDefault();
-    if (carouselActive) handleCarouselScroll("down");
-    else if (!carouselActive && window.scrollY <= section.offsetTop) {
       carouselActive = true;
       scrollToCarousel(() => {
-        index = products.length - batchSize;
-        showBatch(index);
-      });
-    }
-  } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-    e.preventDefault();
-    if (carouselActive) handleCarouselScroll("up");
-    else if (!carouselActive && window.scrollY <= section.offsetTop) {
-      carouselActive = true;
-      scrollToCarousel(() => {
-        index = products.length - batchSize;
+        index = products.length - batchSize; // laatste batch (9–12)
         showBatch(index);
       });
     }
   }
-});
+}, { passive: false });
+
+
+// TOUCH
+let touchStartY = null;
+section.addEventListener("touchstart", (e) => {
+  if (e.touches && e.touches[0]) {
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: true });
+
+section.addEventListener("touchmove", (e) => {
+  if (lock || touchStartY === null) return;
+
+  const y = e.touches[0].clientY;
+  const dy = touchStartY - y;
+
+  if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (carouselActive && !atEndOfCarousel()) {
+      triggerStep("down");
+      e.preventDefault();
+    } else if (carouselActive && atEndOfCarousel()) {
+      carouselActive = false;
+      scrollToExtraContent();
+      e.preventDefault();
+    }
+    touchStartY = null;
+  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    if (carouselActive && !atStartOfCarousel()) {
+      triggerStep("up");
+      e.preventDefault();
+    } else if (carouselActive && atStartOfCarousel()) {
+      scrollToTop();
+      e.preventDefault();
+    } else if (!carouselActive && window.scrollY <= section.offsetTop) {
+      carouselActive = true;
+      scrollToCarousel(() => {
+        index = products.length - batchSize;
+        showBatch(index);
+      });
+      e.preventDefault();
+    }
+    touchStartY = null;
+  }
+}, { passive: false });
+
+section.addEventListener("touchend", () => {
+  touchStartY = null;
+}, { passive: true });
