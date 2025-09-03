@@ -46,15 +46,15 @@ const products = [
 ];
 
 // aannemende dat `products` al gedefinieerd is
+const section = document.getElementById("productSection");
+const grid = document.getElementById("productGrid");
+const extraContent = document.querySelector("#extraContent");
+
 let index = 0;
 const batchSize = 4;
-const grid = document.getElementById("productGrid");
-const section = document.getElementById("productSection");
-
-// scroll accumulatie
-let accumulatedDelta = 0;
-const SCROLL_UNIT = 100; // 1 batch = 100 pixels, past zich aan
-const TOUCH_UNIT = 50;
+let lock = false;
+const LOCK_MS = 600;      // voorkomt overslaan
+const TOUCH_THRESHOLD = 20;
 
 // render batch
 function showBatch(startIndex) {
@@ -63,15 +63,20 @@ function showBatch(startIndex) {
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
-    div.innerHTML = `<img src="${p.img}" alt="${p.label}"><div class="product-label">${p.label}</div>`;
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.label}">
+      <div class="product-label">${p.label}</div>
+    `;
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 showBatch(index);
 
-// trigger batch op/af
+// trigger batch
 function triggerStep(direction) {
+  if (lock) return;
+
   if (direction === "down" && index + batchSize < products.length) {
     index += batchSize;
     showBatch(index);
@@ -79,36 +84,68 @@ function triggerStep(direction) {
     index -= batchSize;
     showBatch(index);
   }
+
+  lock = true;
+  setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// ==================
-// Muiswiel / touchpad
-// ==================
-section.addEventListener("wheel", e => {
-  e.preventDefault();
-  accumulatedDelta += e.deltaY;
+// check of batch 3 bereikt is
+function atBatch3() {
+  return index >= products.length - batchSize; // laatste batch = batch 3
+}
 
-  while (accumulatedDelta >= SCROLL_UNIT) {
-    triggerStep("down");
-    accumulatedDelta -= SCROLL_UNIT;
-  }
-  while (accumulatedDelta <= -SCROLL_UNIT) {
-    triggerStep("up");
-    accumulatedDelta += SCROLL_UNIT;
+// ========================
+// 2. Smooth scroll helpers
+// ========================
+function scrollToExtraContent() {
+  extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function scrollToBatch3() {
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  index = products.length - batchSize;
+  showBatch(index);
+}
+
+// ========================
+// 3. Event handlers
+// ========================
+
+// Mouse wheel / touchpad
+window.addEventListener("wheel", (e) => {
+  const deltaY = e.deltaY;
+
+  if (deltaY > 0) { // scroll down
+    if (!atBatch3()) {
+      e.preventDefault();
+      triggerStep("down");
+    } else {
+      e.preventDefault();
+      scrollToExtraContent();
+    }
+  } else if (deltaY < 0) { // scroll up
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToBatch3();
+    } else {
+      e.preventDefault();
+      triggerStep("up");
+    }
   }
 }, { passive: false });
 
-// ==================
 // Pijltoetsen
-// ==================
 window.addEventListener("keydown", e => {
-  if (e.key === "ArrowDown") triggerStep("down");
-  if (e.key === "ArrowUp") triggerStep("up");
+  if (e.key === "ArrowDown") {
+    if (!atBatch3()) triggerStep("down");
+    else scrollToExtraContent();
+  } else if (e.key === "ArrowUp") {
+    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    else triggerStep("up");
+  }
 });
 
-// ==================
 // Touch
-// ==================
 let touchStartY = null;
 section.addEventListener("touchstart", e => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
@@ -118,12 +155,14 @@ section.addEventListener("touchmove", e => {
   if (touchStartY === null) return;
   const dy = touchStartY - e.touches[0].clientY;
 
-  if (dy > TOUCH_UNIT) {
-    triggerStep("down");
-    touchStartY = e.touches[0].clientY;
-  } else if (dy < -TOUCH_UNIT) {
-    triggerStep("up");
-    touchStartY = e.touches[0].clientY;
+  if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (!atBatch3()) triggerStep("down");
+    else scrollToExtraContent();
+    touchStartY = null;
+  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    else triggerStep("up");
+    touchStartY = null;
   }
 }, { passive: false });
 
