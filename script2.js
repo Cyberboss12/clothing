@@ -50,21 +50,11 @@ const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
 const extraContent = document.querySelector("#extraContent");
 
+let lock = false;
 let index = 0;
 const batchSize = 4;
-let lock = false;
-let animating = false;
-let carouselActive = true;
 
-// settings
-const SCROLL_THRESHOLD = 6;
-const TOUCH_THRESHOLD = 20;
-const LOCK_MS = 400;
-const SMOOTH_MS = 600;
-
-// ==============================
-// 3. Helpers
-// ==============================
+// Batches renderen
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
@@ -81,147 +71,79 @@ function showBatch(startIndex) {
 }
 showBatch(index);
 
-function atEnd() {
-  return index + batchSize >= products.length;
-}
-function atStart() {
-  return index === 0;
-}
-
-function withLock(fn, ms = LOCK_MS) {
+// Stap vooruit of achteruit
+function triggerStep(direction) {
   if (lock) return;
-  lock = true;
-  fn();
-  setTimeout(() => (lock = false), ms);
-}
 
-function smoothScrollToY(targetY) {
-  animating = true;
-  window.scrollTo({ top: targetY, behavior: "smooth" });
-  setTimeout(() => (animating = false), SMOOTH_MS);
-}
-
-function getTopY(el) {
-  return el.getBoundingClientRect().top + window.scrollY;
-}
-
-// ==============================
-// 4. Scroll logic
-// ==============================
-
-// naar beneden
-function stepDown() {
-  if (lock || animating) return;
-
-  if (!atEnd()) {
-    // wissel batch
-    withLock(() => {
-      index += batchSize;
-      showBatch(index);
-    });
-  } else if (atEnd() && index === products.length - batchSize && extraContent) {
-    // pas vanaf laatste batch naar extra content
-    carouselActive = false;
-    const target = getTopY(extraContent);
-    smoothScrollToY(target);
-    withLock(() => {}, SMOOTH_MS);
-  }
-}
-
-// naar boven
-function stepUp() {
-  if (lock || animating) return;
-
-  if (carouselActive) {
-    if (!atStart()) {
-      // wissel batch
-      withLock(() => {
-        index -= batchSize;
-        showBatch(index);
-      });
-    } else {
-      // terug naar allereerste begin (header + info-bar)
-      smoothScrollToY(0);
-      withLock(() => {}, SMOOTH_MS);
-    }
-  } else {
-    // vanaf extra content terug naar laatste batch (9–12) met header zichtbaar
-    index = products.length - batchSize;
+  if (direction === "down" && index + batchSize < products.length) {
+    index += batchSize;
     showBatch(index);
-    carouselActive = true;
-
-    const target = getTopY(section);
-    smoothScrollToY(target);
-    withLock(() => {}, SMOOTH_MS);
+  } else if (direction === "up" && index - batchSize >= 0) {
+    index -= batchSize;
+    showBatch(index);
   }
+
+  // zet lock aan
+  lock = true;
+  setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// ==============================
-// 5. Event listeners
-// ==============================
+// =========================
+// EVENTS
+// =========================
 
-// Mouse wheel & touchpad
-window.addEventListener(
-  "wheel",
-  e => {
-    if (e.deltaY > SCROLL_THRESHOLD) {
-      e.preventDefault();
-      stepDown();
-    } else if (e.deltaY < -SCROLL_THRESHOLD) {
-      e.preventDefault();
-      stepUp();
-    }
-  },
-  { passive: false }
-);
+// Muiswiel / touchpad
+window.addEventListener("wheel", (e) => {
+  if (lock) {
+    e.preventDefault();
+    return;
+  }
+  if (e.deltaY > SCROLL_THRESHOLD) {
+    e.preventDefault();
+    triggerStep("down");
+  } else if (e.deltaY < -SCROLL_THRESHOLD) {
+    e.preventDefault();
+    triggerStep("up");
+  }
+}, { passive: false });
 
-// Keyboard arrows
-window.addEventListener("keydown", e => {
+// Pijltoetsen
+window.addEventListener("keydown", (e) => {
+  if (lock) return;
   if (e.key === "ArrowDown") {
     e.preventDefault();
-    stepDown();
+    triggerStep("down");
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
-    stepUp();
+    triggerStep("up");
   }
 });
 
 // Touch
 let touchStartY = null;
-window.addEventListener(
-  "touchstart",
-  e => {
-    if (e.touches && e.touches[0]) {
-      touchStartY = e.touches[0].clientY;
-    }
-  },
-  { passive: true }
-);
+window.addEventListener("touchstart", (e) => {
+  if (e.touches && e.touches[0]) {
+    touchStartY = e.touches[0].clientY;
+  }
+}, { passive: true });
 
-window.addEventListener(
-  "touchmove",
-  e => {
-    if (touchStartY === null) return;
-    const y = e.touches[0].clientY;
-    const dy = touchStartY - y;
+window.addEventListener("touchmove", (e) => {
+  if (lock || touchStartY === null) return;
 
-    if (dy > TOUCH_THRESHOLD) {
-      e.preventDefault();
-      stepDown();
-      touchStartY = null;
-    } else if (dy < -TOUCH_THRESHOLD) {
-      e.preventDefault();
-      stepUp();
-      touchStartY = null;
-    }
-  },
-  { passive: false }
-);
+  const y = e.touches[0].clientY;
+  const dy = touchStartY - y;
 
-window.addEventListener(
-  "touchend",
-  () => {
+  if (dy > TOUCH_THRESHOLD) {
+    e.preventDefault();
+    triggerStep("down");
     touchStartY = null;
-  },
-  { passive: true }
-);
+  } else if (dy < -TOUCH_THRESHOLD) {
+    e.preventDefault();
+    triggerStep("up");
+    touchStartY = null;
+  }
+}, { passive: false });
+
+window.addEventListener("touchend", () => {
+  touchStartY = null;
+}, { passive: true });
