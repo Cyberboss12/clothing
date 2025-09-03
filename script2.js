@@ -108,14 +108,19 @@ function getTopY(el) {
 // ==============================
 // 4. Scroll logic
 // ==============================
+
+// naar beneden
 function stepDown() {
   if (lock || animating) return;
+
   if (!atEnd()) {
+    // wissel batch
     withLock(() => {
       index += batchSize;
       showBatch(index);
     });
-  } else if (extraContent) {
+  } else if (atEnd() && index === products.length - batchSize && extraContent) {
+    // pas vanaf laatste batch naar extra content
     carouselActive = false;
     const target = getTopY(extraContent);
     smoothScrollToY(target);
@@ -123,21 +128,24 @@ function stepDown() {
   }
 }
 
+// naar boven
 function stepUp() {
   if (lock || animating) return;
 
   if (carouselActive) {
     if (!atStart()) {
+      // wissel batch
       withLock(() => {
         index -= batchSize;
         showBatch(index);
       });
     } else {
+      // terug naar allereerste begin (header + info-bar)
       smoothScrollToY(0);
       withLock(() => {}, SMOOTH_MS);
     }
   } else {
-    // vanaf extra content → terug naar batch 3
+    // vanaf extra content terug naar laatste batch (9–12) met header zichtbaar
     index = products.length - batchSize;
     showBatch(index);
     carouselActive = true;
