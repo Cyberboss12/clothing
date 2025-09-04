@@ -4,27 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mijn Eerste Website</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styletest_voor_index.css" />
 </head>
 <body>
 
 <!-- Bovenste Info-balk -->
-<div class="info-bar">
+<!-- <div class="info-bar">
   <div class="info-center">Gratis levering vanaf €50</div>
   <div class="info-right">
     <span>NL Nederlands</span>
     <span>Stores</span>
   </div>
+</div> -->
+
+<div class="info-bar">
+  <div class="info-left">Gratis verzending vanaf €50</div>
+  <div class="info-center" id="infoMessage">Welkom bij onze webshop!</div>
+  <div class="info-right">
+    <!-- <a href="#">Contact</a>
+    <a href="#">Help</a> -->
+  </div>
 </div>
 
 <!-- Hoofdnavigatie -->
- <div class= "topbar">
+ <!-- <div class= "topbar">
   <div class="main-navbar">
     <ul class="navbar">
-      <li><a href="index.html" class="active">Mijn merk</a></li>
+      <li><a href="index.html" class="active">Mijn merk</a></li> -->
 
   <!-- Dropdown Menu voor "Men" -->
-    <li class="dropdown">
+    <!-- <li class="dropdown">
       <a href="men.html">Men</a>
       <div class="dropdown-content">
         <div class="dropdown-inner">
@@ -171,24 +180,28 @@
         document.getElementById(button.dataset.tab).classList.add('active');
       });
     });
-  </script>
-  
+  </script> -->
 
-  <!-- <header>
-    <h1>Welkom op mijn website</h1>
-    <p>Ik hoop dat jullie dit leuk gaan vinden</p>
+  <header style="height:80px;display:flex;align-items:center;padding:0 16px;">
+    <h1>Header</h1>
   </header>
 
   <main>
-    <h2>Dit is een eenvoudige HTML-pagina om mee te oefenen.</h2>
-    <p>Ik ga deze website rocken</p>
-    <button onclick="sayHello()">Klik hier</button>
+    <!-- Productsectie: vult 1 viewport en heeft custom scroll -->
+    <section id="productSection">
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+  <!-- andere content zodat page kan scrollen naar footer -->
+    <section style="height:100vh;background:#fafafa;display:flex;align-items:center;justify-content:center;">
+      <p>Extra content onder de productsectie — hier mag de pagina scrollen.</p>
+    </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Mijn Naam</p>
-  </footer> -->
+  <footer style="height:200px;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;">
+    <p>Footer</p>
+  </footer>
 
-  <script src="script.js"></script>
+  <script src="jstest_voor_index.js"></script>
 </body>
 </html>
