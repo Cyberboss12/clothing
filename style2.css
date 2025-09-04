@@ -319,11 +319,11 @@ header h1 {
   margin-right: calc(50% - 50vw);
   width: 100vw;
 
-  padding-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 #extraContent {
-  padding-top: 20px;    /* behoudt een beetje ruimte */
+  padding-top: 5px;    /* behoudt een beetje ruimte */
 }
 
 .grid {
