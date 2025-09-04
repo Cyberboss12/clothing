@@ -323,7 +323,7 @@ header h1 {
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 100vh;    /* elke rij/batch vult precies 1 viewport */
+  grid-auto-rows: 90vh;    /* elke rij/batch vult precies 1 viewport */
   gap: 0;
   width: 100%;
   padding: 0;
