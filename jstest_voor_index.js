@@ -32,7 +32,7 @@ setInterval(showNextMessage, 4000);
 
 const products = [
   { img: "afbeeldingen/model.jpg", label: "Men" },
-  { img: "afbeeldingen/model.jpg", label: "Women" },
+  { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
   { img: "afbeeldingen/model.jpg", label: "Children" },
   { img: "afbeeldingen/boom.jpg", label: "Discover" },
   { img: "afbeeldingen/Black square_test.png", label: "5" },
@@ -53,27 +53,43 @@ const extraContent = document.querySelector("#extraContent");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-const LOCK_MS = 600;      // voorkomt overslaan
+const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
 
-// render batch
+// ========================
+// 3. Render batches
+// ========================
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
-    div.innerHTML = `
-      <img src="${p.img}" alt="${p.label}">
-      <div class="product-label">${p.label}</div>
-    `;
+
+    // Klikbare link alleen voor Women
+    if (p.label === "Women" && p.link) {
+      div.innerHTML = `
+        <a href="${p.link}" style="text-decoration:none;color:inherit;">
+          <img src="${p.img}" alt="${p.label}">
+          <div class="product-label">${p.label}</div>
+        </a>
+      `;
+    } else {
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.label}">
+        <div class="product-label">${p.label}</div>
+      `;
+    }
+
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 showBatch(index);
 
-// trigger batch
+// ========================
+// 4. Carousel trigger
+// ========================
 function triggerStep(direction) {
   if (lock) return;
 
@@ -89,13 +105,12 @@ function triggerStep(direction) {
   setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// check of batch 3 bereikt is
 function atBatch3() {
   return index >= products.length - batchSize; // laatste batch = batch 3
 }
 
 // ========================
-// 2. Smooth scroll helpers
+// 5. Smooth scroll helpers
 // ========================
 function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -108,7 +123,7 @@ function scrollToBatch3() {
 }
 
 // ========================
-// 3. Event handlers
+// 6. Event handlers
 // ========================
 
 // Mouse wheel / touchpad
