@@ -316,14 +316,15 @@ header h1 {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
-  padding: 0;               /* padding weghalen voor strakke aansluiting */
+  padding: 0;           /* padding weghalen voor strakke aansluiting */
+  padding-bottom: 20px; /* kleine ruimte onder de grid */
 }
 
 /* Grid: 1 batch = 1 viewport */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 75vh;    /* elke rij/batch vult precies 1 viewport */
+  grid-auto-rows: 200px;    /* elke rij/batch vult precies 1 viewport */
   gap: 0;
   width: 100%;
   padding: 0;
