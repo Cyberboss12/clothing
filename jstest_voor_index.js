@@ -33,7 +33,7 @@ setInterval(showNextMessage, 4000);
 const products = [
   { img: "afbeeldingen/model.jpg", label: "Men" },
   { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
-  { img: "afbeeldingen/model.jpg", label: "Children" },
+  { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
   { img: "afbeeldingen/boom.jpg", label: "Discover" },
   { img: "afbeeldingen/Black square_test.png", label: "5" },
   { img: "afbeeldingen/model.jpg", label: "6" },
