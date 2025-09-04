@@ -86,6 +86,7 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
+showBatch(index);
 
 // ========================
 // 4. Carousel trigger
