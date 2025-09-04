@@ -309,7 +309,7 @@ header h1 {
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  height: 100vh;       /* neemt viewport in */
+  min-height: 100vh;       /* neemt viewport in */
   overflow: hidden;    /* verberg interne scroll */
   position: relative;
   touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
@@ -320,6 +320,7 @@ header h1 {
   width: 100vw;
 
   padding-bottom: 5px;
+  height: auto;
 }
 
 #extraContent {
