@@ -62,14 +62,15 @@ const TOUCH_THRESHOLD = 20;
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
+
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
 
-    // Klikbare link alleen voor Women
-    if (p.label === "Women" && p.link) {
+    // Als er een link is → maak img + label klikbaar
+    if (p.link) {
       div.innerHTML = `
-        <a href="${p.link}" style="text-decoration:none;color:inherit;">
+        <a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
           <img src="${p.img}" alt="${p.label}">
           <div class="product-label">${p.label}</div>
         </a>
@@ -85,7 +86,6 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
-showBatch(index);
 
 // ========================
 // 4. Carousel trigger
