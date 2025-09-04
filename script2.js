@@ -34,7 +34,7 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "Men" },
   { img: "afbeeldingen/model.jpg", label: "Women" },
   { img: "afbeeldingen/model.jpg", label: "Children" },
-  { img: "afbeeldingen/model.jpg", label: "Discover" },
+  { img: "afbeeldingen/boom.jpg", label: "Discover" },
   { img: "afbeeldingen/Black square_test.png", label: "5" },
   { img: "afbeeldingen/model.jpg", label: "6" },
   { img: "afbeeldingen/model.jpg", label: "7" },
