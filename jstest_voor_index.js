@@ -132,20 +132,32 @@ window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
 
   if (deltaY > 0) { // scroll down
-    if (!atBatch3()) {
+    if (index + batchSize < products.length) {
+      // nog niet bij batch 3
       e.preventDefault();
       triggerStep("down");
-    } else {
+    } else if (index === products.length - batchSize) {
+      // bij batch 3 blijven (eerst tonen)
       e.preventDefault();
-      scrollToExtraContent();
+      // pas als gebruiker opnieuw scrolt -> naar extraContent
+      index = products.length - batchSize;
+      showBatch(index);
+      // flag zetten
+      if (!window._atBatch3) {
+        window._atBatch3 = true; // eerste keer bij batch 3
+      } else {
+        scrollToExtraContent();  // tweede keer -> naar extraContent
+      }
     }
   } else if (deltaY < 0) { // scroll up
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
       scrollToBatch3();
+      window._atBatch3 = true;
     } else {
       e.preventDefault();
       triggerStep("up");
+      window._atBatch3 = false;
     }
   }
 }, { passive: false });
