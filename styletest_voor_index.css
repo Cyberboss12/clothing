@@ -309,7 +309,9 @@ header h1 {
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  height: calc(3 * 100vh); /* 3 batches van 1 viewport */
+  min-height: 100vh;
+  height: auto;
+  /* height: calc(3 * 100vh);  */
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
   touch-action: none;
@@ -323,7 +325,7 @@ header h1 {
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 75vh;    /* elke rij/batch vult precies 1 viewport */
+  grid-auto-rows: 100px;    /* elke rij/batch vult precies 1 viewport */
   gap: 0;
   width: 100%;
   padding: 0;
