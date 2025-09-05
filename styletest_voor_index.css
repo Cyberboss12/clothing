@@ -409,3 +409,16 @@ header h1 {
 
 /* test voor een volledige scrolervaring */
 
+/* Zorg dat info-bar en header smooth zichtbaar/verdwijnen kunnen */
+#siteHeader,
+#infoBar {
+  transition: opacity 0.4s ease;
+  opacity: 1;              /* standaard zichtbaar */
+  pointer-events: auto;    /* standaard klikbaar */
+}
+
+#siteHeader.hidden,
+#infoBar.hidden {
+  opacity: 0;
+  pointer-events: none;    /* niet klikbaar als verborgen */
+}

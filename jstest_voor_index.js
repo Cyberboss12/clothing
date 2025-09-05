@@ -53,27 +53,43 @@ const extraContent = document.querySelector("#extraContent");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-const LOCK_MS = 600;      // voorkomt overslaan
+const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
 
-// render batch
+// ========================
+// 4. Batches renderen
+// ========================
 function showBatch(startIndex) {
   grid.innerHTML = "";
   const slice = products.slice(startIndex, startIndex + batchSize);
+
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
-    div.innerHTML = `
-      <img src="${p.img}" alt="${p.label}">
-      <div class="product-label">${p.label}</div>
-    `;
+
+    if (p.link) {
+      div.innerHTML = `
+        <a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
+          <img src="${p.img}" alt="${p.label}">
+          <div class="product-label">${p.label}</div>
+        </a>
+      `;
+    } else {
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.label}">
+        <div class="product-label">${p.label}</div>
+      `;
+    }
+
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 showBatch(index);
 
-// trigger batch
+// ========================
+// 5. Carousel trigger
+// ========================
 function triggerStep(direction) {
   if (lock) return;
 
@@ -89,13 +105,12 @@ function triggerStep(direction) {
   setTimeout(() => (lock = false), LOCK_MS);
 }
 
-// check of batch 3 bereikt is
 function atBatch3() {
-  return index >= products.length - batchSize; // laatste batch = batch 3
+  return index >= products.length - batchSize;
 }
 
 // ========================
-// 2. Smooth scroll helpers
+// 6. Smooth scroll helpers
 // ========================
 function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -105,10 +120,16 @@ function scrollToBatch3() {
   section.scrollIntoView({ behavior: "smooth", block: "start" });
   index = products.length - batchSize;
   showBatch(index);
+
+  // 👉 header + info-bar direct zichtbaar maken
+  document.getElementById("siteHeader").style.opacity = "1";
+  document.getElementById("infoBar").style.opacity = "1";
+  document.getElementById("siteHeader").style.pointerEvents = "auto";
+  document.getElementById("infoBar").style.pointerEvents = "auto";
 }
 
 // ========================
-// 3. Event handlers
+// 7. Event handlers
 // ========================
 
 // Mouse wheel / touchpad
