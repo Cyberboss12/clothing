@@ -300,7 +300,7 @@ top: 100%; */
 /* Beginnen met de infinite scroll 4-koloms productgrid: */
 
 header {
-  height: 80px;
+  height: 75px;
   padding: 40px 20px;
   display: flex;
   align-items: center;
