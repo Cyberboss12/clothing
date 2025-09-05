@@ -128,36 +128,43 @@ function scrollToBatch3() {
 // ========================
 
 // Mouse wheel / touchpad
+let atBatch3 = false;        // Gebruiker is bij batch 3
+let extraScrollLock = false; // Voorkomt automatisch scroll naar extraContent
+
 window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
 
-  if (deltaY > 0) { // scroll down
+  // Scroll down
+  if (deltaY > 0) {
     if (index + batchSize < products.length) {
-      // nog niet bij batch 3
       e.preventDefault();
       triggerStep("down");
-    } else if (index === products.length - batchSize) {
-      // bij batch 3 blijven (eerst tonen)
+    } else {
       e.preventDefault();
-      // pas als gebruiker opnieuw scrolt -> naar extraContent
-      index = products.length - batchSize;
-      showBatch(index);
-      // flag zetten
-      if (!window._atBatch3) {
-        window._atBatch3 = true; // eerste keer bij batch 3
-      } else {
-        scrollToExtraContent();  // tweede keer -> naar extraContent
+      if (!atBatch3) {
+        // Laat batch 3 zien en blokkeer direct doorgaan
+        index = products.length - batchSize;
+        showBatch(index);
+        atBatch3 = true;
+        extraScrollLock = false; // nog niet naar extraContent
+      } else if (!extraScrollLock) {
+        // Tweede scroll naar extraContent
+        extraScrollLock = true;
+        scrollToExtraContent();
       }
     }
-  } else if (deltaY < 0) { // scroll up
+  }
+
+  // Scroll up
+  if (deltaY < 0) {
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
       scrollToBatch3();
-      window._atBatch3 = true;
+      extraScrollLock = false; // terug scrollen reset lock
     } else {
       e.preventDefault();
       triggerStep("up");
-      window._atBatch3 = false;
+      atBatch3 = false;
     }
   }
 }, { passive: false });
