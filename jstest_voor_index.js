@@ -67,7 +67,6 @@ function showBatch(startIndex) {
     const div = document.createElement("div");
     div.className = "product";
 
-    // Als er een link is → maak img + label klikbaar
     if (p.link) {
       div.innerHTML = `
         <a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
@@ -86,10 +85,12 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
+
+// Toon eerste batch bij load
 showBatch(index);
 
 // ========================
-// 4. Carousel trigger
+// 4. Carousel triggers
 // ========================
 function triggerStep(direction) {
   if (lock) return;
@@ -107,7 +108,7 @@ function triggerStep(direction) {
 }
 
 function atBatch3() {
-  return index >= products.length - batchSize; // laatste batch = batch 3
+  return index >= products.length - batchSize;
 }
 
 // ========================
@@ -124,52 +125,45 @@ function scrollToBatch3() {
 }
 
 // ========================
-// 6. Event handlers
+// 6. Scroll & touch events
 // ========================
-
-// Mouse wheel / touchpad
-let atBatch3 = false;        // Gebruiker is bij batch 3
-let extraScrollLock = false; // Voorkomt automatisch scroll naar extraContent
+let batch3Reached = false;
+let extraScrollLock = false;
 
 window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
 
-  // Scroll down
   if (deltaY > 0) {
     if (index + batchSize < products.length) {
       e.preventDefault();
       triggerStep("down");
     } else {
       e.preventDefault();
-      if (!atBatch3) {
-        // Laat batch 3 zien en blokkeer direct doorgaan
+      if (!batch3Reached) {
         index = products.length - batchSize;
         showBatch(index);
-        atBatch3 = true;
-        extraScrollLock = false; // nog niet naar extraContent
+        batch3Reached = true;
+        extraScrollLock = false;
       } else if (!extraScrollLock) {
-        // Tweede scroll naar extraContent
         extraScrollLock = true;
         scrollToExtraContent();
       }
     }
   }
 
-  // Scroll up
   if (deltaY < 0) {
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
       scrollToBatch3();
-      extraScrollLock = false; // terug scrollen reset lock
+      extraScrollLock = false;
     } else {
       e.preventDefault();
       triggerStep("up");
-      atBatch3 = false;
+      batch3Reached = false;
     }
   }
 }, { passive: false });
 
-// Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
     if (!atBatch3()) triggerStep("down");
@@ -180,8 +174,8 @@ window.addEventListener("keydown", e => {
   }
 });
 
-// Touch
 let touchStartY = null;
+
 section.addEventListener("touchstart", e => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
@@ -190,11 +184,11 @@ section.addEventListener("touchmove", e => {
   if (touchStartY === null) return;
   const dy = touchStartY - e.touches[0].clientY;
 
-  if (dy > TOUCH_THRESHOLD) { // swipe up
+  if (dy > TOUCH_THRESHOLD) {
     if (!atBatch3()) triggerStep("down");
     else scrollToExtraContent();
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+  } else if (dy < -TOUCH_THRESHOLD) {
     if (window.scrollY > section.offsetTop) scrollToBatch3();
     else triggerStep("up");
     touchStartY = null;
