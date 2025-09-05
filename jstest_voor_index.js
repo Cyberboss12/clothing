@@ -53,7 +53,7 @@ const extraContent = document.querySelector("#extraContent");
 let index = 0;
 const batchSize = 4;
 let lock = false;
-const LOCK_MS = 600;
+const LOCK_MS = 1000;
 const TOUCH_THRESHOLD = 20;
 
 // Status trackers
