@@ -128,44 +128,26 @@ function scrollToBatch3() {
 // ========================
 
 // Mouse wheel / touchpad
-let atBatch3 = false;   // of per sessie
-let extraScrollLock = false;
-
 window.addEventListener("wheel", (e) => {
-    const deltaY = e.deltaY;
-    
-    // scroll down
-    if (deltaY > 0) {
-        if (index + batchSize < products.length) {
-            e.preventDefault();
-            triggerStep("down");
-        } else if (index + batchSize >= products.length) {
-            e.preventDefault();
-            if (!atBatch3) {
-                // eerst batch 3 tonen
-                index = products.length - batchSize;
-                showBatch(index);
-                atBatch3 = true;
-            } else if (!extraScrollLock) {
-                // pas tweede keer scroll -> naar extraContent
-                extraScrollLock = true;
-                scrollToExtraContent();
-            }
-        }
-    }
+  const deltaY = e.deltaY;
 
-    // scroll up
-    if (deltaY < 0) {
-        if (window.scrollY > section.offsetTop) {
-            e.preventDefault();
-            scrollToBatch3();
-            extraScrollLock = false;  // terug scrollen reset
-        } else {
-            e.preventDefault();
-            triggerStep("up");
-            atBatch3 = false;
-        }
+  if (deltaY > 0) { // scroll down
+    if (!atBatch3()) {
+      e.preventDefault();
+      triggerStep("down");
+    } else {
+      e.preventDefault();
+      scrollToExtraContent();
     }
+  } else if (deltaY < 0) { // scroll up
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToBatch3();
+    } else {
+      e.preventDefault();
+      triggerStep("up");
+    }
+  }
 }, { passive: false });
 
 // Pijltoetsen
