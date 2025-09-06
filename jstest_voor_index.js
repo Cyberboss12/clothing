@@ -55,6 +55,7 @@ const batchSize = 4;
 let lock = false;
 const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
+let extraScrollLock = false; // voorkomt dubbel scrollen
 
 // ========================
 // 4. Batches renderen
@@ -117,15 +118,36 @@ function scrollToExtraContent() {
 }
 
 function scrollToBatch3() {
-  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (extraScrollLock) return;
+
+  // hoogtes van header + infoBar bepalen
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
+
+  const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
+  const infoH = infoEl ? infoEl.getBoundingClientRect().height : 0;
+
+  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
 
-  // 👉 header + info-bar direct zichtbaar maken
-  document.getElementById("siteHeader").style.opacity = "1";
-  document.getElementById("infoBar").style.opacity = "1";
-  document.getElementById("siteHeader").style.pointerEvents = "auto";
-  document.getElementById("infoBar").style.pointerEvents = "auto";
+  // doelpositie: net boven productSection - met ruimte voor header + infoBar
+  const target = Math.max(section.offsetTop - headerH - infoH, 0);
+
+  if (headerEl) {
+    headerEl.style.opacity = "1";
+    headerEl.style.pointerEvents = "auto";
+  }
+  if (infoEl) {
+    infoEl.style.opacity = "1";
+    infoEl.style.pointerEvents = "auto";
+  }
+
+  extraScrollLock = true;
+  window.scrollTo({ top: target, behavior: "smooth" });
+
+  // na de scroll weer ontgrendelen
+  setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
 // ========================
@@ -181,8 +203,12 @@ section.addEventListener("touchmove", e => {
     else scrollToExtraContent();
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
-    if (window.scrollY > section.offsetTop) scrollToBatch3();
-    else triggerStep("up");
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToBatch3();
+    } else {
+      triggerStep("up");
+    }
     touchStartY = null;
   }
 }, { passive: false });
