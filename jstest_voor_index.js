@@ -113,20 +113,25 @@ function atBatch3() {
 // ========================
 // 6. Smooth scroll helpers
 // ========================
-function scrollToExtraContent() {
-  extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-
+function activateHeader(compact = false) {
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
 
   if (headerEl) {
-    headerEl.classList.add("header-compact", "visible"); // halve hoogte + fade/slide-in
+    headerEl.classList.add("visible");
     headerEl.style.pointerEvents = "auto";
+    if (compact) headerEl.classList.add("header-compact");
+    else headerEl.classList.remove("header-compact");
   }
   if (infoEl) {
-    infoEl.classList.add("visible"); // fade/slide-in
+    infoEl.classList.add("visible");
     infoEl.style.pointerEvents = "auto";
   }
+}
+
+function scrollToExtraContent() {
+  extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+  activateHeader(true); // compact tonen
 }
 
 function scrollToBatch3() {
@@ -136,18 +141,7 @@ function scrollToBatch3() {
   index = products.length - batchSize;
   showBatch(index);
 
-  const headerEl = document.getElementById("siteHeader");
-  const infoEl = document.getElementById("infoBar");
-
-  if (headerEl) {
-    headerEl.classList.remove("header-compact"); // terug naar originele grootte
-    headerEl.classList.add("visible"); // fade/slide-in
-    headerEl.style.pointerEvents = "auto";
-  }
-  if (infoEl) {
-    infoEl.classList.add("visible");
-    infoEl.style.pointerEvents = "auto";
-  }
+  activateHeader(false); // terug naar normaal
 
   extraScrollLock = true;
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -166,6 +160,7 @@ window.addEventListener("wheel", (e) => {
     if (!atBatch3()) {
       e.preventDefault();
       triggerStep("down");
+      activateHeader(false); // batches 1-2 = normale header
     } else {
       e.preventDefault();
       scrollToExtraContent();
@@ -177,6 +172,7 @@ window.addEventListener("wheel", (e) => {
     } else {
       e.preventDefault();
       triggerStep("up");
+      activateHeader(false); // batches 1-2 = normale header
     }
   }
 }, { passive: false });
@@ -184,11 +180,18 @@ window.addEventListener("wheel", (e) => {
 // Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) triggerStep("down");
-    else scrollToExtraContent();
+    if (!atBatch3()) {
+      triggerStep("down");
+      activateHeader(false);
+    } else {
+      scrollToExtraContent();
+    }
   } else if (e.key === "ArrowUp") {
     if (window.scrollY > section.offsetTop) scrollToBatch3();
-    else triggerStep("up");
+    else {
+      triggerStep("up");
+      activateHeader(false);
+    }
   }
 });
 
@@ -203,8 +206,12 @@ section.addEventListener("touchmove", e => {
   const dy = touchStartY - e.touches[0].clientY;
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (!atBatch3()) triggerStep("down");
-    else scrollToExtraContent();
+    if (!atBatch3()) {
+      triggerStep("down");
+      activateHeader(false);
+    } else {
+      scrollToExtraContent();
+    }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
     if (window.scrollY > section.offsetTop) {
@@ -212,6 +219,7 @@ section.addEventListener("touchmove", e => {
       scrollToBatch3();
     } else {
       triggerStep("up");
+      activateHeader(false);
     }
     touchStartY = null;
   }
