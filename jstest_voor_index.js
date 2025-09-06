@@ -120,20 +120,13 @@ function scrollToExtraContent() {
 function scrollToBatch3() {
   if (extraScrollLock) return;
 
-  // hoogtes van header + infoBar bepalen
-  const headerEl = document.getElementById("siteHeader");
-  const infoEl = document.getElementById("infoBar");
-
-  const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
-  const infoH = infoEl ? infoEl.getBoundingClientRect().height : 0;
-
   // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
 
-  // doelpositie: net boven productSection - met ruimte voor header + infoBar
-  const target = Math.max(section.offsetTop - headerH - infoH, 0);
-
+  // header + info-bar actief houden
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
   if (headerEl) {
     headerEl.style.opacity = "1";
     headerEl.style.pointerEvents = "auto";
@@ -143,10 +136,11 @@ function scrollToBatch3() {
     infoEl.style.pointerEvents = "auto";
   }
 
+  // scroll helemaal naar boven
   extraScrollLock = true;
-  window.scrollTo({ top: target, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // na de scroll weer ontgrendelen
+  // lock vrijgeven na animatie
   setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
@@ -214,3 +208,4 @@ section.addEventListener("touchmove", e => {
 }, { passive: false });
 
 section.addEventListener("touchend", () => { touchStartY = null; });
+
