@@ -115,6 +115,18 @@ function atBatch3() {
 // ========================
 function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
+
+  if (headerEl) {
+    headerEl.classList.add("header-compact", "visible"); // halve hoogte + fade/slide-in
+    headerEl.style.pointerEvents = "auto";
+  }
+  if (infoEl) {
+    infoEl.classList.add("visible"); // fade/slide-in
+    infoEl.style.pointerEvents = "auto";
+  }
 }
 
 function scrollToBatch3() {
@@ -124,23 +136,21 @@ function scrollToBatch3() {
   index = products.length - batchSize;
   showBatch(index);
 
-  // header + info-bar actief houden
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
+
   if (headerEl) {
-    headerEl.style.opacity = "1";
+    headerEl.classList.remove("header-compact"); // terug naar originele grootte
+    headerEl.classList.add("visible"); // fade/slide-in
     headerEl.style.pointerEvents = "auto";
   }
   if (infoEl) {
-    infoEl.style.opacity = "1";
+    infoEl.classList.add("visible");
     infoEl.style.pointerEvents = "auto";
   }
 
-  // scroll helemaal naar boven
   extraScrollLock = true;
   window.scrollTo({ top: 0, behavior: "smooth" });
-
-  // lock vrijgeven na animatie
   setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
