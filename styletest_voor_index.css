@@ -340,7 +340,7 @@ header h1 {
 
 /* Extra content direct na productSection */
 #extraContent {
-  padding-top: 20px;       /* kleine ruimte boven de extra content */
+  padding-top: 10px;       /* kleine ruimte boven de extra content */
   height: 100vh;
   background-color: #fafafa;
   display: flex;
