@@ -354,6 +354,7 @@ header h1 {
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  aspect-ratio: 4 / 5;
   
   opacity: 0;
   transform: translateY(16px);
@@ -381,7 +382,7 @@ header h1 {
   width: 100%;
   /* aspect-ratio: 4 / 5; */
   height: auto;
-  object-fit: contain;
+  object-fit: cover;
   display: block; 
   border-radius: 6px; 
 }
