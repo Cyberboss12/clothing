@@ -58,43 +58,6 @@ const TOUCH_THRESHOLD = 20;
 let extraScrollLock = false; // voorkomt dubbel scrollen
 
 // ========================
-// Helper: header state
-// ========================
-// states: "normal" (batches 1-2, info hidden), "full" (batch 3, info visible), "compact" (extraContent)
-function updateHeaderState(state) {
-  const headerEl = document.getElementById("siteHeader");
-  const infoEl = document.getElementById("infoBar");
-  if (!headerEl || !infoEl) return;
-
-  // reset classes we use
-  headerEl.classList.remove("header-compact", "header-visible");
-  infoEl.classList.remove("header-visible");
-
-  // ensure header is visible (fall back to inline styles so we don't depend 100% on CSS)
-  headerEl.style.pointerEvents = "auto";
-  infoEl.style.pointerEvents = "auto";
-
-  if (state === "normal") {
-    // original size, info hidden
-    headerEl.classList.add("header-visible");
-    headerEl.classList.remove("header-compact");
-    infoEl.style.opacity = "0";
-    infoEl.style.pointerEvents = "none";
-  } else if (state === "full") {
-    // original size, info visible
-    headerEl.classList.add("header-visible");
-    headerEl.classList.remove("header-compact");
-    infoEl.style.opacity = "1";
-    infoEl.style.pointerEvents = "auto";
-  } else if (state === "compact") {
-    // compact header + info visible
-    headerEl.classList.add("header-visible", "header-compact");
-    infoEl.style.opacity = "1";
-    infoEl.style.pointerEvents = "auto";
-  }
-}
-
-// ========================
 // 4. Batches renderen
 // ========================
 function showBatch(startIndex) {
@@ -123,10 +86,7 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
-// initial render + initial header state
 showBatch(index);
-if (index < products.length - batchSize) updateHeaderState("normal");
-else updateHeaderState("full");
 
 // ========================
 // 5. Carousel trigger
@@ -142,13 +102,6 @@ function triggerStep(direction) {
     showBatch(index);
   }
 
-  // Update header state afhankelijk van batch
-  if (index < products.length - batchSize) {
-    updateHeaderState("normal");
-  } else {
-    updateHeaderState("full");
-  }
-
   lock = true;
   setTimeout(() => (lock = false), LOCK_MS);
 }
@@ -161,9 +114,7 @@ function atBatch3() {
 // 6. Smooth scroll helpers
 // ========================
 function scrollToExtraContent() {
-  // force the scroll, and set header to compact immediately (observer will also handle)
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-  updateHeaderState("compact");
 }
 
 function scrollToBatch3() {
@@ -173,8 +124,17 @@ function scrollToBatch3() {
   index = products.length - batchSize;
   showBatch(index);
 
-  // header + info-bar "full"
-  updateHeaderState("full");
+  // header + info-bar actief houden
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
+  if (headerEl) {
+    headerEl.style.opacity = "1";
+    headerEl.style.pointerEvents = "auto";
+  }
+  if (infoEl) {
+    infoEl.style.opacity = "1";
+    infoEl.style.pointerEvents = "auto";
+  }
 
   // scroll helemaal naar boven
   extraScrollLock = true;
@@ -182,30 +142,6 @@ function scrollToBatch3() {
 
   // lock vrijgeven na animatie
   setTimeout(() => { extraScrollLock = false; }, 900);
-}
-
-// ========================
-// 6b. IntersectionObserver: detecteer extraContent precies (onafhankelijk van gaps)
-// ========================
-if (extraContent) {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.target !== extraContent) return;
-      if (entry.isIntersecting) {
-        // zodra extraContent in beeld komt: compact header
-        updateHeaderState("compact");
-      } else {
-        // extraContent buiten beeld: kies state afhankelijk van welke batch actief is
-        if (index < products.length - batchSize) updateHeaderState("normal");
-        else updateHeaderState("full");
-      }
-    });
-  }, {
-    root: null,
-    threshold: 0.15 // 15% van extraContent in view => consider intersecting
-  });
-
-  io.observe(extraContent);
 }
 
 // ========================
@@ -238,11 +174,8 @@ window.addEventListener("wheel", (e) => {
 // Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) {
-      triggerStep("down");
-    } else {
-      scrollToExtraContent();
-    }
+    if (!atBatch3()) triggerStep("down");
+    else scrollToExtraContent();
   } else if (e.key === "ArrowUp") {
     if (window.scrollY > section.offsetTop) scrollToBatch3();
     else triggerStep("up");
