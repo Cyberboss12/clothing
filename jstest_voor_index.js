@@ -113,32 +113,35 @@ function atBatch3() {
 // ========================
 // 6. Smooth scroll helpers
 // ========================
-
-// Nieuw: smooth scroll naar batch 3
-function scrollToBatch3Smooth() {
-  const batch3Top = section.offsetTop + section.offsetHeight - window.innerHeight;
-  window.scrollTo({ top: batch3Top, behavior: "smooth" });
-}
-
-// Scroll naar extra content via batch 3
 function scrollToExtraContent() {
-  scrollToBatch3Smooth(); // eerst batch 3 tonen
-  setTimeout(() => {
-    extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 400); // kleine delay zodat batch 3 zichtbaar blijft
+  extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-// Scroll terug naar batch 3 (bij scroll-up)
 function scrollToBatch3() {
   if (extraScrollLock) return;
 
-  index = products.length - batchSize; // laatste batch renderen
+  // laatste batch renderen
+  index = products.length - batchSize;
   showBatch(index);
 
-  extraScrollLock = true;
-  scrollToBatch3Smooth(); // vloeiend naar batch 3
+  // header + info-bar actief houden
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
+  if (headerEl) {
+    headerEl.style.opacity = "1";
+    headerEl.style.pointerEvents = "auto";
+  }
+  if (infoEl) {
+    infoEl.style.opacity = "1";
+    infoEl.style.pointerEvents = "auto";
+  }
 
-  setTimeout(() => { extraScrollLock = false; }, 600);
+  // scroll helemaal naar boven
+  extraScrollLock = true;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // lock vrijgeven na animatie
+  setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
 // ========================
