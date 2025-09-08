@@ -85,6 +85,13 @@ function showBatch(startIndex) {
     grid.appendChild(div);
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
+
+  // === Nieuw: hoogte dynamisch aanpassen ===
+  if (startIndex >= products.length - batchSize) {
+    section.style.minHeight = "auto"; // laatste batch → compact
+  } else {
+    section.style.minHeight = "100vh"; // normale batches → fullscreen
+  }
 }
 showBatch(index);
 
