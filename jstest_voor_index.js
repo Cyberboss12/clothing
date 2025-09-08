@@ -56,6 +56,8 @@ let lock = false;
 const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
 let extraScrollLock = false; // voorkomt dubbel scrollen
+let inBatch3Confirmed = false; // flag voor 2-staps scroll
+let globalLock = false; // nieuwe lock voor touchpad/harde swipes
 
 // ========================
 // 4. Batches renderen
@@ -119,6 +121,8 @@ function scrollToBatch3Smooth() {
 
   const batch3Top = section.offsetTop;
   window.scrollTo({ top: batch3Top, behavior: "smooth" });
+
+  inBatch3Confirmed = true;
 }
 
 function scrollToExtraContent() {
@@ -149,7 +153,21 @@ function scrollToBatch3() {
 }
 
 // ========================
-// 7. Event handlers
+// 7. Global lock helper
+// ========================
+function doScrollAction(action) {
+  if (globalLock) return;
+  globalLock = true;
+
+  action();
+
+  setTimeout(() => {
+    globalLock = false;
+  }, LOCK_MS);
+}
+
+// ========================
+// 8. Event handlers
 // ========================
 
 // Mouse wheel / touchpad
@@ -159,21 +177,22 @@ window.addEventListener("wheel", (e) => {
   if (deltaY > 0) { // scroll down
     if (!atBatch3()) {
       e.preventDefault();
-      triggerStep("down");
-    } else if (atBatch3() && window.scrollY < extraContent.offsetTop - 50) {
+      doScrollAction(() => triggerStep("down"));
+    } else if (!inBatch3Confirmed) {
       e.preventDefault();
-      scrollToBatch3Smooth();
+      doScrollAction(() => scrollToBatch3Smooth());
     } else {
       e.preventDefault();
-      scrollToExtraContent();
+      doScrollAction(() => scrollToExtraContent());
     }
   } else if (deltaY < 0) { // scroll up
+    inBatch3Confirmed = false;
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3Smooth();
+      doScrollAction(() => scrollToBatch3Smooth());
     } else {
       e.preventDefault();
-      triggerStep("up");
+      doScrollAction(() => triggerStep("up"));
     }
   }
 }, { passive: false });
@@ -181,12 +200,20 @@ window.addEventListener("wheel", (e) => {
 // Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) triggerStep("down");
-    else if (window.scrollY < extraContent.offsetTop - 50) scrollToBatch3Smooth();
-    else scrollToExtraContent();
+    if (!atBatch3()) {
+      doScrollAction(() => triggerStep("down"));
+    } else if (!inBatch3Confirmed) {
+      doScrollAction(() => scrollToBatch3Smooth());
+    } else {
+      doScrollAction(() => scrollToExtraContent());
+    }
   } else if (e.key === "ArrowUp") {
-    if (window.scrollY > section.offsetTop) scrollToBatch3Smooth();
-    else triggerStep("up");
+    inBatch3Confirmed = false;
+    if (window.scrollY > section.offsetTop) {
+      doScrollAction(() => scrollToBatch3Smooth());
+    } else {
+      doScrollAction(() => triggerStep("up"));
+    }
   }
 });
 
@@ -202,23 +229,23 @@ section.addEventListener("touchmove", e => {
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
     if (!atBatch3()) {
-      triggerStep("down");
-    } else if (window.scrollY < extraContent.offsetTop - 50) {
-      scrollToBatch3Smooth();
+      doScrollAction(() => triggerStep("down"));
+    } else if (!inBatch3Confirmed) {
+      doScrollAction(() => scrollToBatch3Smooth());
     } else {
-      scrollToExtraContent();
+      doScrollAction(() => scrollToExtraContent());
     }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    inBatch3Confirmed = false;
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3Smooth();
+      doScrollAction(() => scrollToBatch3Smooth());
     } else {
-      triggerStep("up");
+      doScrollAction(() => triggerStep("up"));
     }
     touchStartY = null;
   }
 }, { passive: false });
 
 section.addEventListener("touchend", () => { touchStartY = null; });
-
