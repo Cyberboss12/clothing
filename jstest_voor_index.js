@@ -55,7 +55,7 @@ const batchSize = 4;
 let lock = false;
 const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
-let extraScrollLock = false; // voorkomt dubbel scrollen
+let extraScrollLock = false;
 
 // ========================
 // 4. Batches renderen
@@ -86,11 +86,11 @@ function showBatch(startIndex) {
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 
-  // === Nieuw: hoogte dynamisch aanpassen ===
+  // Dynamische hoogte voor laatste batch
   if (startIndex >= products.length - batchSize) {
-    section.style.minHeight = "auto"; // laatste batch → compact
+    section.style.minHeight = "auto";
   } else {
-    section.style.minHeight = "100vh"; // normale batches → fullscreen
+    section.style.minHeight = "100vh";
   }
 }
 showBatch(index);
@@ -113,7 +113,7 @@ function triggerStep(direction) {
   setTimeout(() => (lock = false), LOCK_MS);
 }
 
-function atBatch3() {
+function atLastBatch() {
   return index >= products.length - batchSize;
 }
 
@@ -124,14 +124,13 @@ function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function scrollToBatch3() {
+function scrollToLastBatch() {
   if (extraScrollLock) return;
 
-  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
 
-  // header + info-bar actief houden
+  // Header + info-bar zichtbaar
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
   if (headerEl) {
@@ -143,11 +142,9 @@ function scrollToBatch3() {
     infoEl.style.pointerEvents = "auto";
   }
 
-  // scroll helemaal naar boven
   extraScrollLock = true;
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // lock vrijgeven na animatie
   setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
@@ -159,18 +156,18 @@ function scrollToBatch3() {
 window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
 
-  if (deltaY > 0) { // scroll down
-    if (!atBatch3()) {
+  if (deltaY > 0) {
+    if (!atLastBatch()) {
       e.preventDefault();
       triggerStep("down");
     } else {
       e.preventDefault();
       scrollToExtraContent();
     }
-  } else if (deltaY < 0) { // scroll up
+  } else if (deltaY < 0) {
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToLastBatch();
     } else {
       e.preventDefault();
       triggerStep("up");
@@ -178,13 +175,13 @@ window.addEventListener("wheel", (e) => {
   }
 }, { passive: false });
 
-// Pijltoetsen
+// Arrow keys
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) triggerStep("down");
+    if (!atLastBatch()) triggerStep("down");
     else scrollToExtraContent();
   } else if (e.key === "ArrowUp") {
-    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    if (window.scrollY > section.offsetTop) scrollToLastBatch();
     else triggerStep("up");
   }
 });
@@ -199,14 +196,14 @@ section.addEventListener("touchmove", e => {
   if (touchStartY === null) return;
   const dy = touchStartY - e.touches[0].clientY;
 
-  if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (!atBatch3()) triggerStep("down");
+  if (dy > TOUCH_THRESHOLD) {
+    if (!atLastBatch()) triggerStep("down");
     else scrollToExtraContent();
     touchStartY = null;
-  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+  } else if (dy < -TOUCH_THRESHOLD) {
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToLastBatch();
     } else {
       triggerStep("up");
     }

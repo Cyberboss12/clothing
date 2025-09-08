@@ -314,57 +314,31 @@ header h1 {
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  /* height: calc(3 * 100vh);  */
-  overflow: hidden;         /* interne scroll verbergen */
-  position: relative;
-  touch-action: none;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  width: 100vw;
-  padding: 0;               /* padding weghalen voor strakke aansluiting */
-
-  /* min-height: 100vh; */
-  min-width: 100vh;
-  /* height: 100vh; */
-  height: auto;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* Grid: 1 batch = 1 viewport */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
   width: 100%;
-  padding: 0;
-  margin: 0;
   box-sizing: border-box;
-
-    /* grid-auto-rows: 100px; */
 }
 
-/* Extra content direct na productSection */
-#extraContent {
-  background-color: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding-top: 5px;       
-  min-height: 100vh;
-  height: auto;
-}
-
-.product { 
-  /* position: relative; */
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
+/* Product items */
+.product {
   aspect-ratio: 4 / 5;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 300ms ease, transform 300ms ease; 
+  transition: opacity 300ms ease, transform 300ms ease;
 }
 
 .product.loaded {
@@ -374,22 +348,30 @@ header h1 {
 
 .product img {
   width: 100%;
-  /* aspect-ratio: 4 / 5; */
   height: 100%;
   object-fit: cover;
-  display: block; 
-  border-radius: 6px; 
+  border-radius: 6px;
+  display: block;
 }
 
+/* Product labels */
 .product-label {
+  margin-top: 8px;
   text-align: center;
   font-size: 1.7rem;
-  margin-top: 8px;
   font-family: Arial, sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
-  /* margin-top: 8px;
-  font-weight: bold; */
+}
+
+/* Extra content */
+#extraContent {
+  padding-top: 10px; /* kleine gap */
+  height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product h3 {
