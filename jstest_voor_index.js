@@ -113,6 +113,14 @@ function atBatch3() {
 // ========================
 // 6. Smooth scroll helpers
 // ========================
+function scrollToBatch3Smooth() {
+  index = products.length - batchSize; // render laatste batch
+  showBatch(index);
+
+  const batch3Top = section.offsetTop;
+  window.scrollTo({ top: batch3Top, behavior: "smooth" });
+}
+
 function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -120,11 +128,9 @@ function scrollToExtraContent() {
 function scrollToBatch3() {
   if (extraScrollLock) return;
 
-  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
 
-  // header + info-bar actief houden
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
   if (headerEl) {
@@ -136,11 +142,9 @@ function scrollToBatch3() {
     infoEl.style.pointerEvents = "auto";
   }
 
-  // scroll helemaal naar boven
   extraScrollLock = true;
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // lock vrijgeven na animatie
   setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
@@ -156,6 +160,9 @@ window.addEventListener("wheel", (e) => {
     if (!atBatch3()) {
       e.preventDefault();
       triggerStep("down");
+    } else if (atBatch3() && window.scrollY < extraContent.offsetTop - 50) {
+      e.preventDefault();
+      scrollToBatch3Smooth();
     } else {
       e.preventDefault();
       scrollToExtraContent();
@@ -163,7 +170,7 @@ window.addEventListener("wheel", (e) => {
   } else if (deltaY < 0) { // scroll up
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToBatch3Smooth();
     } else {
       e.preventDefault();
       triggerStep("up");
@@ -175,9 +182,10 @@ window.addEventListener("wheel", (e) => {
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
     if (!atBatch3()) triggerStep("down");
+    else if (window.scrollY < extraContent.offsetTop - 50) scrollToBatch3Smooth();
     else scrollToExtraContent();
   } else if (e.key === "ArrowUp") {
-    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    if (window.scrollY > section.offsetTop) scrollToBatch3Smooth();
     else triggerStep("up");
   }
 });
@@ -193,13 +201,18 @@ section.addEventListener("touchmove", e => {
   const dy = touchStartY - e.touches[0].clientY;
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (!atBatch3()) triggerStep("down");
-    else scrollToExtraContent();
+    if (!atBatch3()) {
+      triggerStep("down");
+    } else if (window.scrollY < extraContent.offsetTop - 50) {
+      scrollToBatch3Smooth();
+    } else {
+      scrollToExtraContent();
+    }
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToBatch3Smooth();
     } else {
       triggerStep("up");
     }
@@ -208,3 +221,4 @@ section.addEventListener("touchmove", e => {
 }, { passive: false });
 
 section.addEventListener("touchend", () => { touchStartY = null; });
+
