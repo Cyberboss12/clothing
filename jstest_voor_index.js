@@ -52,11 +52,10 @@ const extraContent = document.querySelector("#extraContent");
 
 let index = 0;
 const batchSize = 4;
-const LOCK_MS = 700; // iets ruimer voor touchpad
+let lock = false;
+const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
-
-let globalLock = false;
-let scrollStage = "batch"; // "batch" of "extra"
+let extraScrollLock = false; // voorkomt dubbel scrollen
 
 // ========================
 // 4. Batches renderen
@@ -90,85 +89,97 @@ function showBatch(startIndex) {
 showBatch(index);
 
 // ========================
-// 5. Helpers
+// 5. Carousel trigger
 // ========================
-function lockGlobal() {
-  globalLock = true;
-  setTimeout(() => { globalLock = false; }, LOCK_MS);
-}
+function triggerStep(direction) {
+  if (lock) return;
 
-function atLastBatch() {
-  return index >= products.length - batchSize;
-}
-
-function goToNextBatch() {
-  if (!atLastBatch()) {
+  if (direction === "down" && index + batchSize < products.length) {
     index += batchSize;
     showBatch(index);
-  }
-}
-
-function goToPrevBatch() {
-  if (index - batchSize >= 0) {
+  } else if (direction === "up" && index - batchSize >= 0) {
     index -= batchSize;
     showBatch(index);
   }
+
+  lock = true;
+  setTimeout(() => (lock = false), LOCK_MS);
 }
 
-function goToExtraContent() {
+function atBatch3() {
+  return index >= products.length - batchSize;
+}
+
+// ========================
+// 6. Smooth scroll helpers
+// ========================
+function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-  scrollStage = "extra";
 }
 
-function goToBatch3() {
+function scrollToBatch3() {
+  if (extraScrollLock) return;
+
+  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
-  window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
-  scrollStage = "batch";
-}
 
-// ========================
-// 6. Scroll controller
-// ========================
-function handleScroll(direction) {
-  if (globalLock) return;
-  lockGlobal();
-
-  if (direction === "down") {
-    if (scrollStage === "batch") {
-      if (!atLastBatch()) {
-        goToNextBatch();
-      } else {
-        goToExtraContent();
-      }
-    }
-  } else if (direction === "up") {
-    if (scrollStage === "extra") {
-      goToBatch3();
-    } else {
-      goToPrevBatch();
-    }
+  // header + info-bar actief houden
+  const headerEl = document.getElementById("siteHeader");
+  const infoEl = document.getElementById("infoBar");
+  if (headerEl) {
+    headerEl.style.opacity = "1";
+    headerEl.style.pointerEvents = "auto";
   }
+  if (infoEl) {
+    infoEl.style.opacity = "1";
+    infoEl.style.pointerEvents = "auto";
+  }
+
+  // scroll helemaal naar boven
+  extraScrollLock = true;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // lock vrijgeven na animatie
+  setTimeout(() => { extraScrollLock = false; }, 900);
 }
 
 // ========================
 // 7. Event handlers
 // ========================
 
-// Wheel
+// Mouse wheel / touchpad
 window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
-  if (Math.abs(deltaY) < 10) return; // mini scrolls negeren
 
-  e.preventDefault();
-  if (deltaY > 0) handleScroll("down");
-  else handleScroll("up");
+  if (deltaY > 0) { // scroll down
+    if (!atBatch3()) {
+      e.preventDefault();
+      triggerStep("down");
+    } else {
+      e.preventDefault();
+      scrollToExtraContent();
+    }
+  } else if (deltaY < 0) { // scroll up
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToBatch3();
+    } else {
+      e.preventDefault();
+      triggerStep("up");
+    }
+  }
 }, { passive: false });
 
-// Keys
+// Pijltoetsen
 window.addEventListener("keydown", e => {
-  if (e.key === "ArrowDown") handleScroll("down");
-  if (e.key === "ArrowUp") handleScroll("up");
+  if (e.key === "ArrowDown") {
+    if (!atBatch3()) triggerStep("down");
+    else scrollToExtraContent();
+  } else if (e.key === "ArrowUp") {
+    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    else triggerStep("up");
+  }
 });
 
 // Touch
@@ -177,13 +188,23 @@ section.addEventListener("touchstart", e => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
-section.addEventListener("touchend", e => {
+section.addEventListener("touchmove", e => {
   if (touchStartY === null) return;
-  const dy = touchStartY - e.changedTouches[0].clientY;
+  const dy = touchStartY - e.touches[0].clientY;
 
-  if (Math.abs(dy) > TOUCH_THRESHOLD) {
-    if (dy > 0) handleScroll("down");
-    else handleScroll("up");
+  if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (!atBatch3()) triggerStep("down");
+    else scrollToExtraContent();
+    touchStartY = null;
+  } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToBatch3();
+    } else {
+      triggerStep("up");
+    }
+    touchStartY = null;
   }
-  touchStartY = null;
-}, { passive: true });
+}, { passive: false });
+
+section.addEventListener("touchend", () => { touchStartY = null; });
