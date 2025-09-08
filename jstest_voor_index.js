@@ -52,12 +52,11 @@ const extraContent = document.querySelector("#extraContent");
 
 let index = 0;
 const batchSize = 4;
-let lock = false;
 const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
-let extraScrollLock = false; // voorkomt dubbel scrollen
-let inBatch3Confirmed = false; // flag voor 2-staps scroll
-let globalLock = false; // nieuwe lock voor touchpad/harde swipes
+
+let globalLock = false; // nieuwe lock voor ALLE scrolls
+let inBatch3Confirmed = false; // houdt bij of batch 3 al 'actief' is
 
 // ========================
 // 4. Batches renderen
@@ -94,7 +93,7 @@ showBatch(index);
 // 5. Carousel trigger
 // ========================
 function triggerStep(direction) {
-  if (lock) return;
+  if (globalLock) return;
 
   if (direction === "down" && index + batchSize < products.length) {
     index += batchSize;
@@ -104,8 +103,7 @@ function triggerStep(direction) {
     showBatch(index);
   }
 
-  lock = true;
-  setTimeout(() => (lock = false), LOCK_MS);
+  lockGlobal();
 }
 
 function atBatch3() {
@@ -115,26 +113,21 @@ function atBatch3() {
 // ========================
 // 6. Smooth scroll helpers
 // ========================
-function scrollToBatch3Smooth() {
-  index = products.length - batchSize; // render laatste batch
-  showBatch(index);
-
-  const batch3Top = section.offsetTop;
-  window.scrollTo({ top: batch3Top, behavior: "smooth" });
-
-  inBatch3Confirmed = true;
-}
-
 function scrollToExtraContent() {
+  if (globalLock) return;
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+  lockGlobal();
 }
 
 function scrollToBatch3() {
-  if (extraScrollLock) return;
+  if (globalLock) return;
 
+  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
+  inBatch3Confirmed = true;
 
+  // header + info-bar actief houden
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
   if (headerEl) {
@@ -146,28 +139,21 @@ function scrollToBatch3() {
     infoEl.style.pointerEvents = "auto";
   }
 
-  extraScrollLock = true;
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // scroll naar boven van de sectie
+  window.scrollTo({ top: section.offsetTop, behavior: "smooth" });
 
-  setTimeout(() => { extraScrollLock = false; }, 900);
+  lockGlobal();
 }
 
-// ========================
-// 7. Global lock helper
-// ========================
-function doScrollAction(action) {
-  if (globalLock) return;
+function lockGlobal() {
   globalLock = true;
-
-  action();
-
   setTimeout(() => {
     globalLock = false;
   }, LOCK_MS);
 }
 
 // ========================
-// 8. Event handlers
+// 7. Event handlers
 // ========================
 
 // Mouse wheel / touchpad
@@ -175,24 +161,23 @@ window.addEventListener("wheel", (e) => {
   const deltaY = e.deltaY;
 
   if (deltaY > 0) { // scroll down
+    e.preventDefault();
     if (!atBatch3()) {
-      e.preventDefault();
-      doScrollAction(() => triggerStep("down"));
+      triggerStep("down");
     } else if (!inBatch3Confirmed) {
-      e.preventDefault();
-      doScrollAction(() => scrollToBatch3Smooth());
+      scrollToBatch3();
     } else {
-      e.preventDefault();
-      doScrollAction(() => scrollToExtraContent());
+      scrollToExtraContent();
     }
   } else if (deltaY < 0) { // scroll up
-    inBatch3Confirmed = false;
-    if (window.scrollY > section.offsetTop) {
-      e.preventDefault();
-      doScrollAction(() => scrollToBatch3Smooth());
+    e.preventDefault();
+    if (window.scrollY > section.offsetTop + 10) {
+      scrollToBatch3();
+    } else if (inBatch3Confirmed) {
+      inBatch3Confirmed = false;
+      triggerStep("up");
     } else {
-      e.preventDefault();
-      doScrollAction(() => triggerStep("up"));
+      triggerStep("up");
     }
   }
 }, { passive: false });
@@ -200,19 +185,16 @@ window.addEventListener("wheel", (e) => {
 // Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) {
-      doScrollAction(() => triggerStep("down"));
-    } else if (!inBatch3Confirmed) {
-      doScrollAction(() => scrollToBatch3Smooth());
-    } else {
-      doScrollAction(() => scrollToExtraContent());
-    }
+    if (!atBatch3()) triggerStep("down");
+    else if (!inBatch3Confirmed) scrollToBatch3();
+    else scrollToExtraContent();
   } else if (e.key === "ArrowUp") {
-    inBatch3Confirmed = false;
-    if (window.scrollY > section.offsetTop) {
-      doScrollAction(() => scrollToBatch3Smooth());
+    if (window.scrollY > section.offsetTop + 10) scrollToBatch3();
+    else if (inBatch3Confirmed) {
+      inBatch3Confirmed = false;
+      triggerStep("up");
     } else {
-      doScrollAction(() => triggerStep("up"));
+      triggerStep("up");
     }
   }
 });
@@ -224,25 +206,24 @@ section.addEventListener("touchstart", e => {
 }, { passive: true });
 
 section.addEventListener("touchmove", e => {
-  if (touchStartY === null) return;
+  if (touchStartY === null || globalLock) return;
   const dy = touchStartY - e.touches[0].clientY;
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (!atBatch3()) {
-      doScrollAction(() => triggerStep("down"));
-    } else if (!inBatch3Confirmed) {
-      doScrollAction(() => scrollToBatch3Smooth());
-    } else {
-      doScrollAction(() => scrollToExtraContent());
-    }
+    e.preventDefault();
+    if (!atBatch3()) triggerStep("down");
+    else if (!inBatch3Confirmed) scrollToBatch3();
+    else scrollToExtraContent();
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
-    inBatch3Confirmed = false;
-    if (window.scrollY > section.offsetTop) {
-      e.preventDefault();
-      doScrollAction(() => scrollToBatch3Smooth());
+    e.preventDefault();
+    if (window.scrollY > section.offsetTop + 10) {
+      scrollToBatch3();
+    } else if (inBatch3Confirmed) {
+      inBatch3Confirmed = false;
+      triggerStep("up");
     } else {
-      doScrollAction(() => triggerStep("up"));
+      triggerStep("up");
     }
     touchStartY = null;
   }
