@@ -372,18 +372,6 @@ header h1 {
   transform: translateY(0);
 }
 
-/* exit animations (voor vloeiend wisselen) */
-.product.exit-up {
-  transform: translateY(-20px);
-  opacity: 0;
-  transition: transform 300ms ease, opacity 300ms ease;
-}
-.product.exit-down {
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform 300ms ease, opacity 300ms ease;
-}
-
 .product img {
   width: 100%;
   /* aspect-ratio: 4 / 5; */
@@ -413,6 +401,19 @@ header h1 {
   font-size: 0.9rem;
   color: #666;
 }
+
+/* exit animations (voor vloeiend wisselen) */
+.product.exit-up {
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+.product.exit-down {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
 
 /* test voor een volledige scrolervaring */
 
