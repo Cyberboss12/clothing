@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    /* overflow-x: hidden; */
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -323,6 +323,7 @@ header h1 {
   margin-right: calc(50% - 50vw);
   width: 100vw;
   padding: 0;               /* padding weghalen voor strakke aansluiting */
+  box-sizing: border-box;
 }
 
 /* Grid: 1 batch = 1 viewport */
