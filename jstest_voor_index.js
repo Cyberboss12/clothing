@@ -36,13 +36,13 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
   { img: "afbeeldingen/boom.jpg", label: "Discover" },
   { img: "afbeeldingen/Black square_test.png", label: "5" },
-  { img: "afbeeldingen/model.jpg", label: "6" },
-  { img: "afbeeldingen/model.jpg", label: "7" },
-  { img: "afbeeldingen/model.jpg", label: "8" },
+  { img: "afbeeldingen/model.jpg", label: "Bags" },
+  { img: "afbeeldingen/model.jpg", label: "Shoes" },
+  { img: "afbeeldingen/model.jpg", label: "Jewelry and watches" },
   { img: "afbeeldingen/model.jpg", label: "9" },
   { img: "afbeeldingen/model.jpg", label: "10" },
-  { img: "afbeeldingen/model.jpg", label: "11" },
-  { img: "afbeeldingen/model.jpg", label: "12" }
+  { img: "afbeeldingen/model.jpg", label: "Discover" },
+  { img: "afbeeldingen/model.jpg", label: "Gifts" }
 ];
 
 // aannemende dat `products` al gedefinieerd is
