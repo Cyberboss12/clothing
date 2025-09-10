@@ -42,6 +42,11 @@ body::-webkit-scrollbar {
   display: block;
 }
 
+/* Alleen de eerste fullscreen-section corrigeren */
+.fullscreen-section:first-of-type {
+  height: auto; /* JS bepaalt straks de exacte hoogte */
+}
+
 /* Hier moest de header styling komen: */
 
 /* Main content styling */
