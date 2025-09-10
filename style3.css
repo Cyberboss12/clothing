@@ -2,9 +2,44 @@
 body {
     font-family: 'Special Elite';
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
     color: #333;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;    /* voorkom horizontale scroll */
+  overflow-y: hidden;      /* laat scrollen toe wanneer nodig */
+  -ms-overflow-style: none;   /* IE 10+ */
+  scrollbar-width: none;      /* Firefox */
+}
+
+/* WebKit (Chrome, Safari, Edge) — verberg de zichtbare balk door width 0 */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ===== Fullscreen sections (zorg dat ze exact 100vh zijn) ===== */
+.fullscreen-section,
+#heroSection {
+  width: 100%;
+  height: 100vh;          /* precies 1 viewport */
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-section img,
+.hero-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* Hier moest de header styling komen: */
@@ -321,33 +356,4 @@ top: 100%; */
   height: 100%;
   object-fit: cover; /* houdt aspect-ratio intact en vult viewport */
   display: block;
-}
-
-/* Verberg alleen de scrollbar, scrollen blijft werken */
-body {
-  overflow-y: scroll;   /* scroll blijft actief */
-}
-
-body::-webkit-scrollbar {
-  display: none;        /* Chrome, Safari, Edge */
-}
-
-body {
-  -ms-overflow-style: none;  /* IE en Edge */
-  scrollbar-width: none;     /* Firefox */
-}
-
-/* Full-screen sectie */
-.fullscreen-section {
-  height: 100vh;              /* vult exact het venster */
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fullscreen-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;          /* afbeelding vult altijd de sectie */
 }
