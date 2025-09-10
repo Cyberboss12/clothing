@@ -29,18 +29,3 @@ function showNextMessage() {
 
 // Elke 4 seconden wisselen van boodschap
 setInterval(showNextMessage, 4000);
-
-// Zorg dat de eerste hero-section altijd 100vh MIN de hoogte van de info-bar is
-function resizeFirstHero() {
-  const infoBar = document.querySelector(".info-bar");
-  const firstHero = document.querySelector("#heroSection");
-
-  if (infoBar && firstHero) {
-    const infoBarHeight = infoBar.offsetHeight; // hoogte van de info-bar in pixels
-    firstHero.style.height = `calc(100vh - ${infoBarHeight}px)`;
-  }
-}
-
-// Pas hoogte aan bij laden en bij resizen
-window.addEventListener("load", resizeFirstHero);
-window.addEventListener("resize", resizeFirstHero);
