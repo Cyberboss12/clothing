@@ -328,3 +328,20 @@ top: 100%; */
 .block-2 {
   background-color: #777;
 }
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.close-btn:hover {
+  color: #222; /* contrast bij hover */
+}
+
+.info-bar.hidden {
+  display: none;
+}

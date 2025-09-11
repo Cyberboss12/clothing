@@ -29,3 +29,32 @@ function showNextMessage() {
 
 // Elke 4 seconden wisselen van boodschap
 setInterval(showNextMessage, 4000);
+
+// -----------------------------
+// Extra logica voor wegklikbare info-bar
+// -----------------------------
+const infoBar = document.getElementById('infoBar');
+const firstImg = document.querySelector('.fullscreen-section:first-of-type img');
+const closeBtn = document.getElementById('closeInfoBar');
+
+// Zorg dat eerste afbeelding rekening houdt met info-bar
+function adjustFirstImage() {
+  if (!infoBar.classList.contains('hidden')) {
+    const infoHeight = infoBar.offsetHeight;
+    firstImg.style.height = `calc(100vh - ${infoHeight}px)`;
+  } else {
+    firstImg.style.height = "100vh"; // info-bar weg → volle hoogte
+  }
+}
+
+// Bij laden meteen goed zetten
+window.addEventListener('DOMContentLoaded', adjustFirstImage);
+window.addEventListener('resize', adjustFirstImage);
+
+// Klik op kruisje → verberg info-bar en update eerste afbeelding
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    infoBar.classList.add('hidden');
+    adjustFirstImage();
+  });
+}
