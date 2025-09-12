@@ -73,7 +73,7 @@ section img,
 }
 
 .split-grid .vak:hover img {
-  transform: scale(1.05); /* lichte zoom bij hover */
+  transform: scale(0.60); /* lichte zoom bij hover */
 }
 
 /* Hier moest de header styling komen: */
