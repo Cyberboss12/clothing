@@ -76,6 +76,37 @@ section img,
   transform: scale(0.60); /* lichte zoom bij hover */
 }
 
+/* Tekst-overlay linksonder */
+.split-grid .vak {
+  position: relative;  /* noodzakelijk voor absolute positioning van tekst */
+}
+
+.text-overlay {
+  position: absolute;
+  bottom: 20px;       /* afstand van onderkant vak */
+  left: 20px;         /* afstand van linkerkant vak */
+  color: white;
+  text-align: left;
+}
+
+.text-overlay h2 {
+  font-size: 1.8rem;  /* hoofdtekst iets groter */
+  margin: 0 0 5px 0;  /* beetje ruimte tussen h2 en p */
+  line-height: 1.2;
+}
+
+.text-overlay p {
+  font-size: 1.2rem;  /* bijtekst iets kleiner */
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Optioneel: lichte schaduw voor betere leesbaarheid op afbeelding */
+.text-overlay h2, 
+.text-overlay p {
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
 /* Hier moest de header styling komen: */
 
 /* Main content styling */
