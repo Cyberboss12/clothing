@@ -1,4 +1,4 @@
-// Alle boodschappen die je wilt tonen
+// ===== Info-bar boodschappen =====
 const messages = [
   "Welkom bij onze webshop!",
   "Gratis verzending vanaf €50",
@@ -13,45 +13,85 @@ const infoMessage = document.getElementById('infoMessage');
 let msgIndex = 0;
 
 function showNextMessage() {
-  // Verberg huidige tekst
+  if (!infoMessage) return;
   infoMessage.classList.add('hidden');
 
-  // Wacht tot fade-out klaar is (500ms uit CSS)
   setTimeout(() => {
-    // Nieuwe boodschap instellen
     msgIndex = (msgIndex + 1) % messages.length;
     infoMessage.textContent = messages[msgIndex];
-
-    // Fade-in
     infoMessage.classList.remove('hidden');
   }, 500);
 }
 
-// Elke 4 seconden wisselen van boodschap
 setInterval(showNextMessage, 4000);
 
-// ===== Wegklikbare info-bar & eerste afbeelding hoogte =====
+// ===== Wegklikbare info-bar & aanpassing eerste section =====
 const infoBar = document.getElementById('infoBar');
-const firstImg = document.querySelector('.fullscreen-section:first-of-type img');
+const firstSection = document.querySelector('.fullscreen-section:first-of-type');
 const closeBtn = document.getElementById('closeInfoBar');
 
-function adjustFirstImage() {
-  if (!infoBar.classList.contains('hidden')) {
-    const infoHeight = infoBar.offsetHeight;
-    firstImg.style.height = `calc(100vh - ${infoHeight}px)`;
+// defensive checks
+if (!firstSection) console.warn('script3.js: geen .fullscreen-section:first-of-type gevonden.');
+if (!infoBar) console.warn('script3.js: geen #infoBar gevonden.');
+if (!closeBtn) console.warn('script3.js: geen #closeInfoBar gevonden.');
+
+/**
+ * Past de hoogte van de eerste <section> aan.
+ * Als de info-bar zichtbaar is: section height = 100vh - infoBarHeight
+ * Als de info-bar verborgen is: section height = 100vh
+ */
+function adjustFirstSection() {
+  if (!firstSection) return;
+
+  // Als infoBar bestaat en zichtbaar is -> reduceer eerste section
+  if (infoBar && !infoBar.classList.contains('hidden')) {
+    // Zorg dat de computed height juist gemeten wordt
+    const rect = infoBar.getBoundingClientRect();
+    const infoHeight = Math.round(rect.height);
+    firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
   } else {
-    firstImg.style.height = "100vh";
+    // info-bar weg -> eerste section weer full viewport
+    firstSection.style.height = '100vh';
   }
 }
 
-// Initialiseren bij laden en bij resize
-window.addEventListener('DOMContentLoaded', adjustFirstImage);
-window.addEventListener('resize', adjustFirstImage);
+// Run na DOM ready en ook na volledige window load (voor alle images/layout)
+window.addEventListener('DOMContentLoaded', () => {
+  // korte vertraging om zeker te zijn dat CSS is toegepast
+  adjustFirstSection();
+});
+window.addEventListener('load', () => {
+  adjustFirstSection();
+});
+window.addEventListener('resize', () => {
+  adjustFirstSection();
+});
 
-// Klik op kruisje
-if (closeBtn) {
+// Klik op kruisje: animatie -> verberg -> pas section aan
+if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
-    infoBar.classList.add('hidden');
-    adjustFirstImage();
+    // start closing animation
+    infoBar.classList.add('closing');
+
+    // na overgang: uit DOM-flow halen en aanpassen
+    const onTransitionEnd = (ev) => {
+      // alleen reageren op de transition van de info-bar zelf
+      if (ev.target !== infoBar) return;
+      infoBar.classList.add('hidden');       // display:none
+      infoBar.classList.remove('closing');   // reset state
+      adjustFirstSection();                  // pas eerste section aan nu info-bar niet meer in flow is
+      infoBar.removeEventListener('transitionend', onTransitionEnd);
+    };
+
+    infoBar.addEventListener('transitionend', onTransitionEnd);
+
+    // Fallback: als transitionend niet firet (bv oudere browsers), forceer na 350ms
+    setTimeout(() => {
+      if (!infoBar.classList.contains('hidden')) {
+        infoBar.classList.add('hidden');
+        infoBar.classList.remove('closing');
+        adjustFirstSection();
+      }
+    }, 400);
   });
 }
