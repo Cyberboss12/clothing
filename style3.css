@@ -48,25 +48,29 @@ section img,
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
 .split-grid .vak {
-  position: relative;       /* nodig voor absolute tekst */
-  display: block;           /* a-tag vult het vak volledig */
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  text-decoration: none;    /* verwijder standaard link underline */
+  text-decoration: none;
   cursor: pointer;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* animatie */
 }
 
+/* Hover-effect voor HELE vak (afbeelding + tekst) */
+.split-grid .vak:hover {
+  transform: scale(1.03); /* subtiel groter */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* schaduw */
+}
+
+/* Afbeelding blijft stabiel (geen aparte zoom meer) */
 .split-grid .vak img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  /* transition: transform 0.3s ease;  <- weggehaald */
-}
-
-.split-grid .vak:hover img {
-  transform: none; /* geen zoom meer bij hover */
 }
 
 /* Tekst-overlay container */
