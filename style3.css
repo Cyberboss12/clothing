@@ -35,6 +35,7 @@ section,
   margin: 0;
   padding: 0;
   line-height: 0;
+  position: relative;
 }
 
 section img,
@@ -49,7 +50,7 @@ section img,
 /* Overlay bovenaan eerste afbeelding */
 .top-overlay {
   position: absolute;
-  top: 15%;             /* Altijd 15% van de hoogte van de afbeelding */
+  top: 60px;             /* blijft exact dezelfde afstand vanaf bovenkant */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
