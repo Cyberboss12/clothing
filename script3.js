@@ -95,3 +95,21 @@ if (closeBtn && infoBar) {
     }, 400);
   });
 }
+
+// Tekst en logo switch
+const switchItems = document.querySelectorAll('.top-overlay .switch-item');
+let currentIndex = 0;
+
+function switchContent() {
+  // huidige verbergen
+  switchItems[currentIndex].classList.add('hidden');
+
+  // volgende index berekenen
+  currentIndex = (currentIndex + 1) % switchItems.length;
+
+  // volgende tonen
+  switchItems[currentIndex].classList.remove('hidden');
+}
+
+// Elke 8 seconden wisselen
+setInterval(switchContent, 8000);
