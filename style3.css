@@ -63,7 +63,7 @@ section img,
   object-fit: cover;
   display: block;
   /* transition: transform 0.3s ease;  <- weggehaald */
-  transform: scale(0.10);
+  transform: scale(1.00);
 }
 
 .split-grid .vak:hover img {
