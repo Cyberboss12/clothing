@@ -96,17 +96,7 @@ section img,
 
 /* Fade in/out effect */
 .switch-item {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  opacity: 0;
-  transition: opacity 0.8s ease; /* fade effect */
-}
-
-.switch-item.active {
-  opacity: 1;
+  transition: opacity 0.5s ease;
 }
 
 .hidden {
