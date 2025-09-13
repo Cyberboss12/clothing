@@ -46,6 +46,25 @@ section img,
   margin: 0;
 }
 
+/* Overlay bovenaan eerste afbeelding */
+.top-overlay {
+  position: absolute;
+  top: 60px;             /* afstand vanaf bovenkant, pas aan naar wens */
+  left: 50%;             /* horizontaal centreren */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 5;            /* boven de afbeelding */
+  max-width: 90%;        /* niet te breed op grote schermen */
+}
+
+.top-overlay h1 {
+  font-size: 2.5rem;     /* hoofdtekst groter */
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.6); /* beter contrast */
+}
+
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
 .split-grid .vak {
   position: relative;      /* nodig voor overlay */
