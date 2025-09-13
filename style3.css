@@ -47,13 +47,13 @@ section img,
 }
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
-/* Zorg dat <a> zich gedraagt als een blok en hele vak vult */
 .split-grid .vak {
-  display: block;       /* a-tag vult het vak volledig */
+  position: relative;       /* nodig voor absolute tekst */
+  display: block;           /* a-tag vult het vak volledig */
   width: 100%;
   height: 100%;
   overflow: hidden;
-  text-decoration: none; /* verwijder standaard link underline */
+  text-decoration: none;    /* verwijder standaard link underline */
   cursor: pointer;
 }
 
@@ -62,12 +62,36 @@ section img,
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s ease; /* optionele hover effect */
+  /* transition: transform 0.3s ease;  <- weggehaald */
 }
 
-/* Optioneel: klein hover-effect op afbeeldingen */
 .split-grid .vak:hover img {
-  transform: scale(1.05); /* lichte zoom bij hover */
+  transform: none; /* geen zoom meer bij hover */
+}
+
+/* Tekst-overlay container */
+.split-grid .vak .text-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  text-align: left;
+}
+
+/* Hoofdtekst */
+.split-grid .vak .overlay-title {
+  font-size: 1.8rem;
+  margin: 0 0 5px 0;
+  line-height: 1.2;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Bijtekst */
+.split-grid .vak .overlay-subtitle {
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
 
