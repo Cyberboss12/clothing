@@ -48,24 +48,23 @@ section img,
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
 .split-grid .vak {
-  position: relative;
+  position: relative;      /* nodig voor overlay */
   display: block;
   width: 100%;
   height: 100%;
   overflow: hidden;
   text-decoration: none;
   cursor: pointer;
-
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* animatie */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover-effect voor HELE vak (afbeelding + tekst) */
+/* Subtiel hover-effect voor HELE vak (afbeelding + tekst) */
 .split-grid .vak:hover {
-  transform: scale(1.02); /* subtiel groter */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* schaduw */
+  transform: scale(1.02); /* iets subtieler springen */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-/* Afbeelding blijft stabiel (geen aparte zoom meer) */
+/* Afbeelding stabiel */
 .split-grid .vak img {
   width: 100%;
   height: 100%;
@@ -76,17 +75,19 @@ section img,
 /* Tekst-overlay container */
 .split-grid .vak .text-overlay {
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;  /* iets hoger */
   left: 20px;
   color: white;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Hoofdtekst */
 .split-grid .vak .overlay-title {
   font-size: 1.8rem;
-  margin: 0 0 25px 0;
-  line-height: 1.2;
+  margin: 0 0 20px 0; /* 20px afstand tot bijtekst */
+  line-height: 1.3;   /* extra ruimte tussen regels */
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
@@ -94,7 +95,7 @@ section img,
 .split-grid .vak .overlay-subtitle {
   font-size: 1.2rem;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.4;   /* iets luchtiger */
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
