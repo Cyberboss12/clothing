@@ -105,6 +105,9 @@ section img,
   transition: opacity 0.5s ease;
   pointer-events: none;
   font-size: 1.5rem; /* tekstgrootte */
+  display: flex;          /* zorg dat tekst en logo gelijk uitlijnen */
+  align-items: center;    /* verticaal centreren */
+  justify-content: center;/* horizontaal centreren */
 }
 
 .top-overlay .switch-item:not(.hidden) {
