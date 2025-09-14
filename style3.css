@@ -96,19 +96,26 @@ section img,
 
 /* Fade in/out effect */
 .top-overlay .switch-item {
-  position: absolute;
+  position: absolute; 
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  top: 0;
-  transition: opacity 0.5s ease; /* correspondeert met fadeTime in JS */
-  opacity: 1;
-  pointer-events: auto; /* zichtbaar item vangt events */
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  font-size: 1.5rem; /* tekstgrootte */
 }
 
-/* verborgen state — geen pointer-events en volledig doorzichtig */
-.top-overlay .switch-item.hidden {
-  opacity: 0;
-  pointer-events: none;
+.top-overlay .switch-item:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.top-overlay .logo {
+  height: 1.5rem; /* zelfde hoogte als tekst */
+  width: auto;
+  vertical-align: middle;
 }
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
