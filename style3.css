@@ -49,7 +49,7 @@ section img,
 
 .top-overlay {
   position: absolute;
-  top: 30px;             /* altijd dezelfde afstand van bovenkant */
+  top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -60,7 +60,7 @@ section img,
 
 /* Tekststijl */
 .top-overlay h1 {
-  font-family: "Baskerville Old Face";
+  font-family: 'Baskerville Old Face';
   font-size: 1.5rem;  /* tekstgrootte */
   margin: 0;
   line-height: 1.2;
