@@ -99,17 +99,34 @@ if (closeBtn && infoBar) {
 // Tekst en logo switch
 const switchItems = document.querySelectorAll('.top-overlay .switch-item');
 let currentIndex = 0;
+const fadeTime = 500;   // ms — moet overeenkomen met CSS transition (0.5s)
+const intervalTime = 8000; // wissel-interval (8s)
+
+// veilige init: alleen het eerste item zichtbaar, rest verborgen
+document.addEventListener('DOMContentLoaded', () => {
+  if (!switchItems.length) return;
+  switchItems.forEach((el, i) => {
+    if (i === 0) el.classList.remove('hidden');
+    else el.classList.add('hidden');
+  });
+});
 
 function switchContent() {
-  // huidige verbergen
-  switchItems[currentIndex].classList.add('hidden');
+  if (!switchItems.length) return;
 
-  // volgende index berekenen
-  currentIndex = (currentIndex + 1) % switchItems.length;
+  const current = switchItems[currentIndex];
+  const nextIndex = (currentIndex + 1) % switchItems.length;
+  const next = switchItems[nextIndex];
 
-  // volgende tonen
-  switchItems[currentIndex].classList.remove('hidden');
+  // 1) fade-out huidig
+  current.classList.add('hidden');
+
+  // 2) wacht tot fade klaar is en fade-in volgende
+  setTimeout(() => {
+    next.classList.remove('hidden');
+    currentIndex = nextIndex;
+  }, fadeTime);
 }
 
-// Elke 8 seconden wisselen
-setInterval(switchContent, 8000);
+// start de interval (wacht eventueel 8s voordat de eerste switch)
+setInterval(switchContent, intervalTime);

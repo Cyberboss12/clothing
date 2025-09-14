@@ -95,13 +95,19 @@ section img,
 }
 
 /* Fade in/out effect */
-.switch-item {
-  transition: opacity 0.5s ease;
+.top-overlay .switch-item {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  transition: opacity 0.5s ease; /* correspondeert met fadeTime in JS */
+  opacity: 1;
+  pointer-events: auto; /* zichtbaar item vangt events */
 }
 
-.hidden {
+/* verborgen state — geen pointer-events en volledig doorzichtig */
+.top-overlay .switch-item.hidden {
   opacity: 0;
-  position: absolute; /* zodat items niet verschuiven */
   pointer-events: none;
 }
 
