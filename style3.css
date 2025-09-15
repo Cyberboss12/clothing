@@ -522,16 +522,3 @@ top: 100%; */
 .info-bar.hidden ~ .side-menu-trigger {
   top: 20px; /* dichter naar boven */
 }
-
-.menu-toggle {
-  position: absolute;
-  top: 30px;       /* afstand vanaf bovenkant */
-  left: 20px;      /* niet tegen de rand geplakt */
-  display: flex;
-  align-items: center;
-  gap: 8px;        /* ruimte tussen ☰ en "Menu" */
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 1000;   /* bovenop alles zichtbaar */
-}
