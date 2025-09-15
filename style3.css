@@ -51,7 +51,6 @@ section img,
   position: absolute;
   top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
   color: white;
   z-index: 5;
@@ -78,9 +77,6 @@ section img,
   transition: opacity 0.5s ease;
   pointer-events: none;
   white-space: nowrap;
-
-  top: 50%;
-  left: 50%;
 }
 
 .top-overlay .switch-item.active {
