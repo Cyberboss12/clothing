@@ -68,19 +68,23 @@ section img,
 
 /* Fade in/out effect */
 .top-overlay .switch-item {
-  font-family: "Baskerville Old Face";
   position: absolute; 
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  white-space: nowrap;
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
 
-  font-size: 1.5rem; /* tekstgrootte */
-  display: inline-flex;          /* zorg dat tekst en logo gelijk uitlijnen */
-  align-items: center;    /* verticaal centreren */
-  justify-content: center;/* horizontaal centreren */
+  /* 🔑 Nieuw toegevoegd */
+  display: inline-flex;       /* tekst en logo in 1 lijn */
+  align-items: center;        /* verticaal centreren */
+  justify-content: center;    /* horizontaal centreren */
+  gap: 8px;                   /* ruimte tussen tekst en logo */
+
+  font-size: 1.5rem;          /* zelfde grootte als tekst */
+  font-family: "Baskerville Old Face"; /* font aanpassen */
+  white-space: nowrap;
 }
 
 .top-overlay .switch-item:not(.hidden) {
@@ -88,10 +92,11 @@ section img,
   pointer-events: auto;
 }
 
-.top-overlay .logo {
-  height: 1.5rem; /* zelfde hoogte als tekst */
+.top-overlay .switch-item img {
+  height: 1.5rem;   /* exact gelijk aan teksthoogte */
   width: auto;
-  vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle; /* extra zekerheid */
 }
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
