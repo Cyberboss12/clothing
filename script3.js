@@ -96,21 +96,20 @@ if (closeBtn && infoBar) {
   });
 }
 
-// Tekst en logo switch
+// logo en tekst
 const switchItems = document.querySelectorAll('.top-overlay .switch-item');
 let currentIndex = 0;
 const duration = 8000; // 8 seconden
-const fadeTime = 800;  // moet gelijk zijn aan CSS transition tijd (0.8s)
+const fadeTime = 800;  // gelijk aan CSS transition
 
 function switchContent() {
   const currentItem = switchItems[currentIndex];
   currentItem.classList.remove('active'); // start fade-out
 
-  // volgende item bepalen
+  // volgende item
   const nextIndex = (currentIndex + 1) % switchItems.length;
   const nextItem = switchItems[nextIndex];
 
-  // wachten tot fade-out klaar is, dan fade-in nieuwe
   setTimeout(() => {
     nextItem.classList.add('active');
     currentIndex = nextIndex;
