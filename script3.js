@@ -95,31 +95,3 @@ if (closeBtn && infoBar) {
     }, 400);
   });
 }
-
-// Tekst en logo switch
-const switchItems = document.querySelectorAll('.top-overlay .switch-item');
-let currentIndex = 0;
-const fadeTime = 500;
-const intervalTime = 8000;
-
-document.addEventListener('DOMContentLoaded', () => {
-  switchItems.forEach((el, i) => {
-    if (i === 0) el.classList.remove('hidden');
-    else el.classList.add('hidden');
-  });
-});
-
-function switchContent() {
-  const current = switchItems[currentIndex];
-  const nextIndex = (currentIndex + 1) % switchItems.length;
-  const next = switchItems[nextIndex];
-
-  current.classList.add('hidden');
-
-  setTimeout(() => {
-    next.classList.remove('hidden');
-    currentIndex = nextIndex;
-  }, fadeTime);
-}
-
-setInterval(switchContent, intervalTime);
