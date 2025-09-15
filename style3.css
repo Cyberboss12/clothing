@@ -450,9 +450,10 @@ top: 100%; */
 }
 
 /* Trigger links boven */
+/* --- Side Menu --- */
 .side-menu-trigger {
   position: absolute;
-  top: 50px; /* zelfde logica als je top-overlay */
+  top: 50px; 
   left: 20px;
   display: flex;
   align-items: center;
@@ -468,13 +469,12 @@ top: 100%; */
   font-size: 1.5rem;
 }
 
-/* Zijmenu zelf */
 .side-menu {
   position: fixed;
   top: 0;
-  left: -100%; /* start buiten beeld */
+  left: -100%; 
   width: 300px;
-  height: 100vh; /* exact fullscreen hoogte */
+  height: 100vh;
   background: rgba(0,0,0,0.9);
   color: white;
   z-index: 1500;
@@ -520,5 +520,5 @@ top: 100%; */
 
 /* Wanneer info-bar weg is, trigger schuift naar boven */
 .info-bar.hidden ~ .side-menu-trigger {
-  top: 20px; /* dichter naar boven */
+  top: 20px;
 }
