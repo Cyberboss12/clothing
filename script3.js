@@ -100,16 +100,17 @@ if (closeBtn && infoBar) {
 const switchItems = document.querySelectorAll('.top-overlay .switch-item');
 let currentIndex = 0;
 const duration = 8000; // 8 seconden
-const fadeTime = 800;  // gelijk aan CSS transition
+const fadeTime = 800;  // moet gelijk zijn aan CSS transition tijd
 
 function switchContent() {
   const currentItem = switchItems[currentIndex];
   currentItem.classList.remove('active'); // start fade-out
 
-  // volgende item
+  // volgende item bepalen
   const nextIndex = (currentIndex + 1) % switchItems.length;
   const nextItem = switchItems[nextIndex];
 
+  // wachten tot fade-out klaar is, dan fade-in nieuwe
   setTimeout(() => {
     nextItem.classList.add('active');
     currentIndex = nextIndex;
