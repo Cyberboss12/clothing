@@ -51,6 +51,7 @@ section img,
   position: absolute;
   top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   color: white;
   z-index: 5;
@@ -83,7 +84,7 @@ section img,
   transform: translate(-50%, -50%);
 }
 
-.top-overlay .switch-item:not(.hidden) {
+.top-overlay .switch-item.active {
   opacity: 1;
   pointer-events: auto;
 }
