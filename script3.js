@@ -123,3 +123,15 @@ function switchContent() {
 }
 
 setInterval(switchContent, intervalTime);
+
+const menuTrigger = document.getElementById('menuTrigger');
+const sideMenu = document.getElementById('sideMenu');
+const closeSideMenu = document.getElementById('closeSideMenu');
+
+menuTrigger.addEventListener('click', () => {
+  sideMenu.classList.add('open');
+});
+
+closeSideMenu.addEventListener('click', () => {
+  sideMenu.classList.remove('open');
+});
