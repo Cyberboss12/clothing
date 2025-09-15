@@ -118,3 +118,14 @@ function switchContent() {
 }
 
 setInterval(switchContent, duration);
+
+// Hamburger menu toggle
+const hamburgerMenu = document.getElementById('hamburgerMenu');
+const menuOverlay = document.getElementById('menuOverlay');
+
+if (hamburgerMenu && menuOverlay) {
+  hamburgerMenu.addEventListener('click', () => {
+    menuOverlay.classList.toggle('show');
+    menuOverlay.classList.toggle('hidden'); // fallback voor display:none
+  });
+}

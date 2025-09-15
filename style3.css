@@ -452,3 +452,83 @@ top: 100%; */
 .info-bar.hidden {
   display: none;
 }
+
+
+/* Hamburger menu container */
+.hamburger-menu {
+  position: fixed;
+  top: 50%;
+  left: 20px; /* niet te ver links */
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Hamburger icon */
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 20px;
+}
+
+.hamburger-icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+/* Uitklapbaar menu overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background-color: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+  transform: translateY(-100%);
+  z-index: 15;
+}
+
+/* Menu zichtbaar */
+.menu-overlay.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Grid voor menu links */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  text-align: center;
+}
+
+.menu-grid a {
+  color: #fff;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.menu-grid a:hover {
+  color: #C3A580;
+}
+
+/* Verborgen */
+.hidden {
+  display: none !important;
+}
