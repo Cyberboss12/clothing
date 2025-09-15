@@ -120,11 +120,52 @@ function switchContent() {
 setInterval(switchContent, duration);
 
 // Hamburger menu toggle
-const hamburgerMenu = document.getElementById('hamburgerMenu');
-const menuOverlay = document.getElementById('menuOverlay');
+document.addEventListener('DOMContentLoaded', () => {
+  const ham = document.getElementById('hamburgerMenu');
+  const overlay = document.getElementById('menuOverlay');
 
-if (hamburgerMenu && menuOverlay) {
-  hamburgerMenu.addEventListener('click', () => {
-    menuOverlay.classList.toggle('show');
+  if (!ham) console.warn('hamburgerMenu element niet gevonden');
+  if (!overlay) console.warn('menuOverlay element niet gevonden');
+
+  if (!ham || !overlay) return;
+
+  // Toggle open/close
+  function openMenu() {
+    overlay.classList.add('menu-open');
+    ham.classList.add('is-active');
+    overlay.setAttribute('aria-hidden', 'false');
+    // voorkom body scroll (optioneel)
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    overlay.classList.remove('menu-open');
+    ham.classList.remove('is-active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  ham.addEventListener('click', () => {
+    if (overlay.classList.contains('menu-open')) closeMenu();
+    else openMenu();
   });
-}
+
+  // keyboard accessibility (Enter/Space)
+  ham.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' || ev.key === ' ') {
+      ev.preventDefault();
+      ham.click();
+    }
+  });
+
+  // Klik buiten de grid sluit het menu
+  overlay.addEventListener('click', (ev) => {
+    if (ev.target === overlay) closeMenu();
+  });
+
+  // Klik op een link sluit menu ook
+  overlay.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => closeMenu());
+  });
+});
