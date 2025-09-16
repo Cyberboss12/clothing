@@ -454,7 +454,7 @@ top: 100%; */
 .hamburger-menu {
   font-family: 'Baskerville Old Face';
   position: absolute;
-  top: 23px;
+  top: 20px;
   left: 50px;                       /* niet te ver links */
   transform: translateX(-50%);
   display: flex;
