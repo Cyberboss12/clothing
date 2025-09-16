@@ -493,7 +493,7 @@ top: 100%; */
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: 0;
+  top: 0;                     /* altijd vast aan de top */
   left: 0;
   width: 100%;
   background: rgba(0,0,0,0.95);
@@ -502,12 +502,12 @@ top: 100%; */
   overflow: hidden;           /* inhoud pas tonen als open */
   pointer-events: none;
   transition: height 0.5s ease, opacity 0.5s ease;
-  z-index: 999;
+  z-index: 999;               /* blijft boven info-bar & content */
 }
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 50vh;               /* menu wordt 50% van viewport hoog */
+  height: 50vh;               /* altijd halve viewport */
   opacity: 1;
   pointer-events: auto;
 }
