@@ -49,7 +49,7 @@ section img,
 
 .top-overlay {
   position: absolute;
-  top: 5%;             /* altijd dezelfde afstand van bovenkant */
+  top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
