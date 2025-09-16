@@ -48,7 +48,8 @@ section img,
 }
 
 .top-overlay {
-  position: absolute;           /* altijd dezelfde afstand van bovenkant */
+  position: absolute;
+  top: 25px;             /* altijd dezelfde afstand van bovenkant */
   text-align: center;
   color: white;
   z-index: 5;
