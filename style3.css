@@ -48,13 +48,12 @@ section img,
 }
 
 .top-overlay {
-  position: absolute;
-  top: 25px;             /* altijd dezelfde afstand van bovenkant */
-  left: 50%;
+  position: absolute;           /* altijd dezelfde afstand van bovenkant */
   text-align: center;
   color: white;
   z-index: 5;
   max-width: 90%;
+  display: flex;
 }
 
 /* Tekststijl */
