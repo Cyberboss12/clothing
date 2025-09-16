@@ -49,9 +49,9 @@ section img,
 
 .top-overlay {
   position: absolute;
-  top: 50%;             /* altijd dezelfde afstand van bovenkant */
+  top: 5%;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   text-align: center;
   color: white;
   z-index: 5;
