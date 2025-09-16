@@ -492,22 +492,20 @@ top: 100%; */
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: 0;
+  top: 60px; /* 25px top + ~35px hoogte van hamburger-menu + 10px marge */
   left: 0;
   width: 100%;
-  height: 50vh;                      /* precies 50vh zoals gevraagd */
+  height: auto; /* automatisch, afhankelijk van content */
   background: rgba(0,0,0,0.95);
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* content start vanaf top van overlay */
   justify-content: center;
-  transform: translateY(-100%);      /* verborgen boven viewport */
+  transform: translateY(-10px); /* kleine animatie vanaf bovenkant */
   opacity: 0;
   pointer-events: none;
-  transition: transform 320ms ease, opacity 320ms ease;
-  z-index: 55;                       /* net onder hamburger maar boven content */
+  transition: transform 0.32s ease, opacity 0.32s ease;
+  z-index: 55;
 }
-
-/* open state */
 .menu-overlay.menu-open {
   transform: translateY(0);
   opacity: 1;
