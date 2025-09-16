@@ -452,9 +452,10 @@ top: 100%; */
 
 /* -------- Hamburger (positie en stijl) -------- */
 .hamburger-menu {
+  font-family: 'Baskerville Old Face';
   position: absolute;
   top: 23px;
-  left: 38px;                       /* niet te ver links */
+  left: 50px;                       /* niet te ver links */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
