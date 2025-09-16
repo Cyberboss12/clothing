@@ -493,45 +493,49 @@ top: 100%; */
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: 60px; /* 25px top + ~35px hoogte van hamburger-menu + 10px marge */
+  top: 0;
   left: 0;
   width: 100%;
-  height: auto; /* automatisch, afhankelijk van content */
   background: rgba(0,0,0,0.95);
-  display: flex;
-  align-items: flex-start; /* content start vanaf top van overlay */
-  justify-content: center;
-  transform: translateY(-10px); /* kleine animatie vanaf bovenkant */
-  opacity: 0;
+  height: 0;                  /* start gesloten */
+  opacity: 0;                 /* onzichtbaar */
+  overflow: hidden;           /* inhoud pas tonen als open */
   pointer-events: none;
-  transition: transform 0.32s ease, opacity 0.32s ease;
-  z-index: 55;
+  transition: height 0.5s ease, opacity 0.5s ease;
+  z-index: 999;
 }
+
+/* Open state */
 .menu-overlay.menu-open {
-  transform: translateY(0);
+  height: 50vh;               /* menu wordt 50% van viewport hoog */
   opacity: 1;
   pointer-events: auto;
 }
 
-/* ---- Grid links ---- */
+/* Menu inhoud */
 .menu-grid {
   display: grid;
   width: min(980px, 92%);
+  height: 100%;               /* vult de volledige 50vh */
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 18px;
   justify-items: center;
   align-items: center;
   text-align: center;
   padding: 12px 20px;
+  box-sizing: border-box;
 }
+
 .menu-grid a {
   color: #fff;
   text-decoration: none;
   font-size: 1.25rem;
-  padding: 6px 8px;
   transition: color 0.2s ease, transform 0.15s ease;
 }
-.menu-grid a:hover { color: #C3A580; transform: translateY(-3px); }
+.menu-grid a:hover {
+  color: #C3A580;
+  transform: translateY(-3px);
+}
 
 /* ---- Hamburger -> kruis animatie wanneer actief ---- */
 .hamburger-menu.is-active .hamburger-icon span:nth-child(1) {
