@@ -452,10 +452,10 @@ top: 100%; */
 
 /* -------- Hamburger (positie en stijl) -------- */
 .hamburger-menu {
-  position: fixed;
+  position: absolute;
   top: 25px;
   left: 22px;                       /* niet te ver links */
-  transform: translateY(-50%);
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 10px;
