@@ -49,14 +49,13 @@ section img,
 
 .top-overlay {
   position: absolute;
-  top: 25px;             /* altijd dezelfde afstand van bovenkant */
+  top: 50%;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   text-align: center;
   color: white;
   z-index: 5;
   max-width: 90%;
-  display: flex;
 }
 
 /* Tekststijl */
