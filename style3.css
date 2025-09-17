@@ -73,7 +73,6 @@ section img,
   justify-content: center;    /* horizontaal centreren */
   font-size: 1.5rem;
   font-family: "Baskerville Old Face";
-  position: absolute;
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
