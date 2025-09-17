@@ -523,7 +523,7 @@ top: 100%; */
   flex-direction: row;            /* woorden naast elkaar */
   flex-wrap: wrap;                /* breken als scherm te klein is */
   gap: 60px;                      /* extra spacing tussen de woorden */
-  justify-content: center;        /* gecentreerd op breedte */
+  justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
   width: 100%;                    /* neemt volledige breedte */
   max-width: 980px;               /* niet breder dan 980px */
@@ -531,6 +531,7 @@ top: 100%; */
 
 .menu-grid a {
   font-family: 'Baskerville Old Face', serif;
+  background-color: transparent;
   color: black;
   text-decoration: none;
   font-size: 1.5rem;              /* iets groter voor balans */
