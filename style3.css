@@ -512,7 +512,7 @@ top: 100%; */
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 50vh;
+  height: 40vh;
   opacity: 1;
   pointer-events: auto;
 }
