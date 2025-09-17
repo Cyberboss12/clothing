@@ -508,6 +508,7 @@ top: 100%; */
   justify-content: flex-start;        /* horizontaal centreren */
   align-items: flex-start;        /* inhoud aan de bovenkant */
   padding-top: 40px;              /* ruimte boven de woorden */
+  padding-left: 75px;
 }
 
 /* Open state */
@@ -522,7 +523,7 @@ top: 100%; */
   display: flex;
   flex-direction: row;            /* woorden naast elkaar */
   flex-wrap: wrap;                /* breken als scherm te klein is */
-  gap: 60px;                      /* extra spacing tussen de woorden */
+  gap: 100px;                      /* extra spacing tussen de woorden */
   justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
   width: 100%;                    /* neemt volledige breedte */
