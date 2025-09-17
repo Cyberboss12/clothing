@@ -498,38 +498,43 @@ top: 100%; */
   top: 0;
   left: 0;
   width: 100%;
-  background: #fff;            /* echt wit */
-  height: 0;                   /* start gesloten */
+  background: #fff;               /* volledige achtergrond wit */
+  height: 0;
   opacity: 0;
   overflow: hidden;
   pointer-events: none;
-  transition: height 0.4s ease, opacity 0.4s ease; /* height & opacity animeren */
+  transition: height 0.4s ease, opacity 0.4s ease;
   z-index: 1000;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;     /* boven uitlijnen */
-  padding-top: 40px;           /* ruimte boven links */
+  justify-content: center;        /* horizontaal centreren */
+  align-items: flex-start;        /* inhoud aan de bovenkant */
+  padding-top: 40px;              /* ruimte boven de woorden */
 }
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 50vh;                /* halve viewport */
+  height: 50vh;
   opacity: 1;
   pointer-events: auto;
 }
 
 /* Menu inhoud */
 .menu-grid {
-  display: flex;               /* flex ipv grid */
-  gap: 40px;                   /* meer ruimte tussen woorden */
-  text-align: center;
+  display: flex;
+  flex-direction: row;            /* woorden naast elkaar */
+  flex-wrap: wrap;                /* breken als scherm te klein is */
+  gap: 60px;                      /* extra spacing tussen de woorden */
+  justify-content: center;        /* gecentreerd op breedte */
+  align-items: flex-start;        /* bovenaan uitgelijnd */
+  width: 100%;                    /* neemt volledige breedte */
+  max-width: 980px;               /* niet breder dan 980px */
 }
 
 .menu-grid a {
   font-family: 'Baskerville Old Face', serif;
   color: black;
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;              /* iets groter voor balans */
   transition: color 0.2s ease, transform 0.15s ease;
 }
 .menu-grid a:hover {
