@@ -517,7 +517,7 @@ top: 100%; */
   display: grid;
   width: min(980px, 92%);
   height: 100%;               /* vult de volledige 50vh */
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: 1fr;
   gap: 25px;
   justify-items: flex-start;
   padding-top: 40px;
