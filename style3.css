@@ -495,42 +495,38 @@ top: 100%; */
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: 0;                     /* altijd vast aan de top */
+  top: 0;
   left: 0;
   width: 100%;
-  background: whitesmoke;
-  height: 0;                  /* start gesloten */
-  opacity: 0;                 /* onzichtbaar */
-  overflow: hidden;           /* inhoud pas tonen als open */
+  background: #fff;            /* echt wit */
+  height: 0;                   /* start gesloten */
+  opacity: 0;
+  overflow: hidden;
   pointer-events: none;
-  transition: height 0.5s ease, opacity 0.5s ease;
-  z-index: 999;               /* blijft boven info-bar & content */
+  transition: height 0.4s ease, opacity 0.4s ease; /* height & opacity animeren */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;     /* boven uitlijnen */
+  padding-top: 40px;           /* ruimte boven links */
 }
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 50vh;               /* altijd halve viewport */
+  height: 50vh;                /* halve viewport */
   opacity: 1;
   pointer-events: auto;
 }
 
 /* Menu inhoud */
 .menu-grid {
-  display: flex;
-  width: min(980px, 92%);
-  height: 100%;               /* vult de volledige 50vh */
-  grid-template-columns: 1fr;
-  gap: 25px;
-  justify-items: center;
-  padding-top: 40px;
-  align-items: center;
+  display: flex;               /* flex ipv grid */
+  gap: 40px;                   /* meer ruimte tussen woorden */
   text-align: center;
-  padding: 12px 20px;
-  box-sizing: border-box;
 }
 
 .menu-grid a {
-  font-family: 'Baskerville Old Face';
+  font-family: 'Baskerville Old Face', serif;
   color: black;
   text-decoration: none;
   font-size: 1.25rem;
