@@ -484,6 +484,8 @@ top: 100%; */
   transition: transform 0.33s ease, opacity 0.2s ease;
 }
 
+
+
 /* tekst 'Menu' */
 .menu-text {
   line-height: 1;
@@ -514,12 +516,12 @@ top: 100%; */
 
 /* Menu inhoud */
 .menu-grid {
-  display: grid;
+  display: flex;
   width: min(980px, 92%);
   height: 100%;               /* vult de volledige 50vh */
   grid-template-columns: 1fr;
   gap: 25px;
-  justify-items: flex-start;
+  justify-items: center;
   padding-top: 40px;
   align-items: center;
   text-align: center;
