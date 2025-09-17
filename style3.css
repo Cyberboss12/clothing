@@ -505,7 +505,7 @@ top: 100%; */
   transition: height 0.4s ease, opacity 0.4s ease;
   z-index: 1000;
   display: flex;
-  justify-content: center;        /* horizontaal centreren */
+  justify-content: flex-start;        /* horizontaal centreren */
   align-items: flex-start;        /* inhoud aan de bovenkant */
   padding-top: 40px;              /* ruimte boven de woorden */
 }
