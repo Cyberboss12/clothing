@@ -60,7 +60,7 @@ section img,
 
 /* Tekststijl */
 .top-overlay h1 {
-  font-size: 2,5rem; 
+  /* font-size: 2,5rem;  */
   margin: 0;
   line-height: 1.2;
   text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
@@ -71,7 +71,7 @@ section img,
   display: flex;              /* tekst of logo in een flexbox */
   align-items: center;        /* verticaal centreren */
   justify-content: center;    /* horizontaal centreren */
-  /* font-size: 1.5rem; */
+  font-size: 3,5rem;
   font-family: "Baskerville Old Face";
   opacity: 0;
   transition: opacity 0.5s ease;
