@@ -448,7 +448,7 @@ nav ul li a:hover {
 .hamburger-menu {
   font-family: 'Baskerville Old Face';
   position: absolute;
-  top: 18px;
+  top: 15px;
   left: 75px;                       /* niet te ver links */
   transform: translateX(-50%);
   display: flex;
