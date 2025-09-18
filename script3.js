@@ -3,7 +3,7 @@ const messages = [
   "Welkom bij onze webshop!",
   "Gratis verzending vanaf €50",
   "Vandaag: 10% korting op alle tassen",
-  "Nieuw binnen: lente collectie 🌸",
+  "Nieuw binnen: zomercollectie",
   "Sign up to recieve 15% off on your next order!",
   "Free shipping on orders above €150",
   "Sign up to our community newsletter!"
@@ -23,7 +23,7 @@ function showNextMessage() {
   }, 500);
 }
 
-setInterval(showNextMessage, 4000);
+setInterval(showNextMessage, 8000);
 
 // ===== Wegklikbare info-bar & aanpassing eerste section =====
 const infoBar = document.getElementById('infoBar');
