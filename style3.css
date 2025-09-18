@@ -474,11 +474,9 @@ nav ul li a:hover {
   display: block;
   height: 3px;
   border-radius: 2px;
-  background-color: #fff;
+  background-color: black;
   transition: transform 0.33s ease, opacity 0.2s ease;
 }
-
-
 
 /* tekst 'Menu' */
 .menu-text {
