@@ -20,7 +20,7 @@ function showNextMessage() {
     msgIndex = (msgIndex + 1) % messages.length;
     infoMessage.textContent = messages[msgIndex];
     infoMessage.classList.remove('hidden');
-  }, 500);
+  }, 800);
 }
 
 setInterval(showNextMessage, 8000);
