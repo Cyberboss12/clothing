@@ -20,7 +20,7 @@ function showNextMessage() {
     msgIndex = (msgIndex + 1) % messages.length;
     infoMessage.textContent = messages[msgIndex];
     infoMessage.classList.remove('hidden');
-  }, 800);
+  }, 650);
 }
 
 setInterval(showNextMessage, 8000);
@@ -100,7 +100,7 @@ if (closeBtn && infoBar) {
 const switchItems = document.querySelectorAll('.top-overlay .switch-item');
 let currentIndex = 0;
 const duration = 8000; // 8 seconden
-const fadeTime = 800;  // moet gelijk zijn aan CSS transition tijd
+const fadeTime = 650;  // moet gelijk zijn aan CSS transition tijd
 
 function switchContent() {
   const currentItem = switchItems[currentIndex];
