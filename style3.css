@@ -543,6 +543,25 @@ top: 100%; */
   transform: translateY(-3px);
 }
 
+/* Witte hover-balk onder de info-bar */
+.menu-hover-bar {
+  position: absolute;
+  top: 0; /* komt bovenaan */
+  left: 0;
+  width: 100%;
+  height: 40px; /* zelfde hoogte als info-bar, evt. aanpassen */
+  background-color: white;
+  opacity: 0;
+  pointer-events: none; /* zodat je er niet op klikt */
+  transition: opacity 0.3s ease;
+  z-index: 2; /* lager dan top-overlay (zodat tekst erboven blijft) */
+}
+
+/* wanneer je over hamburger gaat -> balk zichtbaar */
+.hamburger-menu:hover ~ .menu-hover-bar {
+  opacity: 1;
+}
+
 /* ---- Hamburger -> kruis animatie wanneer actief ---- */
 .hamburger-menu.is-active .hamburger-icon span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
