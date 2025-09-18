@@ -53,7 +53,7 @@ section img,
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  color: white;
+  color: black;
   z-index: 5;
   max-width: 90%;
 }
@@ -340,6 +340,7 @@ nav ul li a:hover {
   width: 100%;
 }
 
+
 /* Dropdown inhoud */
 .dropdown-content {
   display: none; 
@@ -353,12 +354,6 @@ nav ul li a:hover {
   border-top: 1px solid #444;
   overflow-x: hidden;
 }
-
-/* De vorige wijzigingen
-display: none;
-position: absolute;
-overflow-x: hidden;
-top: 100%; */
 
 /* Toon dropdown bij hover */
 .dropdown:hover .dropdown-content {
@@ -461,7 +456,7 @@ top: 100%; */
   gap: 10px;
   z-index: 60;                       /* hoog genoeg t.o.v. hero/info-bar */
   cursor: pointer;
-  color: #fff;
+  color: black;
   font-size: 1rem;
   font-weight: 700;
   user-select: none;
