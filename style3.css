@@ -512,7 +512,7 @@ nav ul li a:hover {
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 45vh;
+  height: 50vh;
   opacity: 1;
   pointer-events: auto;
 }
