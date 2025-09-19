@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openMenu() {
     const rect = ham.getBoundingClientRect();
-    overlay.style.top = `${rect.bottom + 5}px`; // positioneer onder hamburger
+    overlay.style.top = `${rect.bottom + 10}px`; // positioneer onder hamburger
     overlay.classList.add('menu-open');
     ham.classList.add('is-active');
     ham.classList.add('menu-active');           // <-- houdt witte balk zichtbaar

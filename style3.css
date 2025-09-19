@@ -573,30 +573,7 @@ nav ul li a:hover {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Witte balk onder Menu */
-.hamburger-menu::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; /* net onder de tekst “Menu” */
-  left: 0;
-  width: 100%;
-  height: 8px;   /* hoogte van de witte balk */
-  background: white;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 50;
-}
 
-/* Hover: standaard */
-.hamburger-menu:hover::after {
-  opacity: 1;
-}
-
-/* Menu open: witte balk blijft */
-.hamburger-menu.menu-active::after {
-  opacity: 1;
-}
 
 /* Kleine responsive aanpassing (mobiel) */
 /* @media (max-width: 480px) {
