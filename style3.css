@@ -89,6 +89,11 @@ section img,
   width: auto;
 }
 
+.logo {
+  height: 200px;   /* pas aan naar wens */
+  width: auto;    /* behoud verhoudingen */
+}
+
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
 .split-grid .vak {
   position: relative;      /* nodig voor overlay */
