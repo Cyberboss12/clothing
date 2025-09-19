@@ -71,7 +71,7 @@ section img,
   display: flex;              /* tekst of logo in een flexbox */
   align-items: center;        /* verticaal centreren */
   justify-content: center;    /* horizontaal centreren */
-  font-size: 3,5rem;
+  font-size: 1,2rem;
   font-family: "Baskerville Old Face";
   opacity: 0;
   transition: opacity 0.5s ease;
