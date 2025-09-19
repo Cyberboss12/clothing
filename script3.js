@@ -23,7 +23,7 @@ function showNextMessage() {
   }, 650);
 }
 
-setInterval(showNextMessage, 8000);
+setInterval(showNextMessage, 3675);
 
 // ===== Wegklikbare info-bar & aanpassing eerste section =====
 const infoBar = document.getElementById('infoBar');
