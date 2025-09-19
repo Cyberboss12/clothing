@@ -71,7 +71,7 @@ section img,
   display: flex;              /* tekst of logo in een flexbox */
   align-items: center;        /* verticaal centreren */
   justify-content: center;    /* horizontaal centreren */
-  font-size: 1,2rem;
+  font-size: 4rem;
   font-family: "Baskerville Old Face";
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -89,8 +89,8 @@ section img,
   width: auto;
 }
 
-.logo {
-  height: 200px;   /* pas aan naar wens */
+.top-overlay .switch-item img.logo {
+  height: 150px;   /* pas aan naar wens */
   width: auto;    /* behoud verhoudingen */
 }
 
