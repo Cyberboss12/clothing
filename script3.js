@@ -126,14 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!ham || !overlay) return;
 
-  // Open menu onder de hamburger
   function openMenu() {
-    const rect = ham.getBoundingClientRect(); // positie van hamburger
-    overlay.style.top = `${rect.bottom}px`;   // start direct onder hamburger
+    const rect = ham.getBoundingClientRect();
+    overlay.style.top = `${rect.bottom + 5}px`; // positioneer onder hamburger
     overlay.classList.add('menu-open');
     ham.classList.add('is-active');
+    ham.classList.add('menu-active');           // <-- houdt witte balk zichtbaar
     overlay.setAttribute('aria-hidden', 'false');
-    // voorkom body scroll
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
@@ -141,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeMenu() {
     overlay.classList.remove('menu-open');
     ham.classList.remove('is-active');
+    ham.classList.remove('menu-active');       // <-- witte balk verdwijnt
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
@@ -169,11 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
     a.addEventListener('click', () => closeMenu());
   });
 
-  // Optioneel: herbereken positie bij window resize
+  // herbereken positie bij window resize
   window.addEventListener('resize', () => {
     if (overlay.classList.contains('menu-open')) {
       const rect = ham.getBoundingClientRect();
-      overlay.style.top = `${rect.bottom}px`;
+      overlay.style.top = `${rect.bottom + 5}px`;
     }
   });
 });
+
