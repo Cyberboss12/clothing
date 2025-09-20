@@ -574,10 +574,46 @@ nav ul li a:hover {
 }
 
 
-
 /* Kleine responsive aanpassing (mobiel) */
 /* @media (max-width: 480px) {
   .hamburger-menu { left: 14px; font-size: 0.95rem; }
   .menu-grid { grid-template-columns: 1fr; gap: 12px; }
   .menu-grid a { font-size: 1.15rem; }
 } */
+
+/* witte balk */
+.white-bar {
+  position: absolute;
+  top: 100%;       /* direct onder menu */
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 50;
+}
+
+/* witte balk zichtbaar bij hover of menu open */
+.hamburger-menu:hover + .white-bar,
+.menu-open ~ .white-bar {
+  opacity: 1;
+}
+
+/* zwarte lijn onder witte balk */
+.black-line {
+  position: absolute;
+  top: calc(100% + 40px); /* 40px = hoogte van .white-bar */
+  left: 0;
+  width: 100%;
+  height: 3px;           /* dikte van de zwarte lijn */
+  background: black;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 50;
+}
+
+/* zwarte lijn verschijnt alleen bij menu open */
+.menu-open ~ .black-line {
+  opacity: 1;
+}
