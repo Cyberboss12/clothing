@@ -146,7 +146,7 @@ if (ham && overlay && whiteBar && blackLine) {
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible');
+    // blackLine.classList.remove('visible');
   }
 
   // open / close menu (met positionering)

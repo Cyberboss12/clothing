@@ -556,11 +556,6 @@ nav ul li a:hover {
   z-index: 2; /* lager dan top-overlay (zodat tekst erboven blijft) */
 }
 
-/* wanneer je over hamburger gaat -> balk zichtbaar */
-.hamburger-menu:hover ~ .menu-hover-bar {
-  opacity: 1;
-}
-
 /* ---- Hamburger -> kruis animatie wanneer actief ---- */
 .hamburger-menu.is-active .hamburger-icon span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
