@@ -583,37 +583,33 @@ nav ul li a:hover {
 
 /* witte balk */
 .white-bar {
-  position: absolute;
-  top: 100%;       /* direct onder menu */
+  position: fixed;
   left: 0;
   width: 100%;
-  height: 40px;
-  background: white;
+  height: 40px;                         /* pas aan indien nodig */
+  background: #fff;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 50;
+  transition: opacity 0.22s ease;
+  pointer-events: none;                 /* voorkomt dat de balk muis-events pakt */
+  z-index: 1;                           /* lager dan .top-overlay (die z-index:5 heeft) */
 }
 
-/* witte balk zichtbaar bij hover of menu open */
-.hamburger-menu:hover + .white-bar,
-.menu-open ~ .white-bar {
+.black-line {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 3px;                          /* dikte van de zwarte lijn */
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* zichtbaarheid */
+.white-bar.visible {
   opacity: 1;
 }
-
-/* zwarte lijn onder witte balk */
-.black-line {
-  position: absolute;
-  top: calc(100% + 40px); /* 40px = hoogte van .white-bar */
-  left: 0;
-  width: 100%;
-  height: 3px;           /* dikte van de zwarte lijn */
-  background: black;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 50;
-}
-
-/* zwarte lijn verschijnt alleen bij menu open */
-.menu-open ~ .black-line {
+.black-line.visible {
   opacity: 1;
 }
