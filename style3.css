@@ -164,7 +164,7 @@ main h2 {
 
 main p {
     margin-bottom: 20px;
-} */
+} 
 
 /* Button styling */
 button {
@@ -180,7 +180,7 @@ button {
 
 button:hover {
     background-color: #555;
-} */
+} 
 
 /* Footer styling  */
 footer {
@@ -328,22 +328,6 @@ nav ul li a:hover {
   padding: 15px 10px;
   display: inline-block;
   position: relative;
-}
-
-/* Hover onderstreping */
-.navbar li a::after {
-  content: "";
-  position: absolute;
-  bottom: 5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #C3A580;
-  transition: width 0.3s ease;
-}
-
-.navbar li a:hover::after {
-  width: 100%;
 }
 
 
@@ -577,34 +561,39 @@ nav ul li a:hover {
 } */
 
 /* witte balk */
+/* top-overlay moet boven alles zitten zodat de switchende tekst niet wordt bedekt */
+.top-overlay {
+  z-index: 3000; /* hoger dan menu-overlay en balken */
+}
+
+/* WHITE BAR */
 .white-bar {
   position: fixed;
   left: 0;
   width: 100%;
-  height: 40px;                         /* pas aan indien nodig */
+  height: 40px;                 /* pas aan naar wens */
   background: #fff;
   opacity: 0;
   transition: opacity 0.22s ease;
-  pointer-events: none;                 /* voorkomt dat de balk muis-events pakt */
-  z-index: 1;                           /* lager dan .top-overlay (die z-index:5 heeft) */
+  pointer-events: none;
+  z-index: 2000;                /* boven overlay, onder top-overlay */
+  top: 0;
 }
 
+/* BLACK LINE */
 .black-line {
   position: fixed;
+  top: 40px;
   left: 0;
   width: 100%;
-  height: 3px;                          /* dikte van de zwarte lijn */
+  height: 3px;                  /* dikte van zwarte lijn */
   background: #000;
   opacity: 0;
   transition: opacity 0.22s ease;
   pointer-events: none;
-  z-index: 2;
+  z-index: 2001;                /* net boven white-bar */
 }
 
-/* zichtbaarheid */
-.white-bar.visible {
-  opacity: 1;
-}
-.black-line.visible {
-  opacity: 1;
-}
+/* zichtbaarheid toggles */
+.white-bar.visible { opacity: 1; }
+.black-line.visible { opacity: 1; }

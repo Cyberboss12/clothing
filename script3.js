@@ -41,6 +41,7 @@ if (!closeBtn) console.warn('script3.js: geen #closeInfoBar gevonden.');
  * Als de info-bar verborgen is: section height = 100vh
  */
 function adjustFirstSection() {
+  window.dispatchEvent(new Event('resize'));
   if (!firstSection) return;
 
   // Als infoBar bestaat en zichtbaar is -> reduceer eerste section
@@ -120,6 +121,7 @@ function switchContent() {
 setInterval(switchContent, duration);
 
 // Hamburger menu toggle
+// Hamburger menu toggle (vervang je huidige blok met dit)
 const ham = document.getElementById('hamburgerMenu');
 const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
@@ -127,63 +129,59 @@ const blackLine = document.querySelector('.black-line');
 
 if (ham && overlay && whiteBar && blackLine) {
 
-  // zet positie van balken t.o.v. de hamburger
   function updateBarPosition() {
     const rect = ham.getBoundingClientRect();
-    // rect.bottom is t.o.v. viewport; fixed top accepteert viewport pixels
-    const topForWhite = Math.round(rect.bottom); // direct onder hamburger
+    const topForWhite = Math.round(rect.bottom); // start direct onder hamburger
     whiteBar.style.top = `${topForWhite}px`;
 
-    // bepaal hoogte van whiteBar (fallback indien 0)
-    const wbHeight = Math.max(whiteBar.getBoundingClientRect().height, 40);
-    blackLine.style.top = `${topForWhite + wbHeight}px`;
+    // betrouwbare hoogte via computed style (in px)
+    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
+    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+
+    const blackTop = topForWhite + wbHeight;
+    blackLine.style.top = `${blackTop}px`;
+
+    // overlay moet beginnen *onder* de zwarte lijn
+    const overlayTop = Math.round(blackTop + blHeight); // kan +1/2 px aanpassen
+    overlay.style.top = `${overlayTop}px`;
   }
 
   // show / hide helpers
   function showBars() {
     updateBarPosition();
     whiteBar.classList.add('visible');
+    // blackLine niet tonen bij hover
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
-    // blackLine.classList.remove('visible');
+    // blackLine blijft onaangeraakt (wordt alleen door closeMenu weggehaald)
   }
 
-  // open / close menu (met positionering)
   function openMenu() {
-    updateBarPosition();
-    overlay.style.top = `${Math.round(ham.getBoundingClientRect().bottom + 5)}px`;
+    updateBarPosition(); // zet top waarden
     overlay.classList.add('menu-open');
-    ham.classList.add('is-active');
-    ham.classList.add('menu-active');       // optioneel, als je die gebruikt
-    // keep visual cues
+    ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
     blackLine.classList.add('visible');
     overlay.setAttribute('aria-hidden', 'false');
-    document.documentElement.style.overflow = 'hidden';
+    // document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
 
   function closeMenu() {
     overlay.classList.remove('menu-open');
-    ham.classList.remove('is-active');
-    ham.classList.remove('menu-active');
+    ham.classList.remove('is-active', 'menu-active');
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    // hide visual cues
     whiteBar.classList.remove('visible');
     blackLine.classList.remove('visible');
   }
 
-  // hover: toon witte balk — maar verberg alleen wanneer menu niet open is
-  ham.addEventListener('mouseenter', () => {
-    showBars();
-  });
+  // hover: toon witte balk, maar verberg alleen wanneer menu niet open is
+  ham.addEventListener('mouseenter', () => showBars());
   ham.addEventListener('mouseleave', () => {
-    if (!overlay.classList.contains('menu-open')) {
-      hideBars();
-    }
+    if (!overlay.classList.contains('menu-open')) hideBars();
   });
 
   // klik toggles menu
@@ -198,21 +196,22 @@ if (ham && overlay && whiteBar && blackLine) {
   });
 
   // links in overlay sluiten menu
-  overlay.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => closeMenu());
-  });
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
   // herpositioneer bij resize — als menu open is update ook top
   window.addEventListener('resize', () => {
-    if (overlay.classList.contains('menu-open')) {
-      updateBarPosition();
-      overlay.style.top = `${Math.round(ham.getBoundingClientRect().bottom + 5)}px`;
-    } else {
-      // bij alleen hover (ontbreekt) we updaten maar verbergen de balk
-      updateBarPosition();
-    }
+    updateBarPosition();
   });
 
-  // initial update (voor het geval)
+  // herpositioneer ook wanneer info-bar sluit (zorg dat update getriggerd wordt daar)
+  // (later in je close-infoBar logic kun je dispatch resize event: window.dispatchEvent(new Event('resize')); )
+
+  window.addEventListener('scroll', () => {
+     if (overlay.classList.contains('menu-open')) updateBarPosition();
+  });
+
+
+  // initial update om waarde alvast te zetten
   updateBarPosition();
 }
+
