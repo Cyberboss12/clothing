@@ -423,6 +423,8 @@ nav ul li a:hover {
   font-size: 20px;
   cursor: pointer;
   margin-left: 20px;
+  width: 15px;
+  height: 15px;
 }
 
 .close-btn:hover {
