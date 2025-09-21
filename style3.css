@@ -429,6 +429,21 @@ nav ul li a:hover {
   color: #222; /* contrast bij hover */
 }
 
+.close-btn::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 15px;   
+  height: 15px;  
+  background: rgba(255,255,255,0.2);  /* lichte overlay */
+  border-radius: 4px;
+}
+
+.close-btn:hover::after {
+  opacity: 1;
+}
+
 .info-bar.hidden {
   display: none;
 }
