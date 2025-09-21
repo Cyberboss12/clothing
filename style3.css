@@ -594,8 +594,3 @@ nav ul li a:hover {
 .black-line.visible {
   opacity: 1;
 }
-
-/* Optioneel: hover effect alleen voor white-bar, niet de zwarte lijn */
-.hamburger-menu:hover ~ .white-bar {
-  opacity: 1;
-}
