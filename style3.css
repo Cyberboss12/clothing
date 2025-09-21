@@ -423,25 +423,18 @@ nav ul li a:hover {
   font-size: 20px;
   cursor: pointer;
   margin-left: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
 }
 
 .close-btn:hover {
   color: #222; /* contrast bij hover */
-}
-
-.close-btn::after {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  width: 15px;   
-  height: 15px;  
-  background: rgba(255,255,255,0.2);  /* lichte overlay */
-  border-radius: 4px;
-}
-
-.close-btn:hover::after {
-  opacity: 1;
 }
 
 .info-bar.hidden {
