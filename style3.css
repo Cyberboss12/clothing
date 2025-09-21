@@ -423,12 +423,12 @@ nav ul li a:hover {
   font-size: 20px;
   cursor: pointer;
   margin-left: 20px;
-  width: 15px;
-  height: 15px;
 }
 
 .close-btn:hover {
   color: #222; /* contrast bij hover */
+  height: 15px;
+  width: 15px;
 }
 
 .info-bar.hidden {
