@@ -427,8 +427,6 @@ nav ul li a:hover {
 
 .close-btn:hover {
   color: #222; /* contrast bij hover */
-  height: 15px;
-  width: 15px;
 }
 
 .info-bar.hidden {
