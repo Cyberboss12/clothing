@@ -129,89 +129,79 @@ const blackLine = document.querySelector('.black-line');
 
 if (ham && overlay && whiteBar && blackLine) {
 
-  function updateBarPosition() {
-    const rect = ham.getBoundingClientRect();
-    const topForWhite = Math.round(rect.bottom); // start direct onder hamburger
-    whiteBar.style.top = `${topForWhite}px`;
+function updateBarPosition() {
+  const rect = ham.getBoundingClientRect();
 
-    // betrouwbare hoogte via computed style (in px)
-    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
-    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+  // Plaats de witte balk direct onder de hamburger-knop
+  const topForWhite = Math.round(rect.bottom);
+  whiteBar.style.top = `${topForWhite}px`;
 
-    const blackTop = topForWhite + wbHeight;
-    blackLine.style.top = `${blackTop}px`;
+  // Haal hoogte van balken
+  const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
+  const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
 
-    // overlay moet beginnen *onder* de zwarte lijn
-    const overlayTop = Math.round(blackTop + blHeight); // kan +1/2 px aanpassen
-    overlay.style.top = `${overlayTop}px`;
-  }
+  // Plaats zwarte lijn direct onder witte balk
+  const blackTop = topForWhite + wbHeight;
+  blackLine.style.top = `${blackTop}px`;
 
-  // show / hide helpers
-  function showBars() {
-    updateBarPosition();
-    whiteBar.classList.add('visible');
-    // blackLine niet tonen bij hover
-  }
-  function hideBars() {
-    whiteBar.classList.remove('visible');
-    // blackLine blijft onaangeraakt (wordt alleen door closeMenu weggehaald)
-  }
-
-  function openMenu() {
-    updateBarPosition(); // zet top waarden
-    overlay.classList.add('menu-open');
-    ham.classList.add('is-active', 'menu-active');
-    whiteBar.classList.add('visible');
-    blackLine.classList.add('visible');
-    overlay.setAttribute('aria-hidden', 'false');
-    // document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeMenu() {
-    overlay.classList.remove('menu-open');
-    ham.classList.remove('is-active', 'menu-active');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible');
-  }
-
-  // hover: toon witte balk, maar verberg alleen wanneer menu niet open is
-  ham.addEventListener('mouseenter', () => showBars());
-  ham.addEventListener('mouseleave', () => {
-    if (!overlay.classList.contains('menu-open')) hideBars();
-  });
-
-  // klik toggles menu
-  ham.addEventListener('click', () => {
-    if (overlay.classList.contains('menu-open')) closeMenu();
-    else openMenu();
-  });
-
-  // sluit bij click buiten
-  overlay.addEventListener('click', (ev) => {
-    if (ev.target === overlay) closeMenu();
-  });
-
-  // links in overlay sluiten menu
-  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
-
-  // herpositioneer bij resize — als menu open is update ook top
-  window.addEventListener('resize', () => {
-    updateBarPosition();
-  });
-
-  // herpositioneer ook wanneer info-bar sluit (zorg dat update getriggerd wordt daar)
-  // (later in je close-infoBar logic kun je dispatch resize event: window.dispatchEvent(new Event('resize')); )
-
-  window.addEventListener('scroll', () => {
-     if (overlay.classList.contains('menu-open')) updateBarPosition();
-  });
-
-
-  // initial update om waarde alvast te zetten
-  updateBarPosition();
+  // Overlay begint direct onder zwarte lijn
+  const overlayTop = blackTop + blHeight;
+  overlay.style.top = `${overlayTop}px`;
 }
 
+// Toon balken bij hover, maar alleen als menu niet open is
+function showBars() {
+  updateBarPosition();
+  if (!overlay.classList.contains('menu-open')) {
+    whiteBar.classList.add('visible');
+    blackLine.classList.remove('visible'); // zwarte lijn alleen bij open menu
+  }
+}
+
+function hideBars() {
+  if (!overlay.classList.contains('menu-open')) {
+    whiteBar.classList.remove('visible');
+  }
+}
+
+// Open/close menu
+function openMenu() {
+  updateBarPosition();
+  overlay.classList.add('menu-open');
+  ham.classList.add('is-active', 'menu-active');
+  whiteBar.classList.add('visible');
+  blackLine.classList.add('visible');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  overlay.classList.remove('menu-open');
+  ham.classList.remove('is-active', 'menu-active');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  whiteBar.classList.remove('visible');
+  blackLine.classList.remove('visible');
+}
+
+// Event listeners
+ham.addEventListener('mouseenter', showBars);
+ham.addEventListener('mouseleave', hideBars);
+ham.addEventListener('click', () => {
+  overlay.classList.contains('menu-open') ? closeMenu() : openMenu();
+});
+
+overlay.addEventListener('click', ev => {
+  if (ev.target === overlay) closeMenu();
+});
+
+overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+// Herpositioneer bij resize of scroll
+window.addEventListener('resize', updateBarPosition);
+window.addEventListener('scroll', () => {
+  if (overlay.classList.contains('menu-open')) updateBarPosition();
+});
+
+// Initial position
+updateBarPosition();

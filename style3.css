@@ -561,39 +561,41 @@ nav ul li a:hover {
 } */
 
 /* witte balk */
-/* top-overlay moet boven alles zitten zodat de switchende tekst niet wordt bedekt */
-.top-overlay {
-  z-index: 3000; /* hoger dan menu-overlay en balken */
-}
-
-/* WHITE BAR */
 .white-bar {
   position: fixed;
   left: 0;
   width: 100%;
-  height: 40px;                 /* pas aan naar wens */
+  height: 40px;                 /* hoogte balk */
   background: #fff;
   opacity: 0;
-  transition: opacity 0.22s ease;
   pointer-events: none;
+  transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
   z-index: 2000;                /* boven overlay, onder top-overlay */
-  top: 0;
 }
 
-/* BLACK LINE */
+/* Zwarte lijn */
 .black-line {
   position: fixed;
-  top: 40px;
   left: 0;
   width: 100%;
-  height: 3px;                  /* dikte van zwarte lijn */
+  height: 3px;                  /* dikte lijn */
   background: #000;
   opacity: 0;
-  transition: opacity 0.22s ease;
   pointer-events: none;
+  transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
   z-index: 2001;                /* net boven white-bar */
 }
 
-/* zichtbaarheid toggles */
-.white-bar.visible { opacity: 1; }
-.black-line.visible { opacity: 1; }
+/* Zichtbaar maken bij hover of menu open */
+.white-bar.visible {
+  opacity: 1;
+}
+
+.black-line.visible {
+  opacity: 1;
+}
+
+/* Optioneel: hover effect alleen voor white-bar, niet de zwarte lijn */
+.hamburger-menu:hover ~ .white-bar {
+  opacity: 1;
+}
