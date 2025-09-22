@@ -130,21 +130,24 @@ const blackLine = document.querySelector('.black-line');
 if (ham && overlay && whiteBar && blackLine) {
 
   function updateBarPosition() {
-    const rect = ham.getBoundingClientRect();
-    const topForWhite = Math.round(rect.bottom); // start direct onder hamburger
-    whiteBar.style.top = `${topForWhite}px`;
+    const hamRect = ham.getBoundingClientRect();
+    const scrollTop = window.scrollY || window.pageYOffset;
 
-    // betrouwbare hoogte via computed style (in px)
+    // positie relatief aan document in plaats van viewport
+    const hamTop = hamRect.top + scrollTop;
+    const hamHeight = hamRect.height;
+
+    // witte balk net onder hamburger
+    whiteBar.style.top = `${hamTop + hamHeight}px`;
+
+    // zwarte lijn direct onder witte balk
     const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
     const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+    blackLine.style.top = `${hamTop + hamHeight + wbHeight}px`;
 
-    const blackTop = topForWhite + wbHeight;
-    blackLine.style.top = `${blackTop}px`;
-
-    // overlay moet beginnen *onder* de zwarte lijn
-    const overlayTop = Math.round(blackTop + blHeight); // kan +1/2 px aanpassen
-    overlay.style.top = `${overlayTop}px`;
-  }
+    // overlay start net onder zwarte lijn
+    overlay.style.top = `${hamTop + hamHeight + wbHeight + blHeight}px`;
+}
 
   // show / hide helpers
   function showBars() {
