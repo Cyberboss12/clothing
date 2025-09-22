@@ -37,28 +37,21 @@ if (!closeBtn) console.warn('script3.js: geen #closeInfoBar gevonden.');
 
 /**
  * Past de hoogte van de eerste <section> aan.
- * Als de info-bar zichtbaar is: section height = 100vh - infoBarHeight
- * Als de info-bar verborgen is: section height = 100vh
  */
 function adjustFirstSection() {
   window.dispatchEvent(new Event('resize'));
   if (!firstSection) return;
 
-  // Als infoBar bestaat en zichtbaar is -> reduceer eerste section
   if (infoBar && !infoBar.classList.contains('hidden')) {
-    // Zorg dat de computed height juist gemeten wordt
     const rect = infoBar.getBoundingClientRect();
     const infoHeight = Math.round(rect.height);
     firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
   } else {
-    // info-bar weg -> eerste section weer full viewport
     firstSection.style.height = '100vh';
   }
 }
 
-// Run na DOM ready en ook na volledige window load (voor alle images/layout)
 window.addEventListener('DOMContentLoaded', () => {
-  // korte vertraging om zeker te zijn dat CSS is toegepast
   adjustFirstSection();
 });
 window.addEventListener('load', () => {
@@ -68,25 +61,20 @@ window.addEventListener('resize', () => {
   adjustFirstSection();
 });
 
-// Klik op kruisje: animatie -> verberg -> pas section aan
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
-    // start closing animation
     infoBar.classList.add('closing');
 
-    // na overgang: uit DOM-flow halen en aanpassen
     const onTransitionEnd = (ev) => {
-      // alleen reageren op de transition van de info-bar zelf
       if (ev.target !== infoBar) return;
-      infoBar.classList.add('hidden');       // display:none
-      infoBar.classList.remove('closing');   // reset state
-      adjustFirstSection();                  // pas eerste section aan nu info-bar niet meer in flow is
+      infoBar.classList.add('hidden');
+      infoBar.classList.remove('closing');
+      adjustFirstSection();
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
 
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
-    // Fallback: als transitionend niet firet (bv oudere browsers), forceer na 350ms
     setTimeout(() => {
       if (!infoBar.classList.contains('hidden')) {
         infoBar.classList.add('hidden');
@@ -100,18 +88,16 @@ if (closeBtn && infoBar) {
 // logo en tekst
 const switchItems = document.querySelectorAll('.top-overlay .switch-item');
 let currentIndex = 0;
-const duration = 8000; // 8 seconden
-const fadeTime = 650;  // moet gelijk zijn aan CSS transition tijd
+const duration = 8000;
+const fadeTime = 650;
 
 function switchContent() {
   const currentItem = switchItems[currentIndex];
-  currentItem.classList.remove('active'); // start fade-out
+  currentItem.classList.remove('active');
 
-  // volgende item bepalen
   const nextIndex = (currentIndex + 1) % switchItems.length;
   const nextItem = switchItems[nextIndex];
 
-  // wachten tot fade-out klaar is, dan fade-in nieuwe
   setTimeout(() => {
     nextItem.classList.add('active');
     currentIndex = nextIndex;
@@ -121,7 +107,6 @@ function switchContent() {
 setInterval(switchContent, duration);
 
 // Hamburger menu toggle
-// Hamburger menu toggle (vervang je huidige blok met dit)
 const ham = document.getElementById('hamburgerMenu');
 const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
@@ -130,44 +115,42 @@ const blackLine = document.querySelector('.black-line');
 if (ham && overlay && whiteBar && blackLine) {
 
   function updateBarPosition() {
-    const hamRect = ham.getBoundingClientRect();
-    const scrollTop = window.scrollY || window.pageYOffset;
+    const rect = ham.getBoundingClientRect();
 
-    // positie relatief aan document in plaats van viewport
-    const hamTop = hamRect.top + scrollTop;
-    const hamHeight = hamRect.height;
+    // Bepaal offset van "menu"-tekst zelf
+    const lineHeight = parseFloat(getComputedStyle(ham).lineHeight) || rect.height;
+    const baselineOffset = (rect.height - lineHeight) / 2;
 
-    // witte balk net onder hamburger
-    whiteBar.style.top = `${hamTop + hamHeight}px`;
+    // witte balk start precies onder de tekst
+    const topForWhite = Math.round(rect.top + lineHeight + baselineOffset);
+    whiteBar.style.top = `${topForWhite}px`;
 
-    // zwarte lijn direct onder witte balk
+    // zwarte lijn er direct onder
     const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
     const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
-    blackLine.style.top = `${hamTop + hamHeight + wbHeight}px`;
+    const blackTop = topForWhite + wbHeight;
+    blackLine.style.top = `${blackTop}px`;
 
-    // overlay start net onder zwarte lijn
-    overlay.style.top = `${hamTop + hamHeight + wbHeight + blHeight}px`;
-}
+    // overlay eronder
+    const overlayTop = Math.round(blackTop + blHeight);
+    overlay.style.top = `${overlayTop}px`;
+  }
 
-  // show / hide helpers
   function showBars() {
     updateBarPosition();
     whiteBar.classList.add('visible');
-    // blackLine niet tonen bij hover
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
-    // blackLine blijft onaangeraakt (wordt alleen door closeMenu weggehaald)
   }
 
   function openMenu() {
-    updateBarPosition(); // zet top waarden
+    updateBarPosition();
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
     blackLine.classList.add('visible');
     overlay.setAttribute('aria-hidden', 'false');
-    // document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
 
@@ -181,40 +164,26 @@ if (ham && overlay && whiteBar && blackLine) {
     blackLine.classList.remove('visible');
   }
 
-  // hover: toon witte balk, maar verberg alleen wanneer menu niet open is
   ham.addEventListener('mouseenter', () => showBars());
   ham.addEventListener('mouseleave', () => {
     if (!overlay.classList.contains('menu-open')) hideBars();
   });
 
-  // klik toggles menu
   ham.addEventListener('click', () => {
     if (overlay.classList.contains('menu-open')) closeMenu();
     else openMenu();
   });
 
-  // sluit bij click buiten
   overlay.addEventListener('click', (ev) => {
     if (ev.target === overlay) closeMenu();
   });
 
-  // links in overlay sluiten menu
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
-  // herpositioneer bij resize — als menu open is update ook top
-  window.addEventListener('resize', () => {
-    updateBarPosition();
-  });
-
-  // herpositioneer ook wanneer info-bar sluit (zorg dat update getriggerd wordt daar)
-  // (later in je close-infoBar logic kun je dispatch resize event: window.dispatchEvent(new Event('resize')); )
-
+  window.addEventListener('resize', () => updateBarPosition());
   window.addEventListener('scroll', () => {
-     if (overlay.classList.contains('menu-open')) updateBarPosition();
+    if (overlay.classList.contains('menu-open')) updateBarPosition();
   });
 
-
-  // initial update om waarde alvast te zetten
   updateBarPosition();
 }
-
