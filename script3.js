@@ -114,42 +114,22 @@ const blackLine = document.querySelector('.black-line');
 
 if (ham && overlay && whiteBar && blackLine) {
 
-  function updateBarPosition() {
-    const rect = ham.getBoundingClientRect();
-
-    // Bepaal offset van "menu"-tekst zelf
-    const lineHeight = parseFloat(getComputedStyle(ham).lineHeight) || rect.height;
-    const baselineOffset = (rect.height - lineHeight) / 2;
-
-    // witte balk start precies onder de tekst
-    const topForWhite = Math.round(rect.top + lineHeight + baselineOffset);
-    whiteBar.style.top = `${topForWhite}px`;
-
-    // zwarte lijn er direct onder
-    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
-    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
-    const blackTop = topForWhite + wbHeight;
-    blackLine.style.top = `${blackTop}px`;
-
-    // overlay eronder
-    const overlayTop = Math.round(blackTop + blHeight);
-    overlay.style.top = `${overlayTop}px`;
-  }
-
   function showBars() {
-    updateBarPosition();
     whiteBar.classList.add('visible');
+    blackLine.classList.add('visible');
   }
+
   function hideBars() {
-    whiteBar.classList.remove('visible');
+    if (!overlay.classList.contains('menu-open')) {
+      whiteBar.classList.remove('visible');
+      blackLine.classList.remove('visible');
+    }
   }
 
   function openMenu() {
-    updateBarPosition();
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
-    whiteBar.classList.add('visible');
-    blackLine.classList.add('visible');
+    showBars();
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -160,14 +140,11 @@ if (ham && overlay && whiteBar && blackLine) {
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible');
+    hideBars();
   }
 
-  ham.addEventListener('mouseenter', () => showBars());
-  ham.addEventListener('mouseleave', () => {
-    if (!overlay.classList.contains('menu-open')) hideBars();
-  });
+  ham.addEventListener('mouseenter', showBars);
+  ham.addEventListener('mouseleave', hideBars);
 
   ham.addEventListener('click', () => {
     if (overlay.classList.contains('menu-open')) closeMenu();
@@ -178,12 +155,5 @@ if (ham && overlay && whiteBar && blackLine) {
     if (ev.target === overlay) closeMenu();
   });
 
-  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
-
-  window.addEventListener('resize', () => updateBarPosition());
-  window.addEventListener('scroll', () => {
-    if (overlay.classList.contains('menu-open')) updateBarPosition();
-  });
-
-  updateBarPosition();
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 }

@@ -476,29 +476,20 @@ nav ul li a:hover {
 
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
-  position: fixed;
-  top: 0;
+  position: absolute;
+  top: calc(100% + 43px);
   left: 0;
   width: 100%;
   background: #fff;               /* volledige achtergrond wit */
-  height: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: height 0.4s ease, opacity 0.4s ease;
-  z-index: 1000;
-  display: flex;
-  justify-content: flex-start;        /* horizontaal centreren */
-  align-items: flex-start;        /* inhoud aan de bovenkant */
-  padding-top: 40px;              /* ruimte boven de woorden */
-  padding-left: 75px;
+  display: none;
 }
 
 /* Open state */
 .menu-overlay.menu-open {
-  height: 50vh;
+  /* height: 50vh;
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto; */
+  display: block;
 }
 
 /* Menu inhoud */
@@ -562,35 +553,37 @@ nav ul li a:hover {
 
 /* witte balk */
 .white-bar {
-  position: fixed;
+  position: absolute;
+  top: 100%;
   left: 0;
   width: 100%;
   height: 40px;                 /* hoogte balk */
   background: #fff;
-  opacity: 0;
-  pointer-events: none;
+  /* opacity: 0;
+  pointer-events: none; */
   transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
   z-index: 2000;                /* boven overlay, onder top-overlay */
 }
 
 /* Zwarte lijn */
 .black-line {
-  position: fixed;
+  position: absolute;
+  top: calc(100% + 40px);
   left: 0;
   width: 100%;
   height: 3px;                  /* dikte lijn */
   background: #000;
-  opacity: 0;
-  pointer-events: none;
+  /* opacity: 0;
+  pointer-events: none; */
   transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
-  z-index: 2001;                /* net boven white-bar */
+  /* z-index: 2001;                net boven white-bar */
 }
 
 /* Zichtbaar maken bij hover of menu open */
 .white-bar.visible {
-  opacity: 1;
+  display: block;
 }
 
 .black-line.visible {
-  opacity: 1;
+  display: block;
 }
