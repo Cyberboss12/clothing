@@ -482,6 +482,8 @@ nav ul li a:hover {
   width: 100%;
   background: #fff;               /* volledige achtergrond wit */
   display: none;
+  z-index: 2002;
+ 
 }
 
 /* Open state */
@@ -576,14 +578,16 @@ nav ul li a:hover {
   /* opacity: 0;
   pointer-events: none; */
   transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
-  /* z-index: 2001;                net boven white-bar */
+  z-index: 2001;                
 }
 
 /* Zichtbaar maken bij hover of menu open */
-.white-bar.visible {
-  display: block;
+.white-bar, 
+.black-line {
+  display: none;
 }
 
+.white-bar.visible, 
 .black-line.visible {
   display: block;
 }
