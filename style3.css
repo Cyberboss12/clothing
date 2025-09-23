@@ -565,7 +565,7 @@ nav ul li a:hover {
   position: fixed;
   left: 0;
   width: 100%;
-  height: 40px;                 /* hoogte balk */
+  height: 10px;                 /* hoogte balk */
   background: #fff;
   opacity: 0;
   pointer-events: none;
