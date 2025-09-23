@@ -555,8 +555,8 @@ nav ul li a:hover {
 
 /* witte balk */
 .white-bar {
-  position: absolute;
-  top: 100%;
+  position: fixed;
+  /* top: 100%; */
   left: 0;
   width: 100%;
   height: 40px;                 /* hoogte balk */
@@ -565,12 +565,13 @@ nav ul li a:hover {
   pointer-events: none; */
   transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
   z-index: 2000;                /* boven overlay, onder top-overlay */
+  display: none;
 }
 
 /* Zwarte lijn */
 .black-line {
-  position: absolute;
-  top: calc(100% + 40px);
+  position: fixed;
+  /* top: calc(100% + 40px); */
   left: 0;
   width: 100%;
   height: 3px;                  /* dikte lijn */
@@ -578,15 +579,11 @@ nav ul li a:hover {
   /* opacity: 0;
   pointer-events: none; */
   transition: opacity 0.22s ease, top 0.2s ease; /* smooth position + fade */
-  z-index: 2001;                
+  z-index: 2001;        
+  display: none;        
 }
 
 /* Zichtbaar maken bij hover of menu open */
-.white-bar, 
-.black-line {
-  display: none;
-}
-
 .white-bar.visible, 
 .black-line.visible {
   display: block;
