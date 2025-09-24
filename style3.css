@@ -54,7 +54,7 @@ section img,
   transform: translateX(-50%);
   text-align: center;
   color: black;
-  z-index: 5;
+  z-index: 3000;
   max-width: 90%;
 }
 
@@ -444,7 +444,7 @@ nav ul li a:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 60;                       /* hoog genoeg t.o.v. hero/info-bar */
+  z-index: 3000;                       /* hoog genoeg t.o.v. hero/info-bar */
   cursor: pointer;
   color: black;
   font-size: 1rem;
@@ -555,29 +555,50 @@ nav ul li a:hover {
 } */
 
 /* witte balk */
-.white-bar,
+/* .white-bar,
 .black-line {
-  position: fixed;       /* ipv absolute → nu ten opzichte van viewport */
+  position: fixed;       
   left: 0;
   width: 100%;
   transition: opacity 0.22s ease, top 0.18s ease;
   z-index: 2000;
-  opacity: 0;            /* standaard onzichtbaar */
-  pointer-events: none;  /* geen klik-gebied */
+  opacity: 0;            
+  pointer-events: none;  
 }
 
-/* witte balk */
 .white-bar {
   height: 40px;
   background: #fff;
-  z-index: 100;
+  z-index: 1000;
 }
 
-/* zwarte lijn */
 .black-line {
   height: 3px;
   background: #000;
   z-index: 200;
+} */
+
+.white-bar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: #fff;
+  transition: opacity 0.22s ease, top 0.2s ease;
+  z-index: 1000; /* lager dan menu/tekst */
+}
+
+/* Zwarte lijn daar net boven */
+.black-line {
+  position: absolute;
+  top: calc(100% + 40px);
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #000;
+  transition: opacity 0.22s ease, top 0.2s ease;
+  z-index: 1100; /* nog steeds onder de tekst, maar boven white-bar */
 }
 
 /* zichtbaar maken via JS */
