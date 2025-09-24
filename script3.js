@@ -93,7 +93,7 @@ const blackLine = document.querySelector('.black-line');
 
 if (ham && overlay && whiteBar && blackLine) {
   // kleine visuele correctie (negatief = omhoog, positief = omlaag)
-  let nudge = -18;
+  let nudge = -22;
 
   function updateBarPosition() {
     window.requestAnimationFrame(() => {
