@@ -601,6 +601,11 @@ nav ul li a:hover {
   z-index: 1100; /* nog steeds onder de tekst, maar boven white-bar */
 }
 
+.black-line {
+  display: none;
+  opacity: 0;
+}
+
 /* zichtbaar maken via JS */
 .white-bar.visible,
 .black-line.visible {
