@@ -609,5 +609,6 @@ nav ul li a:hover {
 /* zichtbaar maken via JS */
 .white-bar.visible,
 .black-line.visible {
+  display: block !important;
   opacity: 1;
 }
