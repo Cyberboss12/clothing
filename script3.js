@@ -124,19 +124,21 @@ if (ham && overlay && whiteBar && blackLine) {
   }
 
   function showBars() {
-    whiteBar.classList.add('visible');
     updateBarPosition();
+    whiteBar.classList.add('visible');
+    // blackLine niet tonen bij hover
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
+    // blackLine blijft onaangeraakt (wordt alleen door closeMenu weggehaald)
   }
 
   function openMenu() {
-    updateBarPosition();
+    updateBarPosition(); // zet top waarden
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
-    blackLine.classList.add('visible');
+    blackLine.classList.add('visible'); // ✅ zwarte lijn pas hier tonen
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -145,9 +147,10 @@ if (ham && overlay && whiteBar && blackLine) {
     overlay.classList.remove('menu-open');
     ham.classList.remove('is-active', 'menu-active');
     overlay.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible');
+    blackLine.classList.remove('visible'); // ✅ zwarte lijn weer weghalen
   }
 
   // events
