@@ -95,33 +95,42 @@ if (ham && overlay && whiteBar && blackLine) {
   // kleine visuele correctie (negatief = omhoog, positief = omlaag)
   let nudge = -32.6;
 
-  function updateBarPosition() {
-    window.requestAnimationFrame(() => {
-      const menuTextEl = ham.querySelector('.menu-text') || ham;
-      if (!menuTextEl) return;
+function updateBarPosition() {
+  window.requestAnimationFrame(() => {
+    const menuTextEl = ham.querySelector('.menu-text') || ham;
+    if (!menuTextEl) return;
 
-      const rect = menuTextEl.getBoundingClientRect();
-      const scrollTop = window.scrollY || window.pageYOffset;
-      const menuBottomDoc = Math.round(rect.bottom + scrollTop);
+    const rect = menuTextEl.getBoundingClientRect();
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const menuBottomDoc = Math.round(rect.bottom + scrollTop);
 
-      // witte balk onder 'menu'
-      whiteBar.style.top = `${menuBottomDoc + nudge}px`;
+    // Witte balk altijd onder menu-text
+    whiteBar.style.top = `${menuBottomDoc + nudge}px`;
 
-      // hoogte uitlezen
-      const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
-      const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+    // hoogte uitlezen
+    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
+    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
 
-      // zwarte lijn er direct onder
-      const blackTop = menuBottomDoc + nudge + wbHeight;
-      blackLine.style.top = `${blackTop}px`;
+    // zwarte lijn alleen tonen als menu open is
+    const blackTop = menuBottomDoc + nudge + wbHeight;
+    blackLine.style.top = `${blackTop}px`;
+    if (overlay.classList.contains('menu-open')) {
+      blackLine.classList.add('visible');
+    } else {
+      blackLine.classList.remove('visible');
+    }
 
-      // overlay direct onder zwarte lijn
-      overlay.style.position = 'fixed';
-      overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-    });
-  }
+    // overlay direct onder zwarte lijn
+    overlay.style.position = 'fixed';
+    overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+
+    // Top overlay meebewegen met scroll
+    topOverlay.style.top = `${scrollTop}px`;
+  });
+}
+
 
   function showBars() {
     updateBarPosition();
@@ -171,9 +180,7 @@ if (ham && overlay && whiteBar && blackLine) {
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
   window.addEventListener('resize', updateBarPosition);
-  window.addEventListener('scroll', () => {
-    if (overlay.classList.contains('menu-open')) updateBarPosition();
-  });
+  window.addEventListener('scroll', updateBarPosition);
 
   // initial position
   updateBarPosition();

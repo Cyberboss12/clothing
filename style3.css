@@ -48,7 +48,7 @@ section img,
 }
 
 .top-overlay {
-  position: relative;
+  position: fixed;
   top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
   transform: translateX(-50%);
@@ -552,7 +552,7 @@ nav ul li a:hover {
 } */
 
 .white-bar {
-  position: sticky;
+  position: fixed;
   top: 100%;
   left: 0;
   width: 100%;
