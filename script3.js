@@ -30,14 +30,10 @@ const infoBar = document.getElementById('infoBar');
 const firstSection = document.querySelector('.fullscreen-section:first-of-type');
 const closeBtn = document.getElementById('closeInfoBar');
 
-// defensive checks
 if (!firstSection) console.warn('script3.js: geen .fullscreen-section:first-of-type gevonden.');
 if (!infoBar) console.warn('script3.js: geen #infoBar gevonden.');
 if (!closeBtn) console.warn('script3.js: geen #closeInfoBar gevonden.');
 
-/**
- * Past de hoogte van de eerste <section> aan.
- */
 function adjustFirstSection() {
   window.dispatchEvent(new Event('resize'));
   if (!firstSection) return;
@@ -51,15 +47,9 @@ function adjustFirstSection() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  adjustFirstSection();
-});
-window.addEventListener('load', () => {
-  adjustFirstSection();
-});
-window.addEventListener('resize', () => {
-  adjustFirstSection();
-});
+window.addEventListener('DOMContentLoaded', adjustFirstSection);
+window.addEventListener('load', adjustFirstSection);
+window.addEventListener('resize', adjustFirstSection);
 
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
@@ -70,6 +60,7 @@ if (closeBtn && infoBar) {
       infoBar.classList.add('hidden');
       infoBar.classList.remove('closing');
       adjustFirstSection();
+      updateBarPosition();   // ✅ meteen corrigeren
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
 
@@ -80,74 +71,79 @@ if (closeBtn && infoBar) {
         infoBar.classList.add('hidden');
         infoBar.classList.remove('closing');
         adjustFirstSection();
+        updateBarPosition(); // ✅ fallback
       }
     }, 400);
   });
 }
 
-// logo en tekst
+// ===== Logo, menu en balken =====
 const ham = document.getElementById('hamburgerMenu');
 const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
 
 if (ham && overlay && whiteBar && blackLine) {
-  // kleine visuele correctie (negatief = omhoog, positief = omlaag)
   let nudge = -32.6;
 
-function updateBarPosition() {
-  window.requestAnimationFrame(() => {
-    const menuTextEl = ham.querySelector('.menu-text') || ham;
-    if (!menuTextEl) return;
+  function updateBarPosition() {
+    window.requestAnimationFrame(() => {
+      const menuTextEl = ham.querySelector('.menu-text') || ham;
+      if (!menuTextEl) return;
 
-    const rect = menuTextEl.getBoundingClientRect();
-    const scrollTop = window.scrollY || window.pageYOffset;
-    const menuBottomDoc = Math.round(rect.bottom + scrollTop);
+      const rect = menuTextEl.getBoundingClientRect();
+      const scrollTop = window.scrollY || window.pageYOffset;
+      const menuBottomDoc = Math.round(rect.bottom + scrollTop);
 
-    // Witte balk altijd onder menu-text
-    whiteBar.style.top = `${menuBottomDoc + nudge}px`;
+      let whiteTop;
+      // ✅ als info-bar zichtbaar is → normale berekening
+      if (infoBar && !infoBar.classList.contains('hidden')) {
+        whiteTop = menuBottomDoc + nudge;
+      } else {
+        // ✅ info-bar weg → witte balk bovenaan
+        whiteTop = 0;
+      }
 
-    // hoogte uitlezen
-    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
-    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+      whiteBar.style.top = `${whiteTop}px`;
 
-    // zwarte lijn alleen tonen als menu open is
-    const blackTop = menuBottomDoc + nudge + wbHeight;
-    blackLine.style.top = `${blackTop}px`;
-    if (overlay.classList.contains('menu-open')) {
-      blackLine.classList.add('visible');
-    } else {
-      blackLine.classList.remove('visible');
-    }
+      const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
+      const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
 
-    // overlay direct onder zwarte lijn
-    overlay.style.position = 'fixed';
-    overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
+      const blackTop = whiteTop + wbHeight;
+      blackLine.style.top = `${blackTop}px`;
 
-    // Top overlay meebewegen met scroll
-    topOverlay.style.top = `${scrollTop}px`;
-  });
-}
+      if (overlay.classList.contains('menu-open')) {
+        blackLine.classList.add('visible');
+      } else {
+        blackLine.classList.remove('visible');
+      }
 
+      overlay.style.position = 'fixed';
+      overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+
+      // NB: topOverlay was genoemd in je code, maar nergens gedefinieerd
+      // Als je 'm gebruikt, moet je 'm hierboven pakken met getElementById!
+      // Voor nu uitgecomment:
+      // topOverlay.style.top = `${scrollTop}px`;
+    });
+  }
 
   function showBars() {
     updateBarPosition();
     whiteBar.classList.add('visible');
-    // blackLine niet tonen bij hover
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
-    // blackLine blijft onaangeraakt (wordt alleen door closeMenu weggehaald)
   }
 
   function openMenu() {
-    updateBarPosition(); // zet top waarden
+    updateBarPosition();
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
-    blackLine.classList.add('visible'); // ✅ zwarte lijn pas hier tonen
+    blackLine.classList.add('visible');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -159,10 +155,9 @@ function updateBarPosition() {
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible'); // ✅ zwarte lijn weer weghalen
+    blackLine.classList.remove('visible');
   }
 
-  // events
   ham.addEventListener('mouseenter', showBars);
   ham.addEventListener('mouseleave', () => {
     if (!overlay.classList.contains('menu-open')) hideBars();
@@ -182,6 +177,5 @@ function updateBarPosition() {
   window.addEventListener('resize', updateBarPosition);
   window.addEventListener('scroll', updateBarPosition);
 
-  // initial position
   updateBarPosition();
 }
