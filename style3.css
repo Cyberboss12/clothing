@@ -48,7 +48,7 @@ section img,
 }
 
 .top-overlay {
-  position: absolute;
+  position: fixed;
   top: 25px;             /* altijd dezelfde afstand van bovenkant */
   left: 50%;
   transform: translateX(-50%);
@@ -437,7 +437,7 @@ nav ul li a:hover {
 /* -------- Hamburger (positie en stijl) -------- */
 .hamburger-menu {
   font-family: 'Baskerville Old Face';
-  position: absolute;
+  position: fixed;
   top: 15px;
   left: 75px;                       /* niet te ver links */
   transform: translateX(-50%);
@@ -489,9 +489,6 @@ nav ul li a:hover {
 
 /* Open state */
 .menu-overlay.menu-open {
-  /* height: 50vh;
-  opacity: 1;
-  pointer-events: auto; */
   display: block;
 }
 
@@ -554,32 +551,8 @@ nav ul li a:hover {
   .menu-grid a { font-size: 1.15rem; }
 } */
 
-/* witte balk */
-/* .white-bar,
-.black-line {
-  position: fixed;       
-  left: 0;
-  width: 100%;
-  transition: opacity 0.22s ease, top 0.18s ease;
-  z-index: 2000;
-  opacity: 0;            
-  pointer-events: none;  
-}
-
 .white-bar {
-  height: 40px;
-  background: #fff;
-  z-index: 1000;
-}
-
-.black-line {
-  height: 3px;
-  background: #000;
-  z-index: 200;
-} */
-
-.white-bar {
-  position: absolute;
+  position: fixed;
   top: 100%;
   left: 0;
   width: 100%;
@@ -591,7 +564,7 @@ nav ul li a:hover {
 
 /* Zwarte lijn daar net boven */
 .black-line {
-  position: absolute;
+  position: fixed;
   top: calc(100% + 40px);
   left: 0;
   width: 100%;
