@@ -31,7 +31,7 @@ function showNextMessage() {
 setInterval(showNextMessage, 4000);
 
 const products = [
-  { img: "afbeeldingen/model.jpg", label: "Men", link: "men.html" },
+  { img: "afbeeldingen/model_muur.png", label: "Men", link: "men.html" },
   { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
   { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
   { img: "afbeeldingen/boom.jpg", label: "Discover" },
