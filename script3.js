@@ -51,6 +51,56 @@ window.addEventListener('DOMContentLoaded', adjustFirstSection);
 window.addEventListener('load', adjustFirstSection);
 window.addEventListener('resize', adjustFirstSection);
 
+// ===== Logo, menu en balken =====
+const ham = document.getElementById('hamburgerMenu');
+const overlay = document.getElementById('menuOverlay');
+const whiteBar = document.querySelector('.white-bar');
+const blackLine = document.querySelector('.black-line');
+
+let nudge = -32.6;
+
+function updateBarPosition() {
+  window.requestAnimationFrame(() => {
+    const menuTextEl = ham?.querySelector('.menu-text') || ham;
+    if (!menuTextEl) return;
+
+    const rect = menuTextEl.getBoundingClientRect();
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const menuBottomDoc = Math.round(rect.bottom + scrollTop);
+
+    let whiteTop;
+
+    // ✅ Als info-bar nog zichtbaar is → gewone berekening
+    if (infoBar && !infoBar.classList.contains('hidden')) {
+      whiteTop = menuBottomDoc + nudge;
+    } else {
+      // ✅ Als info-bar weg is → altijd top:0
+      whiteTop = 0;
+    }
+
+    whiteBar.style.top = `${whiteTop}px`;
+
+    // zwarte lijn en overlay
+    const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
+    const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
+
+    const blackTop = whiteTop + wbHeight;
+    blackLine.style.top = `${blackTop}px`;
+
+    if (overlay.classList.contains('menu-open')) {
+      blackLine.classList.add('visible');
+    } else {
+      blackLine.classList.remove('visible');
+    }
+
+    overlay.style.position = 'fixed';
+    overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+  });
+}
+
+// ===== Info-bar sluiten =====
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
@@ -60,12 +110,13 @@ if (closeBtn && infoBar) {
       infoBar.classList.add('hidden');
       infoBar.classList.remove('closing');
       adjustFirstSection();
-      updateBarPosition();   // ✅ meteen corrigeren
+      updateBarPosition(); // ✅ meteen corrigeren
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
 
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
+    // fallback
     setTimeout(() => {
       if (!infoBar.classList.contains('hidden')) {
         infoBar.classList.add('hidden');
@@ -77,59 +128,8 @@ if (closeBtn && infoBar) {
   });
 }
 
-// ===== Logo, menu en balken =====
-const ham = document.getElementById('hamburgerMenu');
-const overlay = document.getElementById('menuOverlay');
-const whiteBar = document.querySelector('.white-bar');
-const blackLine = document.querySelector('.black-line');
-
+// ===== Menu functionaliteit =====
 if (ham && overlay && whiteBar && blackLine) {
-  let nudge = -32.6;
-
-  function updateBarPosition() {
-    window.requestAnimationFrame(() => {
-      const menuTextEl = ham.querySelector('.menu-text') || ham;
-      if (!menuTextEl) return;
-
-      const rect = menuTextEl.getBoundingClientRect();
-      const scrollTop = window.scrollY || window.pageYOffset;
-      const menuBottomDoc = Math.round(rect.bottom + scrollTop);
-
-      let whiteTop;
-      // ✅ als info-bar zichtbaar is → normale berekening
-      if (infoBar && !infoBar.classList.contains('hidden')) {
-        whiteTop = menuBottomDoc + nudge;
-      } else {
-        // ✅ info-bar weg → witte balk bovenaan
-        whiteTop = 0;
-      }
-
-      whiteBar.style.top = `${whiteTop}px`;
-
-      const wbHeight = parseFloat(getComputedStyle(whiteBar).height) || 40;
-      const blHeight = parseFloat(getComputedStyle(blackLine).height) || 3;
-
-      const blackTop = whiteTop + wbHeight;
-      blackLine.style.top = `${blackTop}px`;
-
-      if (overlay.classList.contains('menu-open')) {
-        blackLine.classList.add('visible');
-      } else {
-        blackLine.classList.remove('visible');
-      }
-
-      overlay.style.position = 'fixed';
-      overlay.style.top = `${Math.round(blackTop + blHeight)}px`;
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-
-      // NB: topOverlay was genoemd in je code, maar nergens gedefinieerd
-      // Als je 'm gebruikt, moet je 'm hierboven pakken met getElementById!
-      // Voor nu uitgecomment:
-      // topOverlay.style.top = `${scrollTop}px`;
-    });
-  }
-
   function showBars() {
     updateBarPosition();
     whiteBar.classList.add('visible');
