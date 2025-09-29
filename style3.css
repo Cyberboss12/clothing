@@ -200,13 +200,14 @@ footer {
   width: 100%;
   background-color: #C3A580;
   color: white;
-  padding: -3px 20px;
+  /* padding: -3px 20px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   position: relative;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 60;
 }
 
 .info-center {
@@ -564,15 +565,16 @@ body.has-pinned-bar {
   background: #fff;
   transition: opacity 0.22s ease, top 0.2s ease;
   z-index: 50; /* lager dan menu/tekst */
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
 }
 
 .white-bar-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
-  padding: 10px 20px;
 }
 
 /* Zwarte lijn daar net boven */
@@ -584,11 +586,6 @@ body.has-pinned-bar {
   transition: opacity 0.22s ease, top 0.2s ease;
   z-index: 49; /* nog steeds onder de tekst, maar boven white-bar */
 }
-
-.black-line {
-  display: none;
-}
-
 /* zichtbaar maken via JS */
 .white-bar.visible,
 .black-line.visible {
@@ -600,6 +597,7 @@ body.has-pinned-bar {
   top: 0;
   left: 0;
   display: block;
+  z-index: 70;
 }
 
 .black-line.pinned {
@@ -607,4 +605,5 @@ body.has-pinned-bar {
   top: var(--whitebar-height, 50px);
   left: 0;
   display: block;
+  z-index: 69;
 }
