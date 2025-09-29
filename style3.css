@@ -596,7 +596,7 @@ body.has-pinned-bar {
   position: fixed;
   top: 0;
   left: 0;
-  display: block;
+  /* display: block; */
   z-index: 70;
 }
 
@@ -604,6 +604,6 @@ body.has-pinned-bar {
   position: fixed;
   top: var(--whitebar-height, 50px);
   left: 0;
-  display: block;
+  /* display: block; */
   z-index: 69;
 }

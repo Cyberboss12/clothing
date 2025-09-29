@@ -56,77 +56,102 @@ const ham = document.getElementById('hamburgerMenu');
 const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
-const topOverlay = document.querySelector('.top-overlay'); 
-
+const topOverlay = document.querySelector('.top-overlay');
 let nudge = -32.6;
 
+// ===== Helpers =====
+function pinBars() {
+  // Move elements into white-bar if needed
+  if (ham) moveIntoWhiteBar(ham);
+  if (topOverlay) moveIntoWhiteBar(topOverlay);
+
+  whiteBar.classList.add('pinned');
+  blackLine.classList.add('pinned', 'visible');
+
+  const wbHeight = Math.round(whiteBar.getBoundingClientRect().height) || 50;
+  const blHeight = parseInt(getComputedStyle(blackLine).height, 10) || 3;
+  const total = wbHeight + blHeight;
+
+  document.documentElement.style.setProperty('--whitebar-height', `${wbHeight}px`);
+  document.documentElement.style.setProperty('--whitebar-total-height', `${total}px`);
+  document.body.classList.add('has-pinned-bar');
+
+  if (firstSection) firstSection.style.height = `calc(100vh - ${total}px)`;
+}
+
+function unpinBars() {
+  whiteBar.classList.remove('pinned');
+  blackLine.classList.remove('pinned', 'visible');
+  document.documentElement.style.removeProperty('--whitebar-height');
+  document.documentElement.style.removeProperty('--whitebar-total-height');
+  document.body.classList.remove('has-pinned-bar');
+
+  if (firstSection) firstSection.style.height = '';
+
+  // move back elements
+  if (ham && _origPos.ham) moveBack(ham, _origPos.ham);
+  if (topOverlay && _origPos.topOverlay) moveBack(topOverlay, _origPos.topOverlay);
+
+  // clean inner div
+  const inner = whiteBar.querySelector('.white-bar-inner');
+  if (inner && inner.children.length === 0) inner.remove();
+}
+
+// bewaar originele posities
+const _origPos = {
+  ham: ham ? { parent: ham.parentNode, nextSibling: ham.nextSibling, style: ham.getAttribute('style') || '' } : null,
+  topOverlay: topOverlay ? { parent: topOverlay.parentNode, nextSibling: topOverlay.nextSibling, style: topOverlay.getAttribute('style') || '' } : null
+};
+
+// move element into white-bar inner
+function moveIntoWhiteBar(el) {
+  if (!el || !whiteBar) return;
+  let inner = whiteBar.querySelector('.white-bar-inner');
+  if (!inner) {
+    inner = document.createElement('div');
+    inner.className = 'white-bar-inner';
+    whiteBar.appendChild(inner);
+  }
+  inner.appendChild(el);
+  el.style.position = 'static';
+  el.style.top = '';
+  el.style.left = '';
+}
+
+// move element back to original position
+function moveBack(el, saved) {
+  if (!el || !saved || !saved.parent) return;
+  if (saved.nextSibling) saved.parent.insertBefore(el, saved.nextSibling);
+  else saved.parent.appendChild(el);
+  if (saved.style) el.setAttribute('style', saved.style);
+  else el.removeAttribute('style');
+}
+
+// ===== Update white-bar & black-line =====
+function updateBarPosition() {
+  if (!infoBar || infoBar.classList.contains('hidden')) {
+    // info-bar weg → pinned
+    pinBars();
+  } else {
+    // info-bar zichtbaar → scroll mee
+    unpinBars();
+    // bereken top
+    const rect = ham?.querySelector('.menu-text')?.getBoundingClientRect() || ham?.getBoundingClientRect();
+    if (!rect) return;
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const menuBottomDoc = Math.round(rect.bottom + scrollTop);
+
+    whiteBar.style.position = 'relative';
+    whiteBar.style.top = '0';
+    blackLine.style.position = 'relative';
+    blackLine.style.top = '0';
+  }
+}
+
 // ===== Info-bar sluiten =====
-if (closeBtn && infoBar && whiteBar && blackLine) {
-
-  // bewaar originele parent/positie/styles zodat we later kunnen terugplaatsen
-  const _origPos = {
-    ham: ham ? { parent: ham.parentNode, nextSibling: ham.nextSibling, style: ham.getAttribute('style') || '' } : null,
-    topOverlay: topOverlay ? { parent: topOverlay.parentNode, nextSibling: topOverlay.nextSibling, style: topOverlay.getAttribute('style') || '' } : null
-  };
-
-  function moveIntoWhiteBar(el) {
-    if (!el || !whiteBar) return;
-    let inner = whiteBar.querySelector('.white-bar-inner');
-    if (!inner) {
-      inner = document.createElement('div');
-      inner.className = 'white-bar-inner';
-      whiteBar.appendChild(inner);
-    }
-    inner.appendChild(el);
-    el.style.position = 'static';
-    el.style.top = '';
-    el.style.left = '';
-  }
-
-  function moveBack(el, saved) {
-    if (!el || !saved || !saved.parent) return;
-    if (saved.nextSibling) saved.parent.insertBefore(el, saved.nextSibling);
-    else saved.parent.appendChild(el);
-    if (saved.style) el.setAttribute('style', saved.style);
-    else el.removeAttribute('style');
-  }
-
-  function pinBars() {
-    if (ham) moveIntoWhiteBar(ham);
-    if (topOverlay) moveIntoWhiteBar(topOverlay);
-
-    whiteBar.classList.add('pinned');
-    blackLine.classList.add('pinned', 'visible');
-
-    const wbHeight = Math.round(whiteBar.getBoundingClientRect().height) || 50;
-    const blHeight = parseInt(getComputedStyle(blackLine).height, 10) || 3;
-    const total = wbHeight + blHeight;
-    document.documentElement.style.setProperty('--whitebar-height', `${wbHeight}px`);
-    document.documentElement.style.setProperty('--whitebar-total-height', `${total}px`);
-
-    document.body.classList.add('has-pinned-bar');
-
-    if (firstSection) firstSection.style.height = `calc(100vh - ${total}px)`;
-  }
-
-  function unpinBars() {
-    whiteBar.classList.remove('pinned');
-    blackLine.classList.remove('pinned', 'visible');
-    document.documentElement.style.removeProperty('--whitebar-height');
-    document.documentElement.style.removeProperty('--whitebar-total-height');
-    document.body.classList.remove('has-pinned-bar');
-
-    if (ham && _origPos.ham) moveBack(ham, _origPos.ham);
-    if (topOverlay && _origPos.topOverlay) moveBack(topOverlay, _origPos.topOverlay);
-
-    if (firstSection) firstSection.style.height = '';
-    const inner = whiteBar.querySelector('.white-bar-inner');
-    if (inner && inner.children.length === 0) inner.remove();
-  }
-
+if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
-
     const onTransitionEnd = (ev) => {
       if (ev.target !== infoBar) return;
       infoBar.classList.add('hidden');
@@ -144,24 +169,19 @@ if (closeBtn && infoBar && whiteBar && blackLine) {
       }
     }, 500);
   });
-
-  if (infoBar.classList.contains('hidden')) {
-    pinBars();
-  } else {
-    unpinBars();
-  }
 }
 
 // ===== Menu functionaliteit =====
 if (ham && overlay && whiteBar && blackLine) {
   function showBars() {
+    updateBarPosition();
     whiteBar.classList.add('visible');
   }
   function hideBars() {
     whiteBar.classList.remove('visible');
   }
-
   function openMenu() {
+    updateBarPosition();
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
@@ -169,7 +189,6 @@ if (ham && overlay && whiteBar && blackLine) {
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
-
   function closeMenu() {
     overlay.classList.remove('menu-open');
     ham.classList.remove('is-active', 'menu-active');
@@ -181,18 +200,13 @@ if (ham && overlay && whiteBar && blackLine) {
   }
 
   ham.addEventListener('mouseenter', showBars);
-  ham.addEventListener('mouseleave', () => {
-    if (!overlay.classList.contains('menu-open')) hideBars();
-  });
-
-  ham.addEventListener('click', () => {
-    if (overlay.classList.contains('menu-open')) closeMenu();
-    else openMenu();
-  });
-
-  overlay.addEventListener('click', (ev) => {
-    if (ev.target === overlay) closeMenu();
-  });
-
+  ham.addEventListener('mouseleave', () => { if (!overlay.classList.contains('menu-open')) hideBars(); });
+  ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
+
+  window.addEventListener('resize', updateBarPosition);
+  window.addEventListener('scroll', updateBarPosition);
+  window.addEventListener('load', updateBarPosition);
+
+  updateBarPosition();
 }
