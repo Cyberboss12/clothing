@@ -477,19 +477,25 @@ nav ul li a:hover {
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: 0;
+  top: calc(var(--whitebar-total-height, 53px));
   left: 0;
   width: 100%;
-  height: 50vh;
-  background: #fff;               /* volledige achtergrond wit */
+  height: calc(100% - var(--whitebar-total-height, 53px));
+  background: rgba(255,255,255,0.95);
+  overflow-y: auto;
   display: none;
-  z-index: 2002;
+  z-index: 40;
+  transition: opacity 0.3s ease;
  
 }
 
 /* Open state */
 .menu-overlay.menu-open {
   display: block;
+}
+
+body.has-pinned-bar {
+  padding-top: var(--whitebar-total-height, 53px);
 }
 
 /* Menu inhoud */
@@ -552,36 +558,53 @@ nav ul li a:hover {
 } */
 
 .white-bar {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: relative;
   width: 100%;
   height: 50px;
   background: #fff;
   transition: opacity 0.22s ease, top 0.2s ease;
-  z-index: 1000; /* lager dan menu/tekst */
+  z-index: 50; /* lager dan menu/tekst */
+  display: none;
+}
+
+.white-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 20px;
 }
 
 /* Zwarte lijn daar net boven */
 .black-line {
-  position: absolute;
-  top: calc(100% + 40px);
-  left: 0;
+  position: relative;
   width: 100%;
   height: 3px;
   background: #000;
   transition: opacity 0.22s ease, top 0.2s ease;
-  z-index: 1100; /* nog steeds onder de tekst, maar boven white-bar */
+  z-index: 49; /* nog steeds onder de tekst, maar boven white-bar */
 }
 
 .black-line {
   display: none;
-  opacity: 0;
 }
 
 /* zichtbaar maken via JS */
 .white-bar.visible,
 .black-line.visible {
   display: block !important;
-  opacity: 1;
+}
+
+.white-bar.pinned {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.black-line.pinned {
+  position: fixed;
+  top: var(--whitebar-height, 50px);
+  left: 0;
+  display: block;
 }
