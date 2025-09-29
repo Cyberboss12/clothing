@@ -101,29 +101,30 @@ function updateBarPosition() {
 }
 
 // ===== Info-bar sluiten =====
-if (closeBtn && infoBar) {
+if (closeBtn && infoBar && whiteBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
 
-    const onTransitionEnd = (ev) => {
-      if (ev.target !== infoBar) return;
+    const finishClose = () => {
       infoBar.classList.add('hidden');
       infoBar.classList.remove('closing');
-      adjustFirstSection();
-      updateBarPosition(); // ✅ meteen corrigeren
-      infoBar.removeEventListener('transitionend', onTransitionEnd);
+
+      // ✅ whiteBar vastzetten bovenaan
+      whiteBar.classList.add('pinned');
+      document.body.classList.add('has-pinned-bar');
     };
 
+    // wacht op overgang
+    const onTransitionEnd = (ev) => {
+      if (ev.target !== infoBar) return;
+      finishClose();
+      infoBar.removeEventListener('transitionend', onTransitionEnd);
+    };
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
     // fallback
     setTimeout(() => {
-      if (!infoBar.classList.contains('hidden')) {
-        infoBar.classList.add('hidden');
-        infoBar.classList.remove('closing');
-        adjustFirstSection();
-        updateBarPosition(); // ✅ fallback
-      }
+      if (!infoBar.classList.contains('hidden')) finishClose();
     }, 400);
   });
 }
