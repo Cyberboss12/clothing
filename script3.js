@@ -27,95 +27,120 @@ setInterval(showNextMessage, 3675);
 
 // ===== Wegklikbare info-bar & aanpassing eerste section =====
 const infoBar = document.getElementById('infoBar');
-const firstSection = document.querySelector('.fullscreen-section:first-of-type');
-const closeBtn = document.getElementById('closeInfoBar');
-
-function adjustFirstSection() {
-  if (!firstSection) return;
-  const infoHeight = infoBar && !infoBar.classList.contains('hidden') ? infoBar.offsetHeight : 0;
-  firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
-}
-
-window.addEventListener('DOMContentLoaded', adjustFirstSection);
-window.addEventListener('resize', adjustFirstSection);
-window.addEventListener('load', adjustFirstSection);
-
-// ===== Logo, menu en balken =====
-const ham = document.getElementById('hamburgerMenu');
-const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
+const firstSection = document.querySelector('.fullscreen-section:first-of-type');
+const closeBtn = document.getElementById('closeInfoBar');
+const ham = document.getElementById('hamburgerMenu');
+const overlay = document.getElementById('menuOverlay');
 const topOverlay = document.querySelector('.top-overlay');
 
-// Zorg dat de inhoud van white-bar inner altijd bestaat
-let whiteInner = whiteBar.querySelector('.white-bar-inner');
-if (!whiteInner) {
-  whiteInner = document.createElement('div');
-  whiteInner.className = 'white-bar-inner';
-  whiteBar.appendChild(whiteInner);
+// ===== Wrapper voor info + white bar =====
+const wrapper = document.createElement('div');
+if (whiteBar && infoBar) {
+  infoBar.parentNode.insertBefore(wrapper, infoBar);
+  wrapper.appendChild(infoBar);
+  wrapper.appendChild(whiteBar);
+  wrapper.style.position = 'absolute';
+  wrapper.style.top = '0';
+  wrapper.style.left = '0';
+  wrapper.style.width = '100%';
+  wrapper.style.zIndex = '60';
 }
 
-// Plaats ham en topOverlay altijd in white-bar-inner zodat alles synchroon meebeweegt
-if (ham) whiteInner.appendChild(ham);
-if (topOverlay) whiteInner.appendChild(topOverlay);
+// ===== Helper: Update wrapper & black-line =====
+function updateWrapperPosition() {
+  if (!wrapper) return;
 
-// ===== Update functie =====
-function updateBarPosition() {
-  const infoHeight = infoBar && !infoBar.classList.contains('hidden') ? infoBar.offsetHeight : 0;
+  if (infoBar && !infoBar.classList.contains('hidden')) {
+    // info-bar zichtbaar → scroll mee
+    wrapper.style.position = 'absolute';
+    wrapper.style.top = '0';
+    wrapper.style.left = '0';
+  } else {
+    // info-bar weg → white-bar fixed bovenaan
+    wrapper.style.position = 'fixed';
+    wrapper.style.top = '0';
+    wrapper.style.left = '0';
+    wrapper.style.width = '100%';
+  }
 
-  // White-bar en black-line meescrollen met info-bar
-  whiteBar.style.position = infoHeight > 0 ? 'sticky' : 'fixed';
-  whiteBar.style.top = infoHeight > 0 ? `${infoHeight}px` : '0';
-  blackLine.style.position = whiteBar.style.position;
-  blackLine.style.top = infoHeight > 0
-    ? `${infoHeight + whiteBar.offsetHeight}px`
-    : `${whiteBar.offsetHeight}px`;
+  // Black-line position
+  const whiteHeight = whiteBar.getBoundingClientRect().height || 50;
+  blackLine.style.position = wrapper.style.position;
+  blackLine.style.top = (wrapper.getBoundingClientRect().top + whiteHeight) + 'px';
+}
 
-  // Pas firstSection aan
-  adjustFirstSection();
+// ===== Adjust first section =====
+function adjustFirstSection() {
+  if (!firstSection) return;
+  let offset = 0;
+  if (infoBar && !infoBar.classList.contains('hidden')) {
+    offset = wrapper.getBoundingClientRect().height;
+  } else {
+    offset = whiteBar.getBoundingClientRect().height;
+  }
+  firstSection.style.height = `calc(100vh - ${offset}px)`;
 }
 
 // ===== Info-bar sluiten =====
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('hidden');
-    updateBarPosition();
+    updateWrapperPosition();
+    adjustFirstSection();
   });
 }
 
 // ===== Menu functionaliteit =====
+function showBars() {
+  whiteBar.classList.add('visible');
+  blackLine.classList.add('visible');
+  updateWrapperPosition();
+}
+
+function hideBars() {
+  whiteBar.classList.remove('visible');
+  blackLine.classList.remove('visible');
+}
+
+function openMenu() {
+  overlay.classList.add('menu-open');
+  ham.classList.add('is-active', 'menu-active');
+  whiteBar.classList.add('visible');
+  blackLine.classList.add('visible');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  updateWrapperPosition();
+}
+
+function closeMenu() {
+  overlay.classList.remove('menu-open');
+  ham.classList.remove('is-active', 'menu-active');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  whiteBar.classList.remove('visible');
+  blackLine.classList.remove('visible');
+}
+
 if (ham && overlay && whiteBar && blackLine) {
-  function showBars() { whiteBar.classList.add('visible'); }
-  function hideBars() { whiteBar.classList.remove('visible'); }
-
-  function openMenu() {
-    overlay.classList.add('menu-open');
-    ham.classList.add('is-active', 'menu-active');
-    blackLine.classList.add('visible');
-    whiteBar.classList.add('visible');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeMenu() {
-    overlay.classList.remove('menu-open');
-    ham.classList.remove('is-active', 'menu-active');
-    overlay.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    whiteBar.classList.remove('visible');
-    blackLine.classList.remove('visible');
-  }
-
   ham.addEventListener('mouseenter', showBars);
   ham.addEventListener('mouseleave', () => { if (!overlay.classList.contains('menu-open')) hideBars(); });
   ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
-  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
-
-  window.addEventListener('scroll', updateBarPosition);
-  window.addEventListener('resize', updateBarPosition);
-  window.addEventListener('load', updateBarPosition);
-
-  // Init
-  updateBarPosition();
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 }
+
+// ===== Scroll & resize =====
+function onScrollResize() {
+  updateWrapperPosition();
+  adjustFirstSection();
+}
+
+window.addEventListener('scroll', onScrollResize);
+window.addEventListener('resize', onScrollResize);
+window.addEventListener('load', onScrollResize);
+
+// ===== Init =====
+updateWrapperPosition();
+adjustFirstSection();
