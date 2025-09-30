@@ -136,8 +136,6 @@ if (ham && overlay && whiteBar && blackLine) {
     blackLine.classList.remove('visible');
   }
 
-  ham.addEventListener('mouseenter', showBars);
-  ham.addEventListener('mouseleave', () => { if (!overlay.classList.contains('menu-open')) hideBars(); });
   ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 

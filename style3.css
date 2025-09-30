@@ -575,7 +575,6 @@ body.has-pinned-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
 }
 
 .white-bar-inner {
