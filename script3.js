@@ -32,18 +32,13 @@ const closeBtn = document.getElementById('closeInfoBar');
 
 function adjustFirstSection() {
   if (!firstSection) return;
-
-  if (infoBar && !infoBar.classList.contains('hidden')) {
-    const infoHeight = Math.round(infoBar.getBoundingClientRect().height);
-    firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
-  } else {
-    firstSection.style.height = '100vh';
-  }
+  const infoHeight = infoBar && !infoBar.classList.contains('hidden') ? infoBar.offsetHeight : 0;
+  firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
 }
 
 window.addEventListener('DOMContentLoaded', adjustFirstSection);
-window.addEventListener('load', adjustFirstSection);
 window.addEventListener('resize', adjustFirstSection);
+window.addEventListener('load', adjustFirstSection);
 
 // ===== Logo, menu en balken =====
 const ham = document.getElementById('hamburgerMenu');
@@ -51,132 +46,53 @@ const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
 const topOverlay = document.querySelector('.top-overlay');
-let nudge = -32.6;
 
-// ===== Bewaar originele posities =====
-const _origPos = {
-  ham: ham ? { parent: ham.parentNode, nextSibling: ham.nextSibling, style: ham.getAttribute('style') || '' } : null,
-  topOverlay: topOverlay ? { parent: topOverlay.parentNode, nextSibling: topOverlay.nextSibling, style: topOverlay.getAttribute('style') || '' } : null
-};
-
-// ===== Helpers =====
-function moveIntoWhiteBar(el) {
-  if (!el || !whiteBar) return;
-  let inner = whiteBar.querySelector('.white-bar-inner');
-  if (!inner) {
-    inner = document.createElement('div');
-    inner.className = 'white-bar-inner';
-    whiteBar.appendChild(inner);
-  }
-  inner.appendChild(el);
-  el.style.position = 'static';
-  el.style.top = '';
-  el.style.left = '';
+// Zorg dat de inhoud van white-bar inner altijd bestaat
+let whiteInner = whiteBar.querySelector('.white-bar-inner');
+if (!whiteInner) {
+  whiteInner = document.createElement('div');
+  whiteInner.className = 'white-bar-inner';
+  whiteBar.appendChild(whiteInner);
 }
 
-function moveBack(el, saved) {
-  if (!el || !saved || !saved.parent) return;
-  if (saved.nextSibling) saved.parent.insertBefore(el, saved.nextSibling);
-  else saved.parent.appendChild(el);
-  if (saved.style) el.setAttribute('style', saved.style);
-  else el.removeAttribute('style');
-}
+// Plaats ham en topOverlay altijd in white-bar-inner zodat alles synchroon meebeweegt
+if (ham) whiteInner.appendChild(ham);
+if (topOverlay) whiteInner.appendChild(topOverlay);
 
-// ===== Pin/unpin bars =====
-function pinBars() {
-  if (ham) moveIntoWhiteBar(ham);
-  if (topOverlay) moveIntoWhiteBar(topOverlay);
-
-  whiteBar.classList.add('pinned');
-  blackLine.classList.add('pinned', 'visible');
-
-  const wbHeight = Math.round(whiteBar.getBoundingClientRect().height) || 50;
-  const blHeight = parseInt(getComputedStyle(blackLine).height, 10) || 3;
-  const total = wbHeight + blHeight;
-
-  document.documentElement.style.setProperty('--whitebar-height', `${wbHeight}px`);
-  document.documentElement.style.setProperty('--whitebar-total-height', `${total}px`);
-  document.body.classList.add('has-pinned-bar');
-
-  if (firstSection) firstSection.style.height = `calc(100vh - ${total}px)`;
-}
-
-function unpinBars() {
-  whiteBar.classList.remove('pinned');
-  blackLine.classList.remove('pinned', 'visible');
-  document.documentElement.style.removeProperty('--whitebar-height');
-  document.documentElement.style.removeProperty('--whitebar-total-height');
-  document.body.classList.remove('has-pinned-bar');
-
-  if (firstSection) firstSection.style.height = '';
-
-  if (ham && _origPos.ham) moveBack(ham, _origPos.ham);
-  if (topOverlay && _origPos.topOverlay) moveBack(topOverlay, _origPos.topOverlay);
-
-  const inner = whiteBar.querySelector('.white-bar-inner');
-  if (inner && inner.children.length === 0) inner.remove();
-}
-
-// ===== Update white-bar & black-line =====
+// ===== Update functie =====
 function updateBarPosition() {
-  if (!infoBar || infoBar.classList.contains('hidden')) {
-    pinBars();
-  } else {
-    unpinBars();
-    const rect = ham?.querySelector('.menu-text')?.getBoundingClientRect() || ham?.getBoundingClientRect();
-    if (!rect) return;
+  const infoHeight = infoBar && !infoBar.classList.contains('hidden') ? infoBar.offsetHeight : 0;
 
-    const scrollTop = window.scrollY || window.pageYOffset;
-    const menuBottomDoc = Math.round(rect.bottom + scrollTop);
+  // White-bar en black-line meescrollen met info-bar
+  whiteBar.style.position = infoHeight > 0 ? 'sticky' : 'fixed';
+  whiteBar.style.top = infoHeight > 0 ? `${infoHeight}px` : '0';
+  blackLine.style.position = whiteBar.style.position;
+  blackLine.style.top = infoHeight > 0
+    ? `${infoHeight + whiteBar.offsetHeight}px`
+    : `${whiteBar.offsetHeight}px`;
 
-    whiteBar.style.position = 'relative';
-    whiteBar.style.top = '0';
-    blackLine.style.position = 'relative';
-    blackLine.style.top = '0';
-  }
+  // Pas firstSection aan
+  adjustFirstSection();
 }
 
 // ===== Info-bar sluiten =====
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
-    infoBar.classList.add('closing');
-
-    const onTransitionEnd = (ev) => {
-      if (ev.target !== infoBar) return;
-      infoBar.classList.add('hidden');
-      infoBar.classList.remove('closing');
-      pinBars();
-      infoBar.removeEventListener('transitionend', onTransitionEnd);
-    };
-    infoBar.addEventListener('transitionend', onTransitionEnd);
-
-    setTimeout(() => {
-      if (!infoBar.classList.contains('hidden')) {
-        infoBar.classList.add('hidden');
-        infoBar.classList.remove('closing');
-        pinBars();
-      }
-    }, 500);
+    infoBar.classList.add('hidden');
+    updateBarPosition();
   });
 }
 
 // ===== Menu functionaliteit =====
 if (ham && overlay && whiteBar && blackLine) {
-  function showBars() {
-    updateBarPosition();
-    whiteBar.classList.add('visible');
-  }
-
-  function hideBars() {
-    whiteBar.classList.remove('visible');
-  }
+  function showBars() { whiteBar.classList.add('visible'); }
+  function hideBars() { whiteBar.classList.remove('visible'); }
 
   function openMenu() {
-    updateBarPosition();
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
-    whiteBar.classList.add('visible');
     blackLine.classList.add('visible');
+    whiteBar.classList.add('visible');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
@@ -196,9 +112,10 @@ if (ham && overlay && whiteBar && blackLine) {
   ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
-  window.addEventListener('resize', updateBarPosition);
   window.addEventListener('scroll', updateBarPosition);
+  window.addEventListener('resize', updateBarPosition);
   window.addEventListener('load', updateBarPosition);
 
+  // Init
   updateBarPosition();
 }
