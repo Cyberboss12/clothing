@@ -207,7 +207,7 @@ footer {
   box-sizing: border-box;
   position: relative;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  z-index: 80;
+  z-index: 70;
 }
 
 body.has-info-bar .white-bar {
@@ -571,7 +571,7 @@ body.has-pinned-bar {
   height: 50px;
   background: #fff;
   transition: opacity 0.22s ease, top 0.2s ease;
-  z-index: 70; /* lager dan menu/tekst */
+  z-index: 80; /* lager dan menu/tekst */
   display: flex;
   align-items: center;
   justify-content: space-between;
