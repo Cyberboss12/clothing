@@ -56,9 +56,6 @@ function updateBarPosition() {
   blackLine.style.position = 'absolute';
   blackLine.style.top = `${infoHeight + wbHeight}px`;
 
-  // Zorg dat inner content meebeweegt
-  const inner = whiteBar.querySelector('.white-bar-inner');
-  if (inner) inner.style.position = 'relative';
 }
 
 // Pas eerste section aan
