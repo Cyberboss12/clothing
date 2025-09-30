@@ -93,6 +93,9 @@ function updateBarPosition() {
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
+
+    document.documentElement.style.setProperty('--info-bar-height', '0px');
+
     const onTransitionEnd = (ev) => {
       if (ev.target !== infoBar) return;
       infoBar.classList.add('hidden');

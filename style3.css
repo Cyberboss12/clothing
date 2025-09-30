@@ -567,6 +567,7 @@ body.has-pinned-bar {
 
 .white-bar {
   position: fixed;
+  top: var(--info-bar-height); /* altijd onder de info-bar */
   width: 100%;
   height: 50px;
   background: #fff;
@@ -587,6 +588,7 @@ body.has-pinned-bar {
 /* Zwarte lijn daar net boven */
 .black-line {
   position: fixed;
+  top: calc(var(--info-bar-height) + var(--white-bar-height));
   width: 100%;
   height: 3px;
   background: #000;
