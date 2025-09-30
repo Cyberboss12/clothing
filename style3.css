@@ -207,7 +207,14 @@ footer {
   box-sizing: border-box;
   position: relative;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  z-index: 60;
+  z-index: 80;
+}
+
+body.has-info-bar .white-bar {
+  top: var(--info-bar-height, 50px);
+}
+body.has-info-bar .black-line {
+  top: calc(var(--info-bar-height, 50px) + 50px);
 }
 
 .info-center {
@@ -559,12 +566,12 @@ body.has-pinned-bar {
 } */
 
 .white-bar {
-  position: relative;
+  position: sticky;
   width: 100%;
   height: 50px;
   background: #fff;
   transition: opacity 0.22s ease, top 0.2s ease;
-  z-index: 50; /* lager dan menu/tekst */
+  z-index: 70; /* lager dan menu/tekst */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -579,7 +586,7 @@ body.has-pinned-bar {
 
 /* Zwarte lijn daar net boven */
 .black-line {
-  position: relative;
+  position: sticky;
   width: 100%;
   height: 3px;
   background: #000;
