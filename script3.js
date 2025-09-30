@@ -30,76 +30,66 @@ const infoBar = document.getElementById('infoBar');
 const firstSection = document.querySelector('.fullscreen-section:first-of-type');
 const closeBtn = document.getElementById('closeInfoBar');
 
+if (!firstSection) console.warn('Geen .fullscreen-section:first-of-type gevonden.');
+if (!infoBar) console.warn('Geen #infoBar gevonden.');
+if (!closeBtn) console.warn('Geen #closeInfoBar gevonden.');
+
 function adjustFirstSection() {
   if (!firstSection) return;
-  if (infoBar && !infoBar.classList.contains('hidden')) {
-    const infoHeight = infoBar.getBoundingClientRect().height;
-    firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
-  } else {
-    const wbHeight = whiteBar.getBoundingClientRect().height || 50;
-    const blHeight = blackLine.getBoundingClientRect().height || 3;
-    firstSection.style.height = `calc(100vh - ${wbHeight + blHeight}px)`;
-  }
+  const infoHeight = infoBar && !infoBar.classList.contains('hidden') ? infoBar.getBoundingClientRect().height : 0;
+  firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
 }
 
 window.addEventListener('DOMContentLoaded', adjustFirstSection);
 window.addEventListener('load', adjustFirstSection);
 window.addEventListener('resize', adjustFirstSection);
 
-// ===== Logo, menu en balken =====
+// ===== Logo, menu en white-bar =====
 const ham = document.getElementById('hamburgerMenu');
 const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
 const topOverlay = document.querySelector('.top-overlay');
-let nudge = -32.6;
 
-// ===== Helpers voor elementen verplaatsen =====
-const _origPos = {
-  ham: ham ? { parent: ham.parentNode, nextSibling: ham.nextSibling, style: ham.getAttribute('style') || '' } : null,
-  topOverlay: topOverlay ? { parent: topOverlay.parentNode, nextSibling: topOverlay.nextSibling, style: topOverlay.getAttribute('style') || '' } : null
-};
+let nudge = -32.6; // kleine offset zodat white-bar niet overlapt met info-bar
 
+// verplaats elementen in white-bar inner
 function moveIntoWhiteBar(el) {
   if (!el || !whiteBar) return;
   let inner = whiteBar.querySelector('.white-bar-inner');
   if (!inner) {
     inner = document.createElement('div');
     inner.className = 'white-bar-inner';
+    inner.style.position = 'relative';
+    inner.style.width = '100%';
     whiteBar.appendChild(inner);
   }
   inner.appendChild(el);
-  el.style.position = 'static';
-  el.style.top = '';
-  el.style.left = '';
+  el.style.position = 'relative';
 }
 
-function moveBack(el, saved) {
-  if (!el || !saved || !saved.parent) return;
-  if (saved.nextSibling) saved.parent.insertBefore(el, saved.nextSibling);
-  else saved.parent.appendChild(el);
-  if (saved.style) el.setAttribute('style', saved.style);
-  else el.removeAttribute('style');
-}
-
-// ===== White-bar & black-line update =====
+// update white-bar en zwarte lijn
 function updateBarPosition() {
   const infoVisible = infoBar && !infoBar.classList.contains('hidden');
 
-  // bereken basis-top voor white-bar
-  let whiteTop = infoVisible ? infoBar.getBoundingClientRect().bottom + window.scrollY + nudge : 0;
-  whiteBar.style.position = 'absolute';
+  let whiteTop = infoVisible ? infoBar.getBoundingClientRect().height + nudge : 0;
+
+  whiteBar.style.position = infoVisible ? 'absolute' : 'fixed';
   whiteBar.style.top = `${whiteTop}px`;
 
-  // Black-line exact onder white-bar
+  // inner content altijd synchroon
+  const inner = whiteBar.querySelector('.white-bar-inner');
+  if (inner) inner.style.top = '0';
+
+  // zwarte lijn direct onder white-bar
   const wbHeight = whiteBar.getBoundingClientRect().height || 50;
-  blackLine.style.position = 'absolute';
+  blackLine.style.position = infoVisible ? 'absolute' : 'fixed';
   blackLine.style.top = `${whiteTop + wbHeight}px`;
 
   adjustFirstSection();
 }
 
-// ===== Info-bar sluiten =====
+// ===== Close info-bar =====
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
@@ -107,14 +97,7 @@ if (closeBtn && infoBar) {
       if (ev.target !== infoBar) return;
       infoBar.classList.add('hidden');
       infoBar.classList.remove('closing');
-
-      // white-bar en black-line bovenaan
-      whiteBar.style.position = 'fixed';
-      whiteBar.style.top = '0';
-      blackLine.style.position = 'fixed';
-      blackLine.style.top = `${whiteBar.getBoundingClientRect().height}px`;
-
-      adjustFirstSection();
+      updateBarPosition();
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
     infoBar.addEventListener('transitionend', onTransitionEnd);
@@ -123,11 +106,7 @@ if (closeBtn && infoBar) {
       if (!infoBar.classList.contains('hidden')) {
         infoBar.classList.add('hidden');
         infoBar.classList.remove('closing');
-        whiteBar.style.position = 'fixed';
-        whiteBar.style.top = '0';
-        blackLine.style.position = 'fixed';
-        blackLine.style.top = `${whiteBar.getBoundingClientRect().height}px`;
-        adjustFirstSection();
+        updateBarPosition();
       }
     }, 500);
   });
@@ -162,9 +141,13 @@ if (ham && overlay && whiteBar && blackLine) {
   ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
-  window.addEventListener('scroll', updateBarPosition);
   window.addEventListener('resize', updateBarPosition);
+  window.addEventListener('scroll', updateBarPosition);
   window.addEventListener('load', updateBarPosition);
+
+  // verplaats hamburger en overlay altijd in white-bar inner
+  moveIntoWhiteBar(ham);
+  if (topOverlay) moveIntoWhiteBar(topOverlay);
 
   updateBarPosition();
 }
