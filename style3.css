@@ -566,7 +566,7 @@ body.has-pinned-bar {
 } */
 
 .white-bar {
-  position: sticky;
+  position: fixed;
   width: 100%;
   height: 50px;
   background: #fff;
@@ -586,7 +586,7 @@ body.has-pinned-bar {
 
 /* Zwarte lijn daar net boven */
 .black-line {
-  position: sticky;
+  position: fixed;
   width: 100%;
   height: 3px;
   background: #000;
