@@ -616,3 +616,10 @@ body.has-pinned-bar {
   /* display: block; */
   z-index: 69;
 }
+
+.white-bar .hamburger-menu,
+.white-bar .top-overlay {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+}
