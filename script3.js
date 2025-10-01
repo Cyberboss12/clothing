@@ -29,45 +29,75 @@ setInterval(showNextMessage, 3675);
 const infoBar = document.getElementById('infoBar');
 const firstSection = document.querySelector('.fullscreen-section:first-of-type');
 const closeBtn = document.getElementById('closeInfoBar');
+
+function adjustFirstSection() {
+  if (!firstSection) return;
+
+  const infoHeight = infoBar && !infoBar.classList.contains('hidden')
+    ? infoBar.getBoundingClientRect().height
+    : 0;
+
+  firstSection.style.height = `calc(100vh - ${infoHeight}px)`;
+}
+
+window.addEventListener('DOMContentLoaded', adjustFirstSection);
+window.addEventListener('load', adjustFirstSection);
+window.addEventListener('resize', adjustFirstSection);
+
+// ===== Logo, menu en balken =====
+const ham = document.getElementById('hamburgerMenu');
+const overlay = document.getElementById('menuOverlay');
 const whiteBar = document.querySelector('.white-bar');
 const blackLine = document.querySelector('.black-line');
 const topOverlay = document.querySelector('.top-overlay');
-const ham = document.getElementById('hamburgerMenu');
-const overlay = document.getElementById('menuOverlay');
 
-// ===== Helpers =====
-function getInfoBarHeight() {
-  return infoBar && !infoBar.classList.contains('hidden') 
-    ? infoBar.getBoundingClientRect().height 
-    : 0;
+// bewaar originele posities voor eventueel terugplaatsen
+const _origPos = {
+  ham: ham ? { parent: ham.parentNode, nextSibling: ham.nextSibling } : null,
+  topOverlay: topOverlay ? { parent: topOverlay.parentNode, nextSibling: topOverlay.nextSibling } : null
+};
+
+// move element into white-bar-inner
+function moveIntoWhiteBar(el) {
+  if (!el || !whiteBar) return;
+  let inner = whiteBar.querySelector('.white-bar-inner');
+  if (!inner) {
+    inner = document.createElement('div');
+    inner.className = 'white-bar-inner';
+    whiteBar.appendChild(inner);
+  }
+  inner.appendChild(el);
 }
 
-// White-bar en zwarte lijn updaten
+// move element back to original position
+function moveBack(el, saved) {
+  if (!el || !saved || !saved.parent) return;
+  if (saved.nextSibling) saved.parent.insertBefore(el, saved.nextSibling);
+  else saved.parent.appendChild(el);
+}
+
+// ===== Update white-bar en black-line =====
 function updateBarPosition() {
-  const scrollY = window.scrollY || window.pageYOffset;
-  const infoHeight = getInfoBarHeight();
+  if (!infoBar) return;
 
-  // White-bar
-  whiteBar.style.position = 'absolute';
-  whiteBar.style.top = `${infoHeight}px`;
+  const infoHeight = infoBar && !infoBar.classList.contains('hidden')
+    ? infoBar.getBoundingClientRect().height
+    : 0;
 
-  // Black-line net onder white-bar
-  const wbHeight = whiteBar.getBoundingClientRect().height;
-  blackLine.style.position = 'absolute';
-  blackLine.style.top = `${infoHeight + wbHeight}px`;
+  // topOffset voor whiteBar
+  const whiteTop = infoHeight;
 
-}
+  whiteBar.style.top = `${whiteTop}px`;
+  blackLine.style.top = `${whiteTop + whiteBar.getBoundingClientRect().height}px`;
 
-// Pas eerste section aan
-function adjustFirstSection() {
-  if (!firstSection) return;
-  firstSection.style.height = '100vh';
+  adjustFirstSection();
 }
 
 // ===== Info-bar sluiten =====
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
+
     const onTransitionEnd = (ev) => {
       if (ev.target !== infoBar) return;
       infoBar.classList.add('hidden');
@@ -75,6 +105,7 @@ if (closeBtn && infoBar) {
       updateBarPosition();
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
+
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
     setTimeout(() => {
@@ -89,33 +120,41 @@ if (closeBtn && infoBar) {
 
 // ===== Menu functionaliteit =====
 if (ham && overlay && whiteBar && blackLine) {
-  function showBars() { whiteBar.classList.add('visible'); }
-  function hideBars() { whiteBar.classList.remove('visible'); }
+  function showBars() {
+    whiteBar.classList.add('visible');
+    blackLine.classList.add('visible');
+  }
+  function hideBars() {
+    whiteBar.classList.remove('visible');
+    blackLine.classList.remove('visible');
+  }
 
   function openMenu() {
     overlay.classList.add('menu-open');
     ham.classList.add('is-active', 'menu-active');
     whiteBar.classList.add('visible');
     blackLine.classList.add('visible');
+    overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
 
   function closeMenu() {
     overlay.classList.remove('menu-open');
     ham.classList.remove('is-active', 'menu-active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
     whiteBar.classList.remove('visible');
     blackLine.classList.remove('visible');
-    document.body.style.overflow = '';
   }
 
   ham.addEventListener('mouseenter', showBars);
   ham.addEventListener('mouseleave', () => { if (!overlay.classList.contains('menu-open')) hideBars(); });
   ham.addEventListener('click', () => { overlay.classList.contains('menu-open') ? closeMenu() : openMenu(); });
-  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', () => closeMenu()));
 
   window.addEventListener('scroll', updateBarPosition);
   window.addEventListener('resize', updateBarPosition);
-  window.addEventListener('load', () => { adjustFirstSection(); updateBarPosition(); });
+  window.addEventListener('load', updateBarPosition);
 
   updateBarPosition();
 }
