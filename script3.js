@@ -42,20 +42,26 @@ function getInfoBarHeight() {
     : 0;
 }
 
-// White-bar en zwarte lijn updaten
+// White-bar, zwarte lijn én info-bar updaten
 function updateBarPosition() {
   const scrollY = window.scrollY || window.pageYOffset;
+  const infoVisible = infoBar && !infoBar.classList.contains('hidden');
   const infoHeight = getInfoBarHeight();
 
-  // White-bar
-  whiteBar.style.position = 'absolute';
-  whiteBar.style.top = `${infoHeight}px`;
+  // Info-bar meescrollen zolang hij zichtbaar is
+  if (infoVisible) {
+    infoBar.style.position = 'absolute';
+    infoBar.style.top = `${scrollY}px`;
+  }
 
-  // Black-line net onder white-bar
+  // White-bar direct onder de info-bar
+  whiteBar.style.position = 'absolute';
+  whiteBar.style.top = `${scrollY + infoHeight}px`;
+
+  // Black-line onder de white-bar
   const wbHeight = whiteBar.getBoundingClientRect().height;
   blackLine.style.position = 'absolute';
-  blackLine.style.top = `${infoHeight + wbHeight}px`;
-
+  blackLine.style.top = `${scrollY + infoHeight + wbHeight}px`;
 }
 
 // Pas eerste section aan
@@ -68,6 +74,7 @@ function adjustFirstSection() {
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
     infoBar.classList.add('closing');
+
     const onTransitionEnd = (ev) => {
       if (ev.target !== infoBar) return;
       infoBar.classList.add('hidden');
