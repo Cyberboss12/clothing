@@ -204,7 +204,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: relative;
   transition: transform 0.3s ease, opacity 0.3s ease;
   z-index: 70;
 }
@@ -565,7 +565,7 @@ body.has-pinned-bar {
 } */
 
 .white-bar {
-  position: absolute;
+  position: relative;
   top: var(--info-bar-height); /* altijd onder de info-bar */
   width: 100%;
   height: 50px;
@@ -582,12 +582,12 @@ body.has-pinned-bar {
   align-items: center;
   gap: 20px;
   /* position: static; */
-  /* position: relative; */
+  position: relative;
 }
 
 /* Zwarte lijn daar net boven */
 .black-line {
-  position: absolute;
+  position: relative;
   top: calc(var(--info-bar-height) + var(--white-bar-height));
   width: 100%;
   height: 3px;
