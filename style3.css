@@ -565,7 +565,7 @@ body.has-pinned-bar {
 } */
 
 .white-bar {
-  position: relative;
+  position: absolute;
   top: var(--info-bar-height); /* altijd onder de info-bar */
   width: 100%;
   height: 50px;
@@ -581,7 +581,7 @@ body.has-pinned-bar {
   display: flex;
   align-items: center;
   gap: 20px;
-  position: static;
+  /* position: static; */
   /* position: relative; */
 }
 
