@@ -578,8 +578,7 @@ body.has-pinned-bar {
 }
 
 .white-bar-inner {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto ;
@@ -625,5 +624,4 @@ body.has-pinned-bar {
   position: static !important;
   top: auto !important;
   justify-content: center;
-  line-height: 1;
 }
