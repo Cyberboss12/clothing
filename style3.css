@@ -582,6 +582,7 @@ body.has-pinned-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  justify-self: center;
   margin: 0 auto ;
   padding: 0 25px;
 
