@@ -484,14 +484,14 @@ nav ul li a:hover {
 /* ---- Overlay (50vh) ---- */
 .menu-overlay {
   position: fixed;
-  top: calc(var(--whitebar-total-height, 53px));
+  top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - var(--whitebar-total-height, 53px));
+  height: 50px;
   background: rgba(255,255,255,0.95);
   overflow-y: auto;
   display: none;
-  z-index: 40;
+  z-index: 9999;
   transition: opacity 0.3s ease;
  
 }
@@ -578,7 +578,7 @@ body.has-pinned-bar {
 }
 
 .white-bar-inner {
-  display: grid;
+  display: grid !important;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   justify-content: space-between;
