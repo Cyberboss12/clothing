@@ -580,7 +580,10 @@ body.has-pinned-bar {
 .white-bar-inner {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  margin: 0 auto ;
+  padding: 0 20px;
+
   /* position: static; */
   /* position: relative; */
 }
@@ -617,9 +620,8 @@ body.has-pinned-bar {
   z-index: 69;
 }
 
-.white-bar .hamburger-menu,
 .white-bar .top-overlay {
   position: static !important;
   top: auto !important;
-  left: auto !important;
+  justify-content: center;
 }
