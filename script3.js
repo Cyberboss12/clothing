@@ -78,7 +78,7 @@ function updateBarPosition() {
 
   // Overlay correct positioneren onder white-bar + info-bar
   overlay.style.top = `${infoHeight + wbHeight}px`;
-  overlay.style.height = `calc(100% - ${infoHeight + wbHeight}px)`;
+  overlay.style.height = `50vh`;
 
   // Eerste section full viewport height behouden
   if (firstSection) firstSection.style.height = '100vh';
