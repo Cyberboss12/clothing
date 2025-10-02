@@ -622,6 +622,6 @@ body.has-pinned-bar {
 
 .white-bar .top-overlay {
   position: static !important;
-  top: auto !important;
+  /* top: auto !important; */
   justify-content: center;
 }
