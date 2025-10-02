@@ -42,7 +42,6 @@ function getInfoBarHeight() {
     : 0;
 }
 
-// Zorg dat elementen die we in de white-bar stoppen geen oude inline position/top/left meer hebben
 function cleanseInlinePosition(el) {
   if (!el) return;
   el.style.position = '';
@@ -58,26 +57,41 @@ function ensureWhiteBarInner() {
   if (!inner) {
     inner = document.createElement('div');
     inner.className = 'white-bar-inner';
+    // Flex layout: hamburger links, merknaam gecentreerd
+    inner.style.display = 'flex';
+    inner.style.alignItems = 'center';
+    inner.style.justifyContent = 'center';
+    inner.style.position = 'relative';
     whiteBar.appendChild(inner);
   }
+
+  // Hamburger links
   if (ham && inner !== ham.parentElement) {
     cleanseInlinePosition(ham);
+    ham.style.position = 'absolute';
+    ham.style.left = '20px';
     inner.appendChild(ham);
   }
+
+  // Merknaam gecentreerd
   if (topOverlay && inner !== topOverlay.parentElement) {
     cleanseInlinePosition(topOverlay);
+    topOverlay.style.position = 'absolute';
+    topOverlay.style.left = '50%';
+    topOverlay.style.transform = 'translateX(-50%)';
+    topOverlay.style.top = '50%';
+    topOverlay.style.transform += ' translateY(-50%)';
     inner.appendChild(topOverlay);
   }
 }
 
-// Update white-bar & black-line positions (en overlay)
+// Update white-bar & black-line positions + overlay
 function updateBarPosition() {
   if (!whiteBar || !blackLine || !overlay) return;
 
   const infoHeight = getInfoBarHeight();
   const wbHeight = Math.round(whiteBar.getBoundingClientRect().height) || 50;
 
-  // White-bar & black-line position
   if (infoBar && !infoBar.classList.contains('hidden')) {
     infoBar.style.position = 'absolute';
     infoBar.style.top = '0px';
@@ -101,11 +115,10 @@ function updateBarPosition() {
     blackLine.classList.add('pinned');
   }
 
-  // Overlay correct position onder white-bar + info-bar
+  // Overlay hoogte aanpassen naar bv. 50vh
   overlay.style.top = `${infoHeight + wbHeight}px`;
-  overlay.style.height = `calc(100% - ${infoHeight + wbHeight}px)`;
+  overlay.style.height = '50vh'; // <--- kleiner menu
 
-  // Eerste section full viewport height
   if (firstSection) firstSection.style.height = '100vh';
 }
 
@@ -145,8 +158,6 @@ if (ham && overlay && whiteBar && blackLine) {
     whiteBar.classList.add('visible');
     blackLine.classList.add('visible');
     document.body.style.overflow = 'hidden';
-
-    // Update overlay position dynamisch
     updateBarPosition();
   }
 
@@ -156,7 +167,6 @@ if (ham && overlay && whiteBar && blackLine) {
     whiteBar.classList.remove('visible');
     blackLine.classList.remove('visible');
     document.body.style.overflow = '';
-
     updateBarPosition();
   }
 
