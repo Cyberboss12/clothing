@@ -624,4 +624,8 @@ body.has-pinned-bar {
   position: static !important;
   /* top: auto !important; */
   justify-content: center;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
