@@ -24,7 +24,7 @@ main h2 {
 
 main p {
     margin-bottom: 20px;
-} */
+} 
 
 /* Button styling */
 button {
@@ -40,7 +40,7 @@ button {
 
 button:hover {
     background-color: #555;
-} */
+} 
 
 /* Footer styling  */
 footer {
@@ -93,13 +93,6 @@ footer {
  .topbar {
   z-index: 10;
 } 
-
-.navbar {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-}
 
 .navbar li a {
   color: #C3A580;
