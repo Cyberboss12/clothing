@@ -356,6 +356,7 @@ header h1 {
   /* aspect-ratio: 4 / 5; */
   height: 100%;
   object-fit: cover;
+  object-position: top;
   display: block; 
   border-radius: 6px; 
 }
