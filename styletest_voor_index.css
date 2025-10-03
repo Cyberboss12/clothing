@@ -335,7 +335,7 @@ header h1 {
 
 .product { 
   /* position: relative; */
-  height: 200px;
+  height: 275px;
   display: flex;
   align-items: center;
   justify-content: center;
