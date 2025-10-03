@@ -358,7 +358,7 @@ header h1 {
   object-fit: cover;
   object-position: top;
   display: block; 
-  border-radius: 6px; 
+  /* border-radius: 6px;  */
 }
 
 /* Extra content direct na productSection */
