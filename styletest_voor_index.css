@@ -335,11 +335,12 @@ header h1 {
 
 .product { 
   /* position: relative; */
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  aspect-ratio: 4 / 5;
+  /* aspect-ratio: 4 / 5; */
   
   opacity: 0;
   transform: translateY(16px);
