@@ -336,7 +336,7 @@ header h1 {
 .product { 
   /* position: relative; */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex-direction: column;
   aspect-ratio: 4 / 5;
