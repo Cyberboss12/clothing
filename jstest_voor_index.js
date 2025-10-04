@@ -30,6 +30,7 @@ function showNextMessage() {
 // Elke 4 seconden wisselen van boodschap
 setInterval(showNextMessage, 4000);
 
+// 2. Producten grid data
 const products = [
   { img: "afbeeldingen/model_muur2.png", label: "Men", link: "men.html" },
   { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
@@ -45,51 +46,53 @@ const products = [
   { img: "afbeeldingen/model.jpg", label: "Gifts" }
 ];
 
-// aannemende dat `products` al gedefinieerd is
+
+// ========================
+// 3. Grid variabelen
+// ========================
 const section = document.getElementById("productSection");
 const grid = document.getElementById("productGrid");
-const extraContent = document.querySelector("#extraContent");
+const extraContent = document.getElementById("extraContent");
 
 let index = 0;
 const batchSize = 4;
+
 let lock = false;
 const LOCK_MS = 600;
 const TOUCH_THRESHOLD = 20;
-let extraScrollLock = false; // voorkomt dubbel scrollen
+let extraScrollLock = false;
+
 
 // ========================
-// 4. Batches renderen
+// 4. Product batches renderen
 // ========================
 function showBatch(startIndex) {
   grid.innerHTML = "";
-  const slice = products.slice(startIndex, startIndex + batchSize);
 
+  const slice = products.slice(startIndex, startIndex + batchSize);
   slice.forEach(p => {
     const div = document.createElement("div");
     div.className = "product";
 
-    if (p.link) {
-      div.innerHTML = `
-        <a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
-          <img src="${p.img}" alt="${p.label}">
-          <div class="product-label">${p.label}</div>
-        </a>
-      `;
-    } else {
-      div.innerHTML = `
-        <img src="${p.img}" alt="${p.label}">
-        <div class="product-label">${p.label}</div>
-      `;
-    }
+    const content = p.link
+      ? `<a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
+           <img src="${p.img}" alt="${p.label}">
+           <div class="product-label">${p.label}</div>
+         </a>`
+      : `<img src="${p.img}" alt="${p.label}">
+         <div class="product-label">${p.label}</div>`;
 
+    div.innerHTML = content;
     grid.appendChild(div);
+
     requestAnimationFrame(() => div.classList.add("loaded"));
   });
 }
 showBatch(index);
 
+
 // ========================
-// 5. Carousel trigger
+// 5. Navigatie logica
 // ========================
 function triggerStep(direction) {
   if (lock) return;
@@ -106,54 +109,45 @@ function triggerStep(direction) {
   setTimeout(() => (lock = false), LOCK_MS);
 }
 
-function atBatch3() {
+function atLastBatch() {
   return index >= products.length - batchSize;
 }
 
+
 // ========================
-// 6. Smooth scroll helpers
+// 6. Scroll helpers
 // ========================
 function scrollToExtraContent() {
   extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function scrollToBatch3() {
+function scrollToLastBatch() {
   if (extraScrollLock) return;
 
-  // laatste batch renderen
   index = products.length - batchSize;
   showBatch(index);
 
-  // header + info-bar actief houden
   const headerEl = document.getElementById("siteHeader");
   const infoEl = document.getElementById("infoBar");
-  if (headerEl) {
-    headerEl.style.opacity = "1";
-    headerEl.style.pointerEvents = "auto";
-  }
-  if (infoEl) {
-    infoEl.style.opacity = "1";
-    infoEl.style.pointerEvents = "auto";
-  }
+  if (headerEl) headerEl.style.opacity = "1";
+  if (infoEl) infoEl.style.opacity = "1";
 
-  // scroll helemaal naar boven
   extraScrollLock = true;
   window.scrollTo({ top: 0, behavior: "smooth" });
-
-  // lock vrijgeven na animatie
-  setTimeout(() => { extraScrollLock = false; }, 900);
+  setTimeout(() => (extraScrollLock = false), 900);
 }
+
 
 // ========================
 // 7. Event handlers
 // ========================
 
 // Mouse wheel / touchpad
-window.addEventListener("wheel", (e) => {
+window.addEventListener("wheel", e => {
   const deltaY = e.deltaY;
 
   if (deltaY > 0) { // scroll down
-    if (!atBatch3()) {
+    if (!atLastBatch()) {
       e.preventDefault();
       triggerStep("down");
     } else {
@@ -163,7 +157,7 @@ window.addEventListener("wheel", (e) => {
   } else if (deltaY < 0) { // scroll up
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToLastBatch();
     } else {
       e.preventDefault();
       triggerStep("up");
@@ -171,35 +165,39 @@ window.addEventListener("wheel", (e) => {
   }
 }, { passive: false });
 
+
 // Pijltoetsen
 window.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") {
-    if (!atBatch3()) triggerStep("down");
+    if (!atLastBatch()) triggerStep("down");
     else scrollToExtraContent();
   } else if (e.key === "ArrowUp") {
-    if (window.scrollY > section.offsetTop) scrollToBatch3();
+    if (window.scrollY > section.offsetTop) scrollToLastBatch();
     else triggerStep("up");
   }
 });
 
+
 // Touch
 let touchStartY = null;
+
 section.addEventListener("touchstart", e => {
   if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 section.addEventListener("touchmove", e => {
   if (touchStartY === null) return;
+
   const dy = touchStartY - e.touches[0].clientY;
 
   if (dy > TOUCH_THRESHOLD) { // swipe up
-    if (!atBatch3()) triggerStep("down");
+    if (!atLastBatch()) triggerStep("down");
     else scrollToExtraContent();
     touchStartY = null;
   } else if (dy < -TOUCH_THRESHOLD) { // swipe down
     if (window.scrollY > section.offsetTop) {
       e.preventDefault();
-      scrollToBatch3();
+      scrollToLastBatch();
     } else {
       triggerStep("up");
     }

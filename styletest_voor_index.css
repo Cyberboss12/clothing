@@ -341,6 +341,7 @@ header h1 {
   flex-direction: column;
   position: relative;
   /* aspect-ratio: 4 / 5; */
+  overflow: hidden;
   
   opacity: 0;
   transform: translateY(16px);
