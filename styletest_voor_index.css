@@ -309,8 +309,12 @@ header h1 {
 /* SECTION met custom scroll gedrag */
 #productSection {
   /* min-height: 100vh; */
+  height: auto;
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
+  touch-action: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   width: 100vw;
   padding: 0;               /* padding weghalen voor strakke aansluiting */
   box-sizing: border-box;
@@ -337,7 +341,6 @@ header h1 {
   flex-direction: column;
   position: relative;
   /* aspect-ratio: 4 / 5; */
-  overflow: hidden;
   
   opacity: 0;
   transform: translateY(16px);
