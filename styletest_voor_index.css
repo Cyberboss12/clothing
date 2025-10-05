@@ -312,8 +312,9 @@ top: 100%; */
   /* height: auto; */
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
-  touch-action: none;
-  margin-top: -11px;
+  /* touch-action: none; */
+  /* margin-top: -11px; */
+  padding-top: 11px;
   /* margin-left: calc(50% - 50vw); */
   /* margin-right: calc(50% - 50vw); */
   width: 100vw;
@@ -326,7 +327,7 @@ top: 100%; */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 1fr; 
+  grid-auto-rows: 0; 
   gap: 0;
   width: 100%;
   /* padding: 0;
@@ -337,10 +338,10 @@ top: 100%; */
 
 .product { 
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: flex-start; 
   flex-direction: column;
   position: relative;
   overflow: hidden;
@@ -356,9 +357,18 @@ top: 100%; */
   transform: translateY(0);
 }
 
+.product::before {
+  content: "";
+  display: block;
+  padding-top: calc(100% * 5 / 4);
+}
+
 .product img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  aspect-ratio: inherit;
+  /* aspect-ratio: inherit; */
   height: 100%;
   object-fit: cover;
   object-position: top;
