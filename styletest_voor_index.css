@@ -308,7 +308,7 @@ top: 100%; */
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  /* min-height: 100vh; */
+  min-height: 100vh;
   /* height: auto; */
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
