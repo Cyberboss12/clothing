@@ -1,7 +1,7 @@
 const products = [
-  { img: "afbeeldingen/model.jpg", label: "Men" },
-  { img: "afbeeldingen/model.jpg", label: "Women" },
-  { img: "afbeeldingen/model.jpg", label: "Children" },
+  { img: "afbeeldingen/model.jpg", label: "Men's all" },
+  { img: "afbeeldingen/model.jpg", label: "Women's all" },
+  { img: "afbeeldingen/model.jpg", label: "Children's all" },
   { img: "afbeeldingen/model.jpg", label: "Discover" },
   { img: "afbeeldingen/model.jpg", label: "5" },
   { img: "afbeeldingen/model.jpg", label: "6" },
