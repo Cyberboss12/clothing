@@ -313,6 +313,7 @@ top: 100%; */
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
   touch-action: none;
+  margin-top: -11px;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
