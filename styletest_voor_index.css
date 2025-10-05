@@ -309,15 +309,16 @@ top: 100%; */
 /* SECTION met custom scroll gedrag */
 #productSection {
   /* min-height: 100vh; */
-  height: auto;
+  /* height: auto; */
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
   touch-action: none;
   margin-top: -11px;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  /* margin-left: calc(50% - 50vw); */
+  /* margin-right: calc(50% - 50vw); */
   width: 100vw;
-  padding: 0;               /* padding weghalen voor strakke aansluiting */
+  margin: 0;
+  /* padding: 0; */
   box-sizing: border-box;
 }
 
