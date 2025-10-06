@@ -575,7 +575,7 @@ body.has-pinned-bar {
   z-index: 80; /* lager dan menu/tekst */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ;
 }
 
 .white-bar-inner {
