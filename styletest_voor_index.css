@@ -1,16 +1,15 @@
 /* 1: Algemene styling */
 body {
-    font-family: 'Special Elite';
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    overflow-x: hidden;
-    overflow-y: auto;
+  font-family: 'Special Elite';
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* Hier moest de header styling komen: */
-
+/* Header styling */
 header {
   height: 57px;
   padding: 40px 20px;
@@ -25,48 +24,48 @@ header h1 {
   font-size: 2rem;
 }
 
-/* Main content styling */
+/* Main content */
 main {
-    padding: 0 20px;
-    max-width: 800px;
-    margin: 0 auto;
+  padding: 0 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 main h2 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 main p {
-    margin-bottom: 20px;
-} 
+  margin-bottom: 20px;
+}
 
-/* Button styling */
+/* Buttons */
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #555;
-} 
+  background-color: #555;
+}
 
-/* Footer styling  */
+/* Footer */
 footer {
-    padding: 20px;
-    color: #333;
-    margin-top: 40px;
-    height: 200px;
-    background-color: #222;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding: 20px;
+  color: #333;
+  margin-top: 40px;
+  height: 200px;
+  background-color: #222;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 2: Bovenste info-balk */
@@ -87,8 +86,6 @@ footer {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
-  /* nieuw */
   flex: 1;
   text-align: center;
   transition: opacity 0.5s ease;
@@ -100,14 +97,14 @@ footer {
 
 .info-right {
   display: flex;
-  gap: 80px; 
+  gap: 80px;
   align-items: center;
 }
 
 /* 3: Hoofdnavigatie */
- .topbar {
+.topbar {
   z-index: 10;
-} 
+}
 
 .navbar li a {
   color: #C3A580;
@@ -166,7 +163,7 @@ nav ul li a:hover {
   background-color: #555;
 }
 
-/* 4: Dropdown menu men */
+/* 4: Dropdown menu */
 .main-navbar {
   background-color: #333;
   position: relative;
@@ -215,7 +212,7 @@ nav ul li a:hover {
 
 /* Dropdown inhoud */
 .dropdown-content {
-  display: none; 
+  display: none;
   position: fixed;
   top: 100px;
   left: 0;
@@ -226,12 +223,6 @@ nav ul li a:hover {
   border-top: 1px solid #444;
   overflow-x: hidden;
 }
-
-/* De vorige wijzigingen
-display: none;
-position: absolute;
-overflow-x: hidden;
-top: 100%; */
 
 /* Toon dropdown bij hover */
 .dropdown:hover .dropdown-content {
@@ -304,12 +295,10 @@ top: 100%; */
   background-color: #777;
 }
 
-/* Beginnen met de infinite scroll 4-koloms productgrid: */
-
-/* SECTION met custom scroll gedrag */
+/* 5: Productgrid (infinite scroll) */
 #productSection {
   height: auto;
-  overflow: hidden;         /* interne scroll verbergen */
+  overflow: hidden;
   position: relative;
   touch-action: none;
   margin-left: calc(50% - 50vw);
@@ -319,36 +308,30 @@ top: 100%; */
   box-sizing: border-box;
 }
 
-/* Grid container */
+/* ===============================
+   💡 Perfecte uniforme afbeelding-grid
+   =============================== */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 500px;        /* vaste hoogte per vak */
+  grid-auto-rows: 500px;
   gap: 0;
   width: 100%;
-  padding: 0;
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
-
-  /* Consistente uitlijning */
-  align-items: start;           /* items starten vanaf bovenkant */
-  justify-items: stretch;       /* volledige breedte van vak */
+  align-items: start; /* alles bovenaan */
 }
 
-/* Productvak */
 .product {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;       /* label onder afbeelding */
-  align-items: flex-start;      /* start vanaf bovenkant */
-  justify-content: flex-start;  /* geen verticale centrering */
-  position: relative;
-  overflow: hidden;             /* bijsnijden buiten vak */
-  margin: 0;
-  padding: 0;
-
-  /* Animatie bij laden */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 300ms ease, transform 300ms ease;
@@ -359,16 +342,38 @@ top: 100%; */
   transform: translateY(0);
 }
 
-/* Afbeeldingen in vak */
+/* Klikbare wrapper */
+.product a {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Uniforme afbeeldingen */
 .product img {
   width: 100%;
   height: 100%;
-  object-fit: cover;           /* knip afbeeldingen waar nodig */
-  object-position: top;        /* altijd top uitlijnen */
-  display: block;              /* geen inline spacing */
+  display: block;
+  object-fit: cover;
+  object-position: top center;
   margin: 0;
   padding: 0;
-  max-width: 100%;
+  background-color: #fff;
+  vertical-align: top;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Extra fixes voor consistent gedrag */
+.grid,
+.product,
+.product a,
+.product img {
+  aspect-ratio: auto !important;
+  line-height: 0;
 }
 
 /* Label onder afbeelding */
@@ -376,9 +381,9 @@ top: 100%; */
   text-align: center;
   font-size: 1.7rem;
   margin-top: 8px;
-  font-family: Arial, sans-serif;
   letter-spacing: 1px;
   text-transform: uppercase;
+  font-family: Arial, sans-serif;
 }
 
 /* Exit animaties */
@@ -387,8 +392,19 @@ top: 100%; */
   opacity: 0;
   transition: transform 300ms ease, opacity 300ms ease;
 }
+
 .product.exit-down {
   transform: translateY(20px);
   opacity: 0;
   transition: transform 300ms ease, opacity 300ms ease;
+}
+
+/* Extra content */
+#extraContent {
+  padding-top: 5px;
+  height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
