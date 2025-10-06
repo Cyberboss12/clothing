@@ -585,6 +585,11 @@ body.has-pinned-bar {
   justify-self: center;
   margin: 0 auto ;
   padding: 0 25px;
+  pointer-events: none;
+}
+
+.white-bar-inner > * {
+  pointer-events: auto; /* zodat knoppen wel werken */
 }
 
 /* Zwarte lijn daar net boven */
@@ -620,9 +625,10 @@ body.has-pinned-bar {
 }
 
 .white-bar .top-overlay {
-  position: static !important;
+  position: absolute;
   /* top: auto !important; */
   justify-content: center;
+  transform: translateX(-50%);
   margin: 0 auto;
   display: flex;
   align-items: center;
