@@ -1,42 +1,403 @@
-/* body blijft normale pagina-scroll hebben */
+/* 1: Algemene styling */
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  overflow-y: auto; /* normale pagina scrollbar */
+    font-family: 'Special Elite';
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
+
+/* Hier moest de header styling komen: */
+
+header {
+  height: 57px;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #222;
+}
+
+header h1 {
+  font-size: 2rem;
+}
+
+/* Main content styling */
+main {
+    padding: 0 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+main h2 {
+    margin-bottom: 20px;
+}
+
+main p {
+    margin-bottom: 20px;
+} 
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+} 
+
+/* Footer styling  */
+footer {
+    padding: 20px;
+    color: #333;
+    margin-top: 40px;
+    height: 200px;
+    background-color: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2: Bovenste info-balk */
+.info-bar {
+  width: 100%;
+  background-color: #C3A580;
+  color: white;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+  height: 41px;
+}
+
+.info-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* nieuw */
+  flex: 1;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+.info-center.hidden {
+  opacity: 0;
+}
+
+.info-right {
+  display: flex;
+  gap: 80px; 
+  align-items: center;
+}
+
+/* 3: Hoofdnavigatie */
+ .topbar {
+  z-index: 10;
+} 
+
+.navbar li a {
+  color: #C3A580;
+  text-decoration: none;
+  font-size: 16px;
+  position: relative;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect met onderstreep */
+.navbar li a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #C3A580;
+  transition: width 0.3s ease;
+}
+
+.navbar li a:hover::after {
+  width: 100%;
+}
+
+/* Actieve link */
+.navbar li a.active {
+  font-weight: bold;
+}
+
+/* Navigatiebalk */
+nav {
+  background-color: #333;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li a {
+  display: block;
+  padding: 14px 20px;
+  color: white;
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  background-color: #555;
+}
+
+/* 4: Dropdown menu men */
+.main-navbar {
+  background-color: #333;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* Navigatielinks */
+.navbar {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  gap: 40px;
+}
+
+.navbar li {
+  position: relative;
+}
+
+.navbar li a {
+  color: #C3A580;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 15px 10px;
+  display: inline-block;
+  position: relative;
+}
+
+/* Hover onderstreping */
+.navbar li a::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #C3A580;
+  transition: width 0.3s ease;
+}
+
+.navbar li a:hover::after {
+  width: 100%;
+}
+
+/* Dropdown inhoud */
+.dropdown-content {
+  display: none; 
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 100vw;
+  background-color: #333;
+  padding: 40px 80px;
+  box-sizing: border-box;
+  border-top: 1px solid #444;
+  overflow-x: hidden;
+}
+
+/* De vorige wijzigingen
+display: none;
+position: absolute;
+overflow-x: hidden;
+top: 100%; */
+
+/* Toon dropdown bij hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Dropdown layout */
+.dropdown-inner {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dropdown-left {
+  flex: 1;
+}
+
+.dropdown-left ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dropdown-left li {
+  margin-bottom: 15px;
+}
+
+.dropdown-left a {
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-left a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.dropdown-left a:hover::after {
+  width: 100%;
+}
+
+.dropdown-right {
+  display: flex;
+  gap: 20px;
+}
+
+.color-block {
+  width: 200px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.block-1 {
+  background-color: #333;
+}
+
+.block-2 {
+  background-color: #777;
+}
+
+/* Beginnen met de infinite scroll 4-koloms productgrid: */
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  height: 100vh;       /* neemt viewport in */
-  overflow: hidden;    /* verberg interne scroll */
-  position: relative;
-  touch-action: none;  /* voorkom standaard touch-scroll binnen deze sectie */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* belangrijk: zet op flex-start, niet center */
 }
 
-/* grid - 1 rij van 4 */
+/* Grid: 1 batch = 1 viewport */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 24px;
-  height: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px;
   box-sizing: border-box;
-  align-content: center;
+
+  /* Zorg dat grid rows niet geforceerd worden naar vaste hoogte */
+  grid-auto-rows: auto;    /* of helemaal verwijderen als aanwezig */
+  align-items: start;      /* heel belangrijk: items niet stretchen */
+  border: 2px solid red;
 }
 
-/* product cards */
-.product {
+.product { 
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;           /* NIET: height: 100% */
+  align-self: start;      /* forceert elk item om bovenaan in de grid-track te beginnen */
+  overflow: hidden;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.image-box {
+  width: 100%;
+  aspect-ratio: 4 / 5;     /* reserveert ruimte en maakt alle vakjes gelijk */
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start; /* zorgt ervoor dat inhoud 'boven' uitlijnt */
+  justify-content: center;
+  background: #f4f4f4;
+}
+
+/* Afbeelding vult volledige container en gebruikt top-centering */
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
 }
 
 .product.loaded {
   opacity: 1;
   transform: translateY(0);
+}
+/* 
+.product img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block; 
+} */
+
+.product-label {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-top: 8px;
+  font-family: Arial, sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.product h3 {
+  margin: 10px 0 5px;
+  font-size: 1.1rem;
+}
+
+.product p {
+  font-size: 0.9rem;
+  color: #666;
 }
 
 /* exit animations (voor vloeiend wisselen) */
@@ -51,16 +412,12 @@ body {
   transition: transform 300ms ease, opacity 300ms ease;
 }
 
-.product img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-.product-label {
-  margin-top: 8px;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
+/* Extra content direct na productSection */
+#extraContent {
+  padding-top: 5px;       
+  height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
