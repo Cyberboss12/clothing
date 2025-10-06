@@ -323,30 +323,35 @@ top: 100%; */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 500px; 
+  grid-auto-rows: 500px;        /* vaste hoogte per vak */
   gap: 0;
   width: 100%;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  border: 2px solid red; /* tijdelijk, voor debug */
-  align-items: start;     /* bovenaan uitlijnen */
+
+  /* Consistente uitlijning */
+  align-items: start;           /* items starten vanaf bovenkant */
+  justify-items: stretch;       /* volledige breedte van vak */
 }
 
-/* Individuele productvakjes */
-.product { 
+/* Productvak */
+.product {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;  /* bovenaan uitlijnen */
-  justify-content: center;  /* horizontaal centreren */
+  flex-direction: column;       /* label onder afbeelding */
+  align-items: flex-start;      /* start vanaf bovenkant */
+  justify-content: flex-start;  /* geen verticale centrering */
   position: relative;
-  overflow: hidden;
+  overflow: hidden;             /* bijsnijden buiten vak */
+  margin: 0;
+  padding: 0;
 
+  /* Animatie bij laden */
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 300ms ease, transform 300ms ease; 
+  transition: opacity 300ms ease, transform 300ms ease;
 }
 
 .product.loaded {
@@ -354,27 +359,20 @@ top: 100%; */
   transform: translateY(0);
 }
 
-/* Afbeeldingen */
+/* Afbeeldingen in vak */
 .product img {
   width: 100%;
   height: 100%;
-  object-fit: cover;      /* bijsnijden indien nodig */
-  object-position: top;   /* altijd uitgelijnd vanaf de bovenkant */
-  display: block;
-}
-
-/* Klikbare link rondom afbeelding */
-.product a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
+  object-fit: cover;           /* knip afbeeldingen waar nodig */
+  object-position: top;        /* altijd top uitlijnen */
+  display: block;              /* geen inline spacing */
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
 }
 
 /* Label onder afbeelding */
 .product-label {
-  width: 100%;
   text-align: center;
   font-size: 1.7rem;
   margin-top: 8px;
@@ -383,36 +381,14 @@ top: 100%; */
   text-transform: uppercase;
 }
 
-/* Eventueel extra tekst onder label */
-.product h3 {
-  margin: 10px 0 5px;
-  font-size: 1.1rem;
-}
-
-.product p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Exit animations (voor vloeiend wisselen van batches) */
+/* Exit animaties */
 .product.exit-up {
   transform: translateY(-20px);
   opacity: 0;
   transition: transform 300ms ease, opacity 300ms ease;
 }
-
 .product.exit-down {
   transform: translateY(20px);
   opacity: 0;
   transition: transform 300ms ease, opacity 300ms ease;
-}
-
-/* Extra content direct na productSection */
-#extraContent {
-  padding-top: 5px;       
-  height: 100vh;
-  background-color: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
