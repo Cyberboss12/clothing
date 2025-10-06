@@ -308,7 +308,6 @@ top: 100%; */
 
 /* SECTION met custom scroll gedrag */
 #productSection {
-  /* min-height: 100vh; */
   height: auto;
   overflow: hidden;         /* interne scroll verbergen */
   position: relative;
@@ -316,11 +315,11 @@ top: 100%; */
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
-  padding: 0;               /* padding weghalen voor strakke aansluiting */
+  padding: 0;
   box-sizing: border-box;
 }
 
-/* Grid: 1 batch = 1 viewport */
+/* Grid container */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -330,20 +329,21 @@ top: 100%; */
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  border: 2px solid red;
+  border: 2px solid red; /* tijdelijk, voor debug */
+  align-items: start;     /* bovenaan uitlijnen */
 }
 
+/* Individuele productvakjes */
 .product { 
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center; 
   flex-direction: column;
+  align-items: flex-start;  /* bovenaan uitlijnen */
+  justify-content: center;  /* horizontaal centreren */
   position: relative;
   overflow: hidden;
-  /* aspect-ratio: 4 / 5; */
-  
+
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 300ms ease, transform 300ms ease; 
@@ -354,16 +354,27 @@ top: 100%; */
   transform: translateY(0);
 }
 
+/* Afbeeldingen */
 .product img {
   width: 100%;
-  aspect-ratio: 4 / 5;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block; 
+  object-fit: cover;      /* bijsnijden indien nodig */
+  object-position: top;   /* altijd uitgelijnd vanaf de bovenkant */
+  display: block;
 }
 
+/* Klikbare link rondom afbeelding */
+.product a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Label onder afbeelding */
 .product-label {
+  width: 100%;
   text-align: center;
   font-size: 1.7rem;
   margin-top: 8px;
@@ -372,6 +383,7 @@ top: 100%; */
   text-transform: uppercase;
 }
 
+/* Eventueel extra tekst onder label */
 .product h3 {
   margin: 10px 0 5px;
   font-size: 1.1rem;
@@ -382,12 +394,13 @@ top: 100%; */
   color: #666;
 }
 
-/* exit animations (voor vloeiend wisselen) */
+/* Exit animations (voor vloeiend wisselen van batches) */
 .product.exit-up {
   transform: translateY(-20px);
   opacity: 0;
   transition: transform 300ms ease, opacity 300ms ease;
 }
+
 .product.exit-down {
   transform: translateY(20px);
   opacity: 0;
