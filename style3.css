@@ -203,9 +203,9 @@ footer {
   color: white;
   /* padding: -3px 20px; */
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: absolute;
   transition: transform 0.3s ease, opacity 0.3s ease;
   z-index: 70;
 }
@@ -575,7 +575,7 @@ body.has-pinned-bar {
   z-index: 80; /* lager dan menu/tekst */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .white-bar-inner {
@@ -585,11 +585,9 @@ body.has-pinned-bar {
   justify-self: center;
   margin: 0 auto ;
   padding: 0 25px;
-  pointer-events: none;
-}
 
-.white-bar-inner > * {
-  pointer-events: auto; /* zodat knoppen wel werken */
+  /* position: static; */
+  /* position: relative; */
 }
 
 /* Zwarte lijn daar net boven */
@@ -625,10 +623,9 @@ body.has-pinned-bar {
 }
 
 .white-bar .top-overlay {
-  position: absolute;
+  position: static !important;
   /* top: auto !important; */
   justify-content: center;
-  transform: translateX(-50%);
   margin: 0 auto;
   display: flex;
   align-items: center;
