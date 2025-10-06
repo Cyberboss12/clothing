@@ -620,7 +620,8 @@ body.has-pinned-bar {
 }
 
 .white-bar .top-overlay {
-  position: absolute;
+  position: static !important;
+  /* top: auto !important; */
   justify-content: center;
   margin: 0 auto;
   display: flex;
