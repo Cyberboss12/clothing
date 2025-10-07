@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model_muur2.png", label: "Men", link: "men.html" },
     { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
     { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
-    { img: "afbeeldingen/model.jpg", label: "Discover", link: "discover.html" },
+    { img: "afbeeldingen/Black square_test.png", label: "Discover", link: "discover.html" },
     { img: "afbeeldingen/Black square_test.png", label: "5" },
     { img: "afbeeldingen/model.jpg", label: "Bags" },
     { img: "afbeeldingen/model.jpg", label: "Shoes" },
