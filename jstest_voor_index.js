@@ -74,35 +74,80 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.innerHTML = "";
 
     const slice = products.slice(startIndex, startIndex + batchSize);
+    const loadPromises = [];
+
     slice.forEach(p => {
       const div = document.createElement("div");
       div.className = "product";
 
-      const content = p.link
-        ? `<a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
-             <img src="${p.img}" alt="${p.label}">
-             <div class="product-label">${p.label}</div>
-           </a>`
-        : `<img src="${p.img}" alt="${p.label}">
-           <div class="product-label">${p.label}</div>`;
+      const img = document.createElement("img");
+      img.src = p.img;
+      img.alt = p.label;
+      img.loading = "lazy";
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "top";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.display = "block";
+      img.style.margin = "0";
+      img.style.padding = "0";
 
-      div.innerHTML = content;
+      const label = document.createElement("div");
+      label.className = "product-label";
+      label.textContent = p.label;
+
+      if (p.link) {
+        const link = document.createElement("a");
+        link.href = p.link;
+        link.style.display = "block";
+        link.style.textDecoration = "none";
+        link.style.color = "inherit";
+        link.appendChild(img);
+        link.appendChild(label);
+        div.appendChild(link);
+      } else {
+        div.appendChild(img);
+        div.appendChild(label);
+      }
+
       grid.appendChild(div);
+      loadPromises.push(new Promise(res => img.onload = res));
 
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
 
-    // 🟢 8. Afbeeldingscorrectie
-    fixImageAlignment();
+    // 🔧 Wanneer alle afbeeldingen geladen zijn, hoogte corrigeren
+    Promise.all(loadPromises).then(() => normalizeGridHeights());
   }
 
 
   // ========================
-  // 5. Navigatie (up/down)
+  // 5. Hoogte-correctie
+  // ========================
+  function normalizeGridHeights() {
+    const products = grid.querySelectorAll(".product");
+    if (!products.length) return;
+
+    // Reset eerst alle hoogtes
+    products.forEach(p => p.style.height = "");
+
+    // Bepaal de hoogste container
+    let maxHeight = 0;
+    products.forEach(p => {
+      const h = p.offsetHeight;
+      if (h > maxHeight) maxHeight = h;
+    });
+
+    // Pas die toe op alle containers (voor perfecte rijen)
+    products.forEach(p => p.style.height = maxHeight + "px");
+  }
+
+
+  // ========================
+  // 6. Navigatie / scroll
   // ========================
   function triggerStep(direction) {
     if (lock) return;
-
     if (direction === "down" && index + batchSize < products.length) {
       index += batchSize;
       showBatch(index);
@@ -110,7 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
       index -= batchSize;
       showBatch(index);
     }
-
     lock = true;
     setTimeout(() => (lock = false), LOCK_MS);
   }
@@ -119,25 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return index >= products.length - batchSize;
   }
 
-
-  // ========================
-  // 6. Scrollfuncties
-  // ========================
   function scrollToExtraContent() {
     extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function scrollToLastBatch() {
     if (extraScrollLock) return;
-
     index = products.length - batchSize;
     showBatch(index);
-
     const headerEl = document.getElementById("siteHeader");
     const infoEl = document.getElementById("infoBar");
     if (headerEl) headerEl.style.opacity = "1";
     if (infoEl) infoEl.style.opacity = "1";
-
     extraScrollLock = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => (extraScrollLock = false), 900);
@@ -145,27 +182,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 7. Scroll / toets / touch events
+  // 7. Event listeners
   // ========================
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
-
     if (deltaY > 0) {
-      if (!atLastBatch()) {
-        e.preventDefault();
-        triggerStep("down");
-      } else {
-        e.preventDefault();
-        scrollToExtraContent();
-      }
+      if (!atLastBatch()) { e.preventDefault(); triggerStep("down"); }
+      else { e.preventDefault(); scrollToExtraContent(); }
     } else if (deltaY < 0) {
-      if (window.scrollY > section.offsetTop) {
-        e.preventDefault();
-        scrollToLastBatch();
-      } else {
-        e.preventDefault();
-        triggerStep("up");
-      }
+      if (window.scrollY > section.offsetTop) { e.preventDefault(); scrollToLastBatch(); }
+      else { e.preventDefault(); triggerStep("up"); }
     }
   }, { passive: false });
 
@@ -180,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   let touchStartY = null;
-
   section.addEventListener("touchstart", e => {
     if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
   }, { passive: true });
@@ -188,18 +213,13 @@ document.addEventListener("DOMContentLoaded", () => {
   section.addEventListener("touchmove", e => {
     if (touchStartY === null) return;
     const dy = touchStartY - e.touches[0].clientY;
-
     if (dy > TOUCH_THRESHOLD) {
       if (!atLastBatch()) triggerStep("down");
       else scrollToExtraContent();
       touchStartY = null;
     } else if (dy < -TOUCH_THRESHOLD) {
-      if (window.scrollY > section.offsetTop) {
-        e.preventDefault();
-        scrollToLastBatch();
-      } else {
-        triggerStep("up");
-      }
+      if (window.scrollY > section.offsetTop) { e.preventDefault(); scrollToLastBatch(); }
+      else { triggerStep("up"); }
       touchStartY = null;
     }
   }, { passive: false });
@@ -208,29 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 8. Afbeeldingscorrectie
+  // 8. Init
   // ========================
-  function fixImageAlignment() {
-    const images = grid.querySelectorAll("img");
-    images.forEach(img => {
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "top";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.display = "block";
-      img.style.margin = "0";
-      img.style.padding = "0";
-
-      // witruimte van transparante PNG’s vermijden
-      img.addEventListener("load", () => {
-        const aspectRatio = img.naturalWidth / img.naturalHeight;
-        if (aspectRatio < 0.5 || aspectRatio > 2) {
-          img.style.objectFit = "cover";
-        }
-      });
-    });
-  }
-
-  // eerste render
   showBatch(index);
 });
