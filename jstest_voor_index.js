@@ -50,101 +50,85 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-  const section = document.getElementById("productSection");
   const grid = document.getElementById("productGrid");
+  const section = document.getElementById("productSection");
   const extraContent = document.getElementById("extraContent");
-
-  if (!section || !grid) {
-    console.error("❌ Fout: 'productSection' of 'productGrid' werd niet gevonden in de DOM.");
-    return;
-  }
 
   let index = 0;
   const batchSize = 4;
   let lock = false;
   const LOCK_MS = 600;
-  const TOUCH_THRESHOLD = 20;
-  let extraScrollLock = false;
-
 
   // ========================
-  // 4. Batch weergave
+  // Functie: batch tonen
   // ========================
   function showBatch(startIndex) {
     grid.innerHTML = "";
 
     const slice = products.slice(startIndex, startIndex + batchSize);
-    const loadPromises = [];
+    const loaders = slice.map(p => loadProduct(p));
 
-    slice.forEach(p => {
+    Promise.all(loaders).then(elements => {
+      elements.forEach(el => grid.appendChild(el));
+      normalizeGridHeights();
+    });
+  }
+
+  // ========================
+  // Product maken + afbeelding laden
+  // ========================
+  function loadProduct(product) {
+    return new Promise(resolve => {
       const div = document.createElement("div");
       div.className = "product";
 
-      const img = document.createElement("img");
-      img.src = p.img;
-      img.alt = p.label;
+      const img = new Image();
+      img.src = product.img;
+      img.alt = product.label;
       img.loading = "lazy";
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "top";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.display = "block";
-      img.style.margin = "0";
-      img.style.padding = "0";
+      img.onload = () => {
+        requestAnimationFrame(() => div.classList.add("loaded"));
+        resolve(div);
+      };
 
       const label = document.createElement("div");
       label.className = "product-label";
-      label.textContent = p.label;
+      label.textContent = product.label;
 
-      if (p.link) {
-        const link = document.createElement("a");
-        link.href = p.link;
-        link.style.display = "block";
-        link.style.textDecoration = "none";
-        link.style.color = "inherit";
-        link.appendChild(img);
-        link.appendChild(label);
-        div.appendChild(link);
+      if (product.link) {
+        const a = document.createElement("a");
+        a.href = product.link;
+        a.style.display = "block";
+        a.appendChild(img);
+        a.appendChild(label);
+        div.appendChild(a);
       } else {
         div.appendChild(img);
         div.appendChild(label);
       }
 
-      grid.appendChild(div);
-      loadPromises.push(new Promise(res => img.onload = res));
-
-      requestAnimationFrame(() => div.classList.add("loaded"));
+      resolve(div);
     });
-
-    // 🔧 Wanneer alle afbeeldingen geladen zijn, hoogte corrigeren
-    Promise.all(loadPromises).then(() => normalizeGridHeights());
   }
 
-
   // ========================
-  // 5. Hoogte-correctie
+  // Hoogtes corrigeren per rij
   // ========================
   function normalizeGridHeights() {
     const products = grid.querySelectorAll(".product");
     if (!products.length) return;
 
-    // Reset eerst alle hoogtes
+    // Reset
     products.forEach(p => p.style.height = "");
 
-    // Bepaal de hoogste container
+    // Gelijk maken
     let maxHeight = 0;
-    products.forEach(p => {
-      const h = p.offsetHeight;
-      if (h > maxHeight) maxHeight = h;
-    });
-
-    // Pas die toe op alle containers (voor perfecte rijen)
-    products.forEach(p => p.style.height = maxHeight + "px");
+    products.forEach(p => maxHeight = Math.max(maxHeight, p.offsetHeight));
+    products.forEach(p => p.style.height = `${maxHeight}px`);
   }
 
-
   // ========================
-  // 6. Navigatie / scroll
+  // Scrollgedrag
   // ========================
   function triggerStep(direction) {
     if (lock) return;
@@ -159,76 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => (lock = false), LOCK_MS);
   }
 
-  function atLastBatch() {
-    return index >= products.length - batchSize;
-  }
-
-  function scrollToExtraContent() {
-    extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function scrollToLastBatch() {
-    if (extraScrollLock) return;
-    index = products.length - batchSize;
-    showBatch(index);
-    const headerEl = document.getElementById("siteHeader");
-    const infoEl = document.getElementById("infoBar");
-    if (headerEl) headerEl.style.opacity = "1";
-    if (infoEl) infoEl.style.opacity = "1";
-    extraScrollLock = true;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => (extraScrollLock = false), 900);
-  }
-
-
-  // ========================
-  // 7. Event listeners
-  // ========================
+  // Event listeners
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
-    if (deltaY > 0) {
-      if (!atLastBatch()) { e.preventDefault(); triggerStep("down"); }
-      else { e.preventDefault(); scrollToExtraContent(); }
-    } else if (deltaY < 0) {
-      if (window.scrollY > section.offsetTop) { e.preventDefault(); scrollToLastBatch(); }
-      else { e.preventDefault(); triggerStep("up"); }
-    }
-  }, { passive: false });
-
-  window.addEventListener("keydown", e => {
-    if (e.key === "ArrowDown") {
-      if (!atLastBatch()) triggerStep("down");
-      else scrollToExtraContent();
-    } else if (e.key === "ArrowUp") {
-      if (window.scrollY > section.offsetTop) scrollToLastBatch();
-      else triggerStep("up");
-    }
-  });
-
-  let touchStartY = null;
-  section.addEventListener("touchstart", e => {
-    if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
+    if (deltaY > 0) triggerStep("down");
+    else triggerStep("up");
   }, { passive: true });
 
-  section.addEventListener("touchmove", e => {
-    if (touchStartY === null) return;
-    const dy = touchStartY - e.touches[0].clientY;
-    if (dy > TOUCH_THRESHOLD) {
-      if (!atLastBatch()) triggerStep("down");
-      else scrollToExtraContent();
-      touchStartY = null;
-    } else if (dy < -TOUCH_THRESHOLD) {
-      if (window.scrollY > section.offsetTop) { e.preventDefault(); scrollToLastBatch(); }
-      else { triggerStep("up"); }
-      touchStartY = null;
-    }
-  }, { passive: false });
-
-  section.addEventListener("touchend", () => { touchStartY = null; });
-
-
-  // ========================
-  // 8. Init
-  // ========================
+  // Init
   showBatch(index);
 });
