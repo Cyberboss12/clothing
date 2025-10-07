@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let index = 0;
   const batchSize = 4;
   let lock = false;
-  const LOCK_MS = 600;
+  const LOCK_MS = 600;           // lock-tijd tussen stappen (aanpassen indien gewenst)
   const TOUCH_THRESHOLD = 20;
   let extraScrollLock = false;
 
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
 
-    // 🟢 Afbeeldingscorrectie
+    // afbeeldings-correcties (zoals eerder)
     fixImageAlignment();
   }
 
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. Scrollfuncties
   // ========================
   function scrollToExtraContent() {
-    extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (extraContent) extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function scrollToLastBatch() {
@@ -145,38 +145,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 7. Scroll / toets / touch events
+  // 7. Scroll / toets / touch events (VERBETERDE wheel-logica)
   // ========================
+  // wheel accumulatie + drempel zodat harde/soft scrolls niet rijen overslaan
+  const WHEEL_THRESHOLD = 40; // pas aan indien je trackpad gevoeliger/gevoeliger wil
+  let wheelAccum = 0;
+  let wheelTimeout = null;
+
   window.addEventListener("wheel", e => {
-  const deltaY = e.deltaY;
+    const deltaY = e.deltaY;
+    if (!deltaY) return;
 
-  if (deltaY > 0) { // scroll down
-    // ✅ Nieuw: alleen doorgaan als we NIET op de laatste batch zitten
-    if (!atLastBatch()) {
-      e.preventDefault();
-      triggerStep("down");
-    } 
-    // ✅ En als we al op de laatste batch zijn, dan pas bij de VOLGENDE scroll
-    else if (index === products.length - batchSize) {
-      // doe eerst niks — gebruiker mag batch 3 rustig zien
-      index++; // markeer dat we hier al geweest zijn
-    } 
-    else {
-      e.preventDefault();
-      scrollToExtraContent();
-    }
-  } 
-  else if (deltaY < 0) { // scroll up
-    if (window.scrollY > section.offsetTop) {
-      e.preventDefault();
-      scrollToLastBatch();
-    } else {
-      e.preventDefault();
-      triggerStep("up");
-    }
-  }
-}, { passive: false });
+    // zorg dat we de default scroll blokkeren voor de product-sectie interactie
+    // (we willen volledige controle zodat er niet wordt ge-skippt)
+    e.preventDefault();
 
+    // update accumulator (trackpad levert veel kleine events)
+    wheelAccum += deltaY;
+
+    // reset accumulator kort na laatste wheel event (samengestelde gestures)
+    clearTimeout(wheelTimeout);
+    wheelTimeout = setTimeout(() => {
+      wheelAccum = 0;
+    }, 150);
+
+    // respecteer de lock (voorkom dubbele steps door momentum)
+    if (lock) return;
+
+    // wacht totdat we genoeg delta hebben verzameld
+    if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
+
+    // we hebben nu voldoende intentie om 1 stap te doen
+    const direction = wheelAccum > 0 ? "down" : "up";
+    wheelAccum = 0; // verbruik de intentie
+
+    if (direction === "down") {
+      // als er nog batches zijn -> ga 1 batch omlaag
+      if (index + batchSize < products.length) {
+        triggerStep("down");
+      } else {
+        // we staan op de laatste batch: 1 scroll gaat naar extra content
+        if (!extraScrollLock) {
+          // blok tijdelijk verdere scroll-acties
+          extraScrollLock = true;
+          lock = true; // ook lock zodat triggerStep niet kan triggerren tijdens scroll
+          scrollToExtraContent();
+          setTimeout(() => {
+            extraScrollLock = false;
+            lock = false;
+          }, LOCK_MS + 200);
+        }
+      }
+    } else { // direction === "up"
+      // als pagina al naar beneden gescrolled is (user in extraContent) -> terug naar laatste batch
+      if (window.scrollY > section.offsetTop) {
+        scrollToLastBatch();
+      } else {
+        // anders: ga 1 batch omhoog
+        triggerStep("up");
+      }
+    }
+  }, { passive: false });
+
+
+  // Pijltoetsen — blijven kort en simpel, gebruiken triggerStep die lock regelt
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowDown") {
       if (!atLastBatch()) triggerStep("down");
@@ -187,6 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+
+  // Touch-besturing (swipe)
   let touchStartY = null;
 
   section.addEventListener("touchstart", e => {
@@ -216,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 8. Afbeeldingscorrectie
+  // 8. Afbeeldingscorrectie (ongeveer jouw eerdere logica)
   // ========================
   function fixImageAlignment() {
     const images = grid.querySelectorAll("img");
@@ -229,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
       img.style.margin = "0";
       img.style.padding = "0";
 
-      // witruimte van transparante PNG’s vermijden
+      // optionele aspect-check (leave as cover)
       img.addEventListener("load", () => {
         const aspectRatio = img.naturalWidth / img.naturalHeight;
         if (aspectRatio < 0.5 || aspectRatio > 2) {
@@ -241,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 9. Eerste render met preload-fix
+  // 9. Eerste render met preload-fix (voorkomt afwijkende eerste rij)
   // ========================
   function preloadFirstBatch(callback) {
     const slice = products.slice(0, batchSize);
