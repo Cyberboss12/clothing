@@ -50,88 +50,59 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-  const grid = document.getElementById("productGrid");
   const section = document.getElementById("productSection");
+  const grid = document.getElementById("productGrid");
   const extraContent = document.getElementById("extraContent");
+
+  if (!section || !grid) {
+    console.error("❌ Fout: 'productSection' of 'productGrid' werd niet gevonden in de DOM.");
+    return;
+  }
 
   let index = 0;
   const batchSize = 4;
   let lock = false;
   const LOCK_MS = 600;
+  const TOUCH_THRESHOLD = 20;
+  let extraScrollLock = false;
+
 
   // ========================
-  // Functie: batch tonen
+  // 4. Batch weergave
   // ========================
   function showBatch(startIndex) {
     grid.innerHTML = "";
 
     const slice = products.slice(startIndex, startIndex + batchSize);
-    const loaders = slice.map(p => loadProduct(p));
-
-    Promise.all(loaders).then(elements => {
-      elements.forEach(el => grid.appendChild(el));
-      normalizeGridHeights();
-    });
-  }
-
-  // ========================
-  // Product maken + afbeelding laden
-  // ========================
-  function loadProduct(product) {
-    return new Promise(resolve => {
+    slice.forEach(p => {
       const div = document.createElement("div");
       div.className = "product";
 
-      const img = new Image();
-      img.src = product.img;
-      img.alt = product.label;
-      img.loading = "lazy";
-      img.onload = () => {
-        requestAnimationFrame(() => div.classList.add("loaded"));
-        resolve(div);
-      };
+      const content = p.link
+        ? `<a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
+             <img src="${p.img}" alt="${p.label}">
+             <div class="product-label">${p.label}</div>
+           </a>`
+        : `<img src="${p.img}" alt="${p.label}">
+           <div class="product-label">${p.label}</div>`;
 
-      const label = document.createElement("div");
-      label.className = "product-label";
-      label.textContent = product.label;
+      div.innerHTML = content;
+      grid.appendChild(div);
 
-      if (product.link) {
-        const a = document.createElement("a");
-        a.href = product.link;
-        a.style.display = "block";
-        a.appendChild(img);
-        a.appendChild(label);
-        div.appendChild(a);
-      } else {
-        div.appendChild(img);
-        div.appendChild(label);
-      }
-
-      resolve(div);
+      requestAnimationFrame(() => div.classList.add("loaded"));
     });
+
+    // 🟢 8. Afbeeldingscorrectie
+    fixImageAlignment();
   }
 
-  // ========================
-  // Hoogtes corrigeren per rij
-  // ========================
-  function normalizeGridHeights() {
-    const products = grid.querySelectorAll(".product");
-    if (!products.length) return;
-
-    // Reset
-    products.forEach(p => p.style.height = "");
-
-    // Gelijk maken
-    let maxHeight = 0;
-    products.forEach(p => maxHeight = Math.max(maxHeight, p.offsetHeight));
-    products.forEach(p => p.style.height = `${maxHeight}px`);
-  }
 
   // ========================
-  // Scrollgedrag
+  // 5. Navigatie (up/down)
   // ========================
   function triggerStep(direction) {
     if (lock) return;
+
     if (direction === "down" && index + batchSize < products.length) {
       index += batchSize;
       showBatch(index);
@@ -139,17 +110,127 @@ document.addEventListener("DOMContentLoaded", () => {
       index -= batchSize;
       showBatch(index);
     }
+
     lock = true;
     setTimeout(() => (lock = false), LOCK_MS);
   }
 
-  // Event listeners
+  function atLastBatch() {
+    return index >= products.length - batchSize;
+  }
+
+
+  // ========================
+  // 6. Scrollfuncties
+  // ========================
+  function scrollToExtraContent() {
+    extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function scrollToLastBatch() {
+    if (extraScrollLock) return;
+
+    index = products.length - batchSize;
+    showBatch(index);
+
+    const headerEl = document.getElementById("siteHeader");
+    const infoEl = document.getElementById("infoBar");
+    if (headerEl) headerEl.style.opacity = "1";
+    if (infoEl) infoEl.style.opacity = "1";
+
+    extraScrollLock = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => (extraScrollLock = false), 900);
+  }
+
+
+  // ========================
+  // 7. Scroll / toets / touch events
+  // ========================
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
-    if (deltaY > 0) triggerStep("down");
-    else triggerStep("up");
+
+    if (deltaY > 0) {
+      if (!atLastBatch()) {
+        e.preventDefault();
+        triggerStep("down");
+      } else {
+        e.preventDefault();
+        scrollToExtraContent();
+      }
+    } else if (deltaY < 0) {
+      if (window.scrollY > section.offsetTop) {
+        e.preventDefault();
+        scrollToLastBatch();
+      } else {
+        e.preventDefault();
+        triggerStep("up");
+      }
+    }
+  }, { passive: false });
+
+  window.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") {
+      if (!atLastBatch()) triggerStep("down");
+      else scrollToExtraContent();
+    } else if (e.key === "ArrowUp") {
+      if (window.scrollY > section.offsetTop) scrollToLastBatch();
+      else triggerStep("up");
+    }
+  });
+
+  let touchStartY = null;
+
+  section.addEventListener("touchstart", e => {
+    if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
   }, { passive: true });
 
-  // Init
+  section.addEventListener("touchmove", e => {
+    if (touchStartY === null) return;
+    const dy = touchStartY - e.touches[0].clientY;
+
+    if (dy > TOUCH_THRESHOLD) {
+      if (!atLastBatch()) triggerStep("down");
+      else scrollToExtraContent();
+      touchStartY = null;
+    } else if (dy < -TOUCH_THRESHOLD) {
+      if (window.scrollY > section.offsetTop) {
+        e.preventDefault();
+        scrollToLastBatch();
+      } else {
+        triggerStep("up");
+      }
+      touchStartY = null;
+    }
+  }, { passive: false });
+
+  section.addEventListener("touchend", () => { touchStartY = null; });
+
+
+  // ========================
+  // 8. Afbeeldingscorrectie
+  // ========================
+  function fixImageAlignment() {
+    const images = grid.querySelectorAll("img");
+    images.forEach(img => {
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "top";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.display = "block";
+      img.style.margin = "0";
+      img.style.padding = "0";
+
+      // witruimte van transparante PNG’s vermijden
+      img.addEventListener("load", () => {
+        const aspectRatio = img.naturalWidth / img.naturalHeight;
+        if (aspectRatio < 0.5 || aspectRatio > 2) {
+          img.style.objectFit = "cover";
+        }
+      });
+    });
+  }
+
+  // eerste render
   showBatch(index);
 });
