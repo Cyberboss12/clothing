@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
 
-    // 🟢 8. Afbeeldingscorrectie
+    // 🟢 Afbeeldingscorrectie
     fixImageAlignment();
   }
 
@@ -231,6 +231,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // eerste render
-  showBatch(index);
+
+  // ========================
+  // 9. Eerste render met preload-fix
+  // ========================
+  function preloadFirstBatch(callback) {
+    const slice = products.slice(0, batchSize);
+    let loaded = 0;
+    let done = false;
+
+    slice.forEach(p => {
+      const img = new Image();
+      img.src = p.img;
+      img.onload = img.onerror = () => {
+        loaded++;
+        if (!done && loaded === slice.length) {
+          done = true;
+          callback();
+        }
+      };
+    });
+
+    // fallback — als iets blijft hangen, toch na 3s tonen
+    setTimeout(() => {
+      if (!done) callback();
+    }, 3000);
+  }
+
+  // startpagina renderen zodra eerste batch geladen is
+  preloadFirstBatch(() => {
+    showBatch(index);
+  });
+
 });
