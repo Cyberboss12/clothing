@@ -91,9 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
-  }
 
-  showBatch(index);
+    // 🟢 8. Afbeeldingscorrectie
+    fixImageAlignment();
+  }
 
 
   // ========================
@@ -146,12 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 7. Scroll / toets / touch events
   // ========================
-
-  // Mouse wheel
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
 
-    if (deltaY > 0) { // scroll down
+    if (deltaY > 0) {
       if (!atLastBatch()) {
         e.preventDefault();
         triggerStep("down");
@@ -159,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         scrollToExtraContent();
       }
-    } else if (deltaY < 0) { // scroll up
+    } else if (deltaY < 0) {
       if (window.scrollY > section.offsetTop) {
         e.preventDefault();
         scrollToLastBatch();
@@ -170,8 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { passive: false });
 
-
-  // Pijltoetsen
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowDown") {
       if (!atLastBatch()) triggerStep("down");
@@ -182,8 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
-  // Touch-besturing
   let touchStartY = null;
 
   section.addEventListener("touchstart", e => {
@@ -194,11 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (touchStartY === null) return;
     const dy = touchStartY - e.touches[0].clientY;
 
-    if (dy > TOUCH_THRESHOLD) { // swipe up
+    if (dy > TOUCH_THRESHOLD) {
       if (!atLastBatch()) triggerStep("down");
       else scrollToExtraContent();
       touchStartY = null;
-    } else if (dy < -TOUCH_THRESHOLD) { // swipe down
+    } else if (dy < -TOUCH_THRESHOLD) {
       if (window.scrollY > section.offsetTop) {
         e.preventDefault();
         scrollToLastBatch();
@@ -211,4 +206,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   section.addEventListener("touchend", () => { touchStartY = null; });
 
+
+  // ========================
+  // 8. Afbeeldingscorrectie
+  // ========================
+  function fixImageAlignment() {
+    const images = grid.querySelectorAll("img");
+    images.forEach(img => {
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "top";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.display = "block";
+      img.style.margin = "0";
+      img.style.padding = "0";
+
+      // witruimte van transparante PNG’s vermijden
+      img.addEventListener("load", () => {
+        const aspectRatio = img.naturalWidth / img.naturalHeight;
+        if (aspectRatio < 0.5 || aspectRatio > 2) {
+          img.style.objectFit = "cover";
+        }
+      });
+    });
+  }
+
+  // eerste render
+  showBatch(index);
 });
