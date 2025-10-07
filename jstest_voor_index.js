@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model.jpg", label: "9" },
     { img: "afbeeldingen/model.jpg", label: "10" },
     { img: "afbeeldingen/model.jpg", label: "Discover" },
-    { img: "afbeeldingen/model.jpg", label: "Gifts" }
+    { img: "afbeeldingen/model_muur2.png", label: "Gifts" }
   ];
 
 
