@@ -148,26 +148,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // 7. Scroll / toets / touch events
   // ========================
   window.addEventListener("wheel", e => {
-    const deltaY = e.deltaY;
+  const deltaY = e.deltaY;
 
-    if (deltaY > 0) {
-      if (!atLastBatch()) {
-        e.preventDefault();
-        triggerStep("down");
-      } else {
-        e.preventDefault();
-        scrollToExtraContent();
-      }
-    } else if (deltaY < 0) {
-      if (window.scrollY > section.offsetTop) {
-        e.preventDefault();
-        scrollToLastBatch();
-      } else {
-        e.preventDefault();
-        triggerStep("up");
-      }
+  if (deltaY > 0) { // scroll down
+    // ✅ Nieuw: alleen doorgaan als we NIET op de laatste batch zitten
+    if (!atLastBatch()) {
+      e.preventDefault();
+      triggerStep("down");
+    } 
+    // ✅ En als we al op de laatste batch zijn, dan pas bij de VOLGENDE scroll
+    else if (index === products.length - batchSize) {
+      // doe eerst niks — gebruiker mag batch 3 rustig zien
+      index++; // markeer dat we hier al geweest zijn
+    } 
+    else {
+      e.preventDefault();
+      scrollToExtraContent();
     }
-  }, { passive: false });
+  } 
+  else if (deltaY < 0) { // scroll up
+    if (window.scrollY > section.offsetTop) {
+      e.preventDefault();
+      scrollToLastBatch();
+    } else {
+      e.preventDefault();
+      triggerStep("up");
+    }
+  }
+}, { passive: false });
 
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowDown") {
