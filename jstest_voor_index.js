@@ -50,10 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-  const section = document.getElementById("productSection");
+const section = document.getElementById("productSection");
   const grid = document.getElementById("productGrid");
   const extraContent = document.getElementById("extraContent");
-
   if (!section || !grid) {
     console.error("❌ Fout: 'productSection' of 'productGrid' werd niet gevonden in de DOM.");
     return;
@@ -62,22 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let index = 0;
   const batchSize = 4;
   let lock = false;
-  const LOCK_MS = 600;           // lock-tijd tussen stappen (aanpassen indien gewenst)
+  const LOCK_MS = 600;
   const TOUCH_THRESHOLD = 20;
   let extraScrollLock = false;
-
 
   // ========================
   // 4. Batch weergave
   // ========================
   function showBatch(startIndex) {
     grid.innerHTML = "";
-
     const slice = products.slice(startIndex, startIndex + batchSize);
     slice.forEach(p => {
       const div = document.createElement("div");
       div.className = "product";
-
       const content = p.link
         ? `<a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
              <img src="${p.img}" alt="${p.label}">
@@ -85,24 +81,19 @@ document.addEventListener("DOMContentLoaded", () => {
            </a>`
         : `<img src="${p.img}" alt="${p.label}">
            <div class="product-label">${p.label}</div>`;
-
       div.innerHTML = content;
       grid.appendChild(div);
-
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
-
-    // afbeeldings-correcties (zoals eerder)
     fixImageAlignment();
+    equalizeImageHeights();
   }
-
 
   // ========================
   // 5. Navigatie (up/down)
   // ========================
   function triggerStep(direction) {
     if (lock) return;
-
     if (direction === "down" && index + batchSize < products.length) {
       index += batchSize;
       showBatch(index);
@@ -110,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
       index -= batchSize;
       showBatch(index);
     }
-
     lock = true;
     setTimeout(() => (lock = false), LOCK_MS);
   }
@@ -118,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function atLastBatch() {
     return index >= products.length - batchSize;
   }
-
 
   // ========================
   // 6. Scrollfuncties
@@ -129,86 +118,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function scrollToLastBatch() {
     if (extraScrollLock) return;
-
     index = products.length - batchSize;
     showBatch(index);
-
     const headerEl = document.getElementById("siteHeader");
     const infoEl = document.getElementById("infoBar");
     if (headerEl) headerEl.style.opacity = "1";
     if (infoEl) infoEl.style.opacity = "1";
-
     extraScrollLock = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => (extraScrollLock = false), 900);
   }
 
-
   // ========================
-  // 7. Scroll / toets / touch events (VERBETERDE wheel-logica)
+  // 7. Scroll / toets / touch
   // ========================
-  // wheel accumulatie + drempel zodat harde/soft scrolls niet rijen overslaan
-  const WHEEL_THRESHOLD = 40; // pas aan indien je trackpad gevoeliger/gevoeliger wil
+  const WHEEL_THRESHOLD = 40;
   let wheelAccum = 0;
   let wheelTimeout = null;
 
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
     if (!deltaY) return;
-
-    // zorg dat we de default scroll blokkeren voor de product-sectie interactie
-    // (we willen volledige controle zodat er niet wordt ge-skippt)
     e.preventDefault();
-
-    // update accumulator (trackpad levert veel kleine events)
     wheelAccum += deltaY;
-
-    // reset accumulator kort na laatste wheel event (samengestelde gestures)
     clearTimeout(wheelTimeout);
     wheelTimeout = setTimeout(() => {
       wheelAccum = 0;
     }, 150);
-
-    // respecteer de lock (voorkom dubbele steps door momentum)
     if (lock) return;
-
-    // wacht totdat we genoeg delta hebben verzameld
     if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
-
-    // we hebben nu voldoende intentie om 1 stap te doen
     const direction = wheelAccum > 0 ? "down" : "up";
-    wheelAccum = 0; // verbruik de intentie
-
+    wheelAccum = 0;
     if (direction === "down") {
-      // als er nog batches zijn -> ga 1 batch omlaag
       if (index + batchSize < products.length) {
         triggerStep("down");
-      } else {
-        // we staan op de laatste batch: 1 scroll gaat naar extra content
-        if (!extraScrollLock) {
-          // blok tijdelijk verdere scroll-acties
-          extraScrollLock = true;
-          lock = true; // ook lock zodat triggerStep niet kan triggerren tijdens scroll
-          scrollToExtraContent();
-          setTimeout(() => {
-            extraScrollLock = false;
-            lock = false;
-          }, LOCK_MS + 200);
-        }
+      } else if (!extraScrollLock) {
+        extraScrollLock = true;
+        lock = true;
+        scrollToExtraContent();
+        setTimeout(() => {
+          extraScrollLock = false;
+          lock = false;
+        }, LOCK_MS + 200);
       }
-    } else { // direction === "up"
-      // als pagina al naar beneden gescrolled is (user in extraContent) -> terug naar laatste batch
+    } else {
       if (window.scrollY > section.offsetTop) {
         scrollToLastBatch();
       } else {
-        // anders: ga 1 batch omhoog
         triggerStep("up");
       }
     }
   }, { passive: false });
 
-
-  // Pijltoetsen — blijven kort en simpel, gebruiken triggerStep die lock regelt
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowDown") {
       if (!atLastBatch()) triggerStep("down");
@@ -219,18 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
-  // Touch-besturing (swipe)
   let touchStartY = null;
-
   section.addEventListener("touchstart", e => {
     if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
   }, { passive: true });
-
   section.addEventListener("touchmove", e => {
     if (touchStartY === null) return;
     const dy = touchStartY - e.touches[0].clientY;
-
     if (dy > TOUCH_THRESHOLD) {
       if (!atLastBatch()) triggerStep("down");
       else scrollToExtraContent();
@@ -245,12 +201,10 @@ document.addEventListener("DOMContentLoaded", () => {
       touchStartY = null;
     }
   }, { passive: false });
-
   section.addEventListener("touchend", () => { touchStartY = null; });
 
-
   // ========================
-  // 8. Afbeeldingscorrectie (ongeveer jouw eerdere logica)
+  // 8. Afbeeldingscorrectie
   // ========================
   function fixImageAlignment() {
     const images = grid.querySelectorAll("img");
@@ -262,8 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
       img.style.display = "block";
       img.style.margin = "0";
       img.style.padding = "0";
-
-      // optionele aspect-check (leave as cover)
       img.addEventListener("load", () => {
         const aspectRatio = img.naturalWidth / img.naturalHeight;
         if (aspectRatio < 0.5 || aspectRatio > 2) {
@@ -273,15 +225,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ========================
+  // 9. Gelijke hoogtes
+  // ========================
+  function equalizeImageHeights() {
+    const imgs = grid.querySelectorAll("img");
+    if (!imgs.length) return;
+    let minHeight = Infinity;
+    imgs.forEach(img => {
+      const h = img.naturalHeight || img.clientHeight;
+      if (h < minHeight) minHeight = h;
+    });
+    imgs.forEach(img => {
+      img.style.height = minHeight + "px";
+    });
+  }
 
   // ========================
-  // 9. Eerste render met preload-fix (voorkomt afwijkende eerste rij)
+  // 10. Eerste render met preload
   // ========================
   function preloadFirstBatch(callback) {
     const slice = products.slice(0, batchSize);
     let loaded = 0;
     let done = false;
-
     slice.forEach(p => {
       const img = new Image();
       img.src = p.img;
@@ -293,16 +259,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
     });
-
-    // fallback — als iets blijft hangen, toch na 3s tonen
     setTimeout(() => {
       if (!done) callback();
     }, 3000);
   }
 
-  // startpagina renderen zodra eerste batch geladen is
   preloadFirstBatch(() => {
     showBatch(index);
   });
-
 });
