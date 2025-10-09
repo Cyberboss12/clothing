@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-  const section = document.getElementById("productSection");
+   const section = document.getElementById("productSection");
   const grid = document.getElementById("productGrid");
   const extraContent = document.getElementById("extraContent");
 
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let index = 0;
   const batchSize = 4;
   let lock = false;
-  const LOCK_MS = 600;           // lock-tijd tussen stappen (aanpassen indien gewenst)
+  const LOCK_MS = 600;
   const TOUCH_THRESHOLD = 20;
   let extraScrollLock = false;
 
@@ -92,8 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
       requestAnimationFrame(() => div.classList.add("loaded"));
     });
 
-    // afbeeldings-correcties (zoals eerder)
+    // afbeeldingscorrecties en hoogte-gelijkmaker
     fixImageAlignment();
+    equalizeImageHeights();
   }
 
 
@@ -145,70 +146,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 7. Scroll / toets / touch events (VERBETERDE wheel-logica)
+  // 7. Scroll / toets / touch events
   // ========================
-  // wheel accumulatie + drempel zodat harde/soft scrolls niet rijen overslaan
-  const WHEEL_THRESHOLD = 40; // pas aan indien je trackpad gevoeliger/gevoeliger wil
+  const WHEEL_THRESHOLD = 40;
   let wheelAccum = 0;
   let wheelTimeout = null;
 
   window.addEventListener("wheel", e => {
     const deltaY = e.deltaY;
     if (!deltaY) return;
-
-    // zorg dat we de default scroll blokkeren voor de product-sectie interactie
-    // (we willen volledige controle zodat er niet wordt ge-skippt)
     e.preventDefault();
 
-    // update accumulator (trackpad levert veel kleine events)
     wheelAccum += deltaY;
-
-    // reset accumulator kort na laatste wheel event (samengestelde gestures)
     clearTimeout(wheelTimeout);
-    wheelTimeout = setTimeout(() => {
-      wheelAccum = 0;
-    }, 150);
+    wheelTimeout = setTimeout(() => (wheelAccum = 0), 150);
 
-    // respecteer de lock (voorkom dubbele steps door momentum)
     if (lock) return;
-
-    // wacht totdat we genoeg delta hebben verzameld
     if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
 
-    // we hebben nu voldoende intentie om 1 stap te doen
     const direction = wheelAccum > 0 ? "down" : "up";
-    wheelAccum = 0; // verbruik de intentie
+    wheelAccum = 0;
 
     if (direction === "down") {
-      // als er nog batches zijn -> ga 1 batch omlaag
       if (index + batchSize < products.length) {
         triggerStep("down");
-      } else {
-        // we staan op de laatste batch: 1 scroll gaat naar extra content
-        if (!extraScrollLock) {
-          // blok tijdelijk verdere scroll-acties
-          extraScrollLock = true;
-          lock = true; // ook lock zodat triggerStep niet kan triggerren tijdens scroll
-          scrollToExtraContent();
-          setTimeout(() => {
-            extraScrollLock = false;
-            lock = false;
-          }, LOCK_MS + 200);
-        }
+      } else if (!extraScrollLock) {
+        extraScrollLock = true;
+        lock = true;
+        scrollToExtraContent();
+        setTimeout(() => {
+          extraScrollLock = false;
+          lock = false;
+        }, LOCK_MS + 200);
       }
-    } else { // direction === "up"
-      // als pagina al naar beneden gescrolled is (user in extraContent) -> terug naar laatste batch
-      if (window.scrollY > section.offsetTop) {
-        scrollToLastBatch();
-      } else {
-        // anders: ga 1 batch omhoog
-        triggerStep("up");
-      }
+    } else {
+      if (window.scrollY > section.offsetTop) scrollToLastBatch();
+      else triggerStep("up");
     }
   }, { passive: false });
 
 
-  // Pijltoetsen — blijven kort en simpel, gebruiken triggerStep die lock regelt
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowDown") {
       if (!atLastBatch()) triggerStep("down");
@@ -220,9 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  // Touch-besturing (swipe)
   let touchStartY = null;
-
   section.addEventListener("touchstart", e => {
     if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
   }, { passive: true });
@@ -239,9 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.scrollY > section.offsetTop) {
         e.preventDefault();
         scrollToLastBatch();
-      } else {
-        triggerStep("up");
-      }
+      } else triggerStep("up");
       touchStartY = null;
     }
   }, { passive: false });
@@ -250,32 +223,94 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // ========================
-  // 8. Afbeeldingscorrectie (ongeveer jouw eerdere logica)
+  // 8. Hulpfuncties voor afbeeldingen
   // ========================
+  function waitForImagesInGrid(timeout = 3000) {
+    const imgs = Array.from(grid.querySelectorAll("img"));
+    if (!imgs.length) return Promise.resolve();
+
+    return new Promise(resolve => {
+      let completed = 0;
+      let done = false;
+      function checkDone() {
+        if (done) return;
+        completed++;
+        if (completed >= imgs.length) {
+          done = true;
+          resolve();
+        }
+      }
+      imgs.forEach(img => {
+        if (img.complete) checkDone();
+        else {
+          img.addEventListener("load", checkDone, { once: true });
+          img.addEventListener("error", checkDone, { once: true });
+        }
+      });
+      setTimeout(() => { if (!done) resolve(); }, timeout);
+    });
+  }
+
+  function debounce(fn, wait = 120) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
   function fixImageAlignment() {
     const images = grid.querySelectorAll("img");
     images.forEach(img => {
       img.style.objectFit = "cover";
-      img.style.objectPosition = "top";
+      img.style.objectPosition = "top center";
+      img.style.display = "block";
       img.style.width = "100%";
       img.style.height = "100%";
-      img.style.display = "block";
       img.style.margin = "0";
       img.style.padding = "0";
-
-      // optionele aspect-check (leave as cover)
-      img.addEventListener("load", () => {
-        const aspectRatio = img.naturalWidth / img.naturalHeight;
-        if (aspectRatio < 0.5 || aspectRatio > 2) {
-          img.style.objectFit = "cover";
-        }
-      });
     });
   }
 
+  function equalizeImageHeights(columns = 4) {
+    waitForImagesInGrid().then(() => {
+      const productEls = Array.from(grid.querySelectorAll(".product"));
+      if (!productEls.length) return;
+
+      productEls.forEach(p => { p.style.height = ""; });
+      const total = productEls.length;
+      const rows = Math.ceil(total / columns);
+      const rowsToFix = Math.min(2, rows);
+
+      for (let r = 0; r < rowsToFix; r++) {
+        const start = r * columns;
+        const rowItems = productEls.slice(start, start + columns);
+
+        let maxH = 0;
+        rowItems.forEach(item => {
+          const rect = item.getBoundingClientRect();
+          if (rect.height > maxH) maxH = rect.height;
+        });
+
+        if (!maxH || maxH < 10) continue;
+        rowItems.forEach(item => {
+          item.style.height = `${Math.round(maxH)}px`;
+        });
+      }
+    });
+  }
+
+  const recomputeRowsDebounced = debounce(() => {
+    const productEls = Array.from(grid.querySelectorAll(".product"));
+    productEls.forEach(p => { p.style.height = ""; });
+    equalizeImageHeights();
+  }, 150);
+
+  window.addEventListener("resize", recomputeRowsDebounced);
+
 
   // ========================
-  // 9. Eerste render met preload-fix (voorkomt afwijkende eerste rij)
+  // 9. Eerste render (preload-fix)
   // ========================
   function preloadFirstBatch(callback) {
     const slice = products.slice(0, batchSize);
@@ -294,13 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     });
 
-    // fallback — als iets blijft hangen, toch na 3s tonen
-    setTimeout(() => {
-      if (!done) callback();
-    }, 3000);
+    setTimeout(() => { if (!done) callback(); }, 3000);
   }
 
-  // startpagina renderen zodra eerste batch geladen is
   preloadFirstBatch(() => {
     showBatch(index);
   });
