@@ -219,7 +219,7 @@ body.has-info-bar .black-line {
 
 .info-center {
   position: absolute;
-  left: 50%;
+  left: 45%;
   transform: translateX(-50%);
 
   /* nieuw */
@@ -511,7 +511,7 @@ body.has-pinned-bar {
   display: flex;
   flex-direction: row;            /* woorden naast elkaar */
   flex-wrap: wrap;                /* breken als scherm te klein is */
-  gap: 100px;                      /* extra spacing tussen de woorden */
+  gap: 130px;                      /* extra spacing tussen de woorden */
   justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
   width: 100%;                    /* neemt volledige breedte */
@@ -526,6 +526,11 @@ body.has-pinned-bar {
   font-size: 1.5rem;              /* iets groter voor balans */
   transition: color 0.2s ease, transform 0.15s ease;
 }
+
+.menu-grid a:first-child {
+  margin-left: 25px; /* pas dit getal aan naar wens */
+}
+
 .menu-grid a:hover {
   color: #C3A580;
   transform: translateY(-3px);
