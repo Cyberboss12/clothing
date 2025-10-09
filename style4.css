@@ -219,7 +219,7 @@ body.has-info-bar .black-line {
 
 .info-center {
   position: absolute;
-  left: 45%;
+  left: 48%;
   transform: translateX(-50%);
 
   /* nieuw */
@@ -515,7 +515,7 @@ body.has-pinned-bar {
   justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
   width: 100%;                    /* neemt volledige breedte */
-  max-width: 980px;               /* niet breder dan 980px */
+  max-width: 1400px;               /* niet breder dan 980px */
 }
 
 .menu-grid a {
@@ -523,7 +523,7 @@ body.has-pinned-bar {
   background-color: transparent;
   color: whitesmoke;
   text-decoration: none;
-  font-size: 1.5rem;              /* iets groter voor balans */
+  font-size: 1.1rem;              /* iets groter voor balans */
   transition: color 0.2s ease, transform 0.15s ease;
 }
 
