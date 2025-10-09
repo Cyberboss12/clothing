@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mijn Eerste Website</title>
+  <link rel="stylesheet" href="style5.css" />
+</head>
+<body>
+
+<div class="info-bar" id="infoBar">
+  <div class="info-left"></div>
+  <div class="info-center" id="infoMessage">Welkom bij onze webshop!</div>
+  <div class="info-right">
+    <button class="close-btn" id="closeInfoBar">&times;</button>
+    <!-- <a href="#">Contact</a>
+    <a href="#">Help</a> -->
+  </div>
+</div>
+
+
+<section class="fullscreen-section">
+  <img src="afbeeldingen/strandpalen.jpg" alt="Eerste afbeelding">
+
+<div class="top-overlay">
+  <div class="switch-item active">Merknaam</div>
+  <div class="switch-item"><img src="afbeeldingen/testlogo_no bg.png" alt="Logo" class="logo"></div>
+</div>
+
+  <!-- HIER komt de hamburger -->
+  <div id="hamburgerMenu" class="hamburger-menu">
+    <div class="hamburger-icon">
+      <span></span><span></span><span></span>
+    </div>
+    <span class="menu-text">Menu</span>
+  </div>
+
+<!-- Hover-balk -->
+<!-- <div class="menu-hover-bar"></div> -->
+</section>
+
+<div class="white-bar"></div>
+<div class="black-line"></div> <!-- nieuwe zwarte lijn -->
+
+<!-- Uitklapbaar menu overlay -->
+<div id="menuOverlay" class="menu-overlay" aria-hidden="true">
+  <nav class="menu-grid" role="navigation" aria-label="Hoofdmenu">
+    <a href="men.html">Men</a>
+    <a href="women.html">Women</a>
+    <a href="children.html">Children</a>
+    <a href="gifts.html">Gifts</a>
+    <a href="contact.html">Contact</a>
+    <a href="discover.html">Discover</a>
+  </nav>
+</div>
+
+<script src="script5.js"></script>
+</body>
+</html>

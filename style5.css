@@ -1,27 +1,156 @@
 /* 1: Algemene styling */
 body {
-    font-family: 'Special Elite';
+    font-family: 'Backerville Old Face';
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
     color: #333;
 }
 
-/* Header styling */
-header {
-    color: #333;
-    padding: 40px 20px;
-    text-align: left;
-    margin-bottom: 40px;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;    /* voorkom horizontale scroll */
+  overflow-y: auto;      /* laat scrollen toe wanneer nodig */
+  -ms-overflow-style: none;   /* IE 10+ */
+  scrollbar-width: none;      /* Firefox */
 }
 
-header h1 {
-    margin-bottom: 20px;
+/* WebKit (Chrome, Safari, Edge) — verberg de zichtbare balk door width 0 */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
-header p {
-    margin: 0;
-} */
+/* ===== Fullscreen sections (zorg dat ze exact 100vh zijn) ===== */
+section,
+.fullscreen-section {
+  width: 100%;
+  height: 100vh;          /* precies 1 viewport */
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  position: relative;
+}
+
+section img,
+.fullscreen-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+}
+
+.top-overlay {
+  position: absolute;
+  top: 25px;             /* altijd dezelfde afstand van bovenkant */
+  left: 50%;
+  /* transform: translateX(-50%); */
+  align-items: center;
+  text-align: center;
+  color: black;
+  z-index: 3000;
+  max-width: 90%;
+}
+
+/* Tekststijl */
+.top-overlay h1 {
+  /* font-size: 2,5rem;  */
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
+}
+
+/* Fade in/out effect */
+.top-overlay .switch-item {
+  display: flex;              /* tekst of logo in een flexbox */
+  align-items: center;        /* verticaal centreren */
+  justify-content: center;    /* horizontaal centreren */
+  font-size: 2.3rem;
+  font-family: "Baskerville Old Face";
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.top-overlay .switch-item.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.top-overlay .switch-item img {
+  height: 1.5rem; /* zelfde hoogte als tekst */
+  width: auto;
+}
+
+.top-overlay .switch-item img.logo {
+  margin-top: -18px;
+  height: 30px;   /* pas aan naar wens */
+  width: auto;    /* behoud verhoudingen */
+}
+
+/* Split-grid layout (3 gelijke vakken naast elkaar) */
+.split-grid .vak {
+  position: relative;      /* nodig voor overlay */
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Subtiel hover-effect voor HELE vak (afbeelding + tekst) */
+.split-grid .vak:hover {
+  transform: scale(1.02); /* iets subtieler springen */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* Afbeelding stabiel */
+.split-grid .vak img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Tekst-overlay container */
+.split-grid .vak .text-overlay {
+  position: absolute;
+  bottom: 40px;  /* iets hoger */
+  left: 20px;
+  color: white;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hoofdtekst */
+.split-grid .vak .overlay-title {
+  font-size: 1.8rem;
+  margin: 0 0 45px 0; /* 20px afstand tot bijtekst */
+  line-height: 1.3;   /* extra ruimte tussen regels */
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Bijtekst */
+.split-grid .vak .overlay-subtitle {
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.4;   /* iets luchtiger */
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+
+/* Hier moest de header styling komen: */
 
 /* Main content styling */
 main {
@@ -36,7 +165,7 @@ main h2 {
 
 main p {
     margin-bottom: 20px;
-} */
+} 
 
 /* Button styling */
 button {
@@ -52,14 +181,19 @@ button {
 
 button:hover {
     background-color: #555;
-} */
+} 
 
 /* Footer styling  */
 footer {
-    text-align: left;
     padding: 20px;
     color: #333;
     margin-top: 40px;
+    height: 200px;
+    background-color: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 2: Bovenste info-balk */
@@ -67,18 +201,35 @@ footer {
   width: 100%;
   background-color: #C3A580;
   color: white;
-  padding: 8px 20px;
+  /* padding: -3px 20px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-sizing: border-box;
-  position: relative;
+  position: absolute;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 70;
+}
+
+body.has-info-bar .white-bar {
+  top: var(--info-bar-height, 50px);
+}
+body.has-info-bar .black-line {
+  top: calc(var(--info-bar-height, 50px) + 50px);
 }
 
 .info-center {
   position: absolute;
-  left: 50%;
+  left: 45%;
   transform: translateX(-50%);
+
+  /* nieuw */
+  flex: 1;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+.info-center.hidden {
+  opacity: 0;
 }
 
 .info-right {
@@ -187,33 +338,19 @@ nav ul li a:hover {
   position: relative;
 }
 
-/* Hover onderstreping */
-.navbar li a::after {
-  content: "";
-  position: absolute;
-  bottom: 5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #C3A580;
-  transition: width 0.3s ease;
-}
-
-.navbar li a:hover::after {
-  width: 100%;
-}
 
 /* Dropdown inhoud */
 .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
+  display: none; 
+  position: fixed;
+  top: 100px;
   left: 0;
   width: 100vw;
   background-color: #333;
   padding: 40px 80px;
   box-sizing: border-box;
   border-top: 1px solid #444;
+  overflow-x: hidden;
 }
 
 /* Toon dropdown bij hover */
@@ -285,4 +422,217 @@ nav ul li a:hover {
 
 .block-2 {
   background-color: #777;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.close-btn:hover {
+  color: #222; /* contrast bij hover */
+}
+
+.info-bar.hidden {
+  display: none;
+}
+
+
+/* -------- Hamburger (positie en stijl) -------- */
+.hamburger-menu {
+  font-family: 'Baskerville Old Face';
+  position: absolute;
+  top: 15px;
+  left: 75px;                       /* niet te ver links */
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 3000;                       /* hoog genoeg t.o.v. hero/info-bar */
+  cursor: pointer;
+  color: black;
+  font-size: 1rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+/* icon (3 lijnen) */
+.hamburger-icon {
+  width: 28px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hamburger-icon span {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background-color: black;
+  transition: transform 0.33s ease, opacity 0.2s ease;
+}
+
+/* tekst 'Menu' */
+.menu-text {
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+/* ---- Overlay (50vh) ---- */
+.menu-overlay {
+  position: fixed;
+  top: calc(var(--whitebar-total-height, 53px));
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background: rgba(255,255,255,0.95);
+  overflow-y: auto;
+  display: none;
+  z-index: 40;
+  transition: opacity 0.3s ease;
+ 
+}
+
+/* Open state */
+.menu-overlay.menu-open {
+  display: block;
+}
+
+body.has-pinned-bar {
+  padding-top: var(--whitebar-total-height, 53px);
+}
+
+/* Menu inhoud */
+.menu-grid {
+  display: flex;
+  flex-direction: row;            /* woorden naast elkaar */
+  flex-wrap: wrap;                /* breken als scherm te klein is */
+  gap: 130px;                      /* extra spacing tussen de woorden */
+  justify-content: flex-start;        /* gecentreerd op breedte */
+  align-items: flex-start;        /* bovenaan uitgelijnd */
+  width: 100%;                    /* neemt volledige breedte */
+  max-width: 980px;               /* niet breder dan 980px */
+}
+
+.menu-grid a {
+  font-family: 'Baskerville Old Face', serif;
+  background-color: transparent;
+  color: whitesmoke;
+  text-decoration: none;
+  font-size: 1.5rem;              /* iets groter voor balans */
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.menu-grid a:first-child {
+  margin-left: 25px; /* pas dit getal aan naar wens */
+}
+
+.menu-grid a:hover {
+  color: #C3A580;
+  transform: translateY(-3px);
+}
+
+/* Witte hover-balk onder de info-bar */
+.menu-hover-bar {
+  position: absolute;
+  top: 0; /* komt bovenaan */
+  left: 0;
+  width: 100%;
+  height: 10px; /* zelfde hoogte als info-bar, evt. aanpassen */
+  background-color: white;
+  opacity: 0;
+  pointer-events: none; /* zodat je er niet op klikt */
+  transition: opacity 0.3s ease;
+  z-index: 2; /* lager dan top-overlay (zodat tekst erboven blijft) */
+}
+
+/* ---- Hamburger -> kruis animatie wanneer actief ---- */
+.hamburger-menu.is-active .hamburger-icon span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger-menu.is-active .hamburger-icon span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.5);
+}
+.hamburger-menu.is-active .hamburger-icon span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+
+/* Kleine responsive aanpassing (mobiel) */
+/* @media (max-width: 480px) {
+  .hamburger-menu { left: 14px; font-size: 0.95rem; }
+  .menu-grid { grid-template-columns: 1fr; gap: 12px; }
+  .menu-grid a { font-size: 1.15rem; }
+} */
+
+.white-bar {
+  position: absolute;
+  top: var(--info-bar-height); /* altijd onder de info-bar */
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  transition: opacity 0.22s ease, top 0.2s ease;
+  z-index: 80; /* lager dan menu/tekst */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.white-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: center;
+  margin: 0 auto ;
+  padding: 0 25px;
+
+  /* position: static; */
+  /* position: relative; */
+}
+
+/* Zwarte lijn daar net boven */
+.black-line {
+  position: absolute;
+  top: calc(var(--info-bar-height) + var(--white-bar-height));
+  width: 100%;
+  height: 3px;
+  background: #000;
+  transition: opacity 0.22s ease, top 0.2s ease;
+  z-index: 49; /* nog steeds onder de tekst, maar boven white-bar */
+}
+/* zichtbaar maken via JS */
+.white-bar.visible,
+.black-line.visible {
+  display: block !important;
+}
+
+.white-bar.pinned {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* display: block; */
+  z-index: 70;
+}
+
+.black-line.pinned {
+  position: fixed;
+  top: var(--whitebar-height, 50px);
+  left: 0;
+  /* display: block; */
+  z-index: 69;
+}
+
+.white-bar .top-overlay {
+  position: static !important;
+  /* top: auto !important; */
+  justify-content: center;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
