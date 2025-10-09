@@ -510,7 +510,7 @@ body.has-pinned-bar {
 .menu-grid {
   display: flex;
   flex-direction: row;            /* woorden naast elkaar */
-  flex-wrap: wrap;                /* breken als scherm te klein is */
+  flex-wrap: nowrap;                /* breken als scherm te klein is */
   gap: 100px;                      /* extra spacing tussen de woorden */
   justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
