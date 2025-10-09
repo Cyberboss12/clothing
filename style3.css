@@ -219,7 +219,7 @@ body.has-info-bar .black-line {
 
 .info-center {
   position: absolute;
-  left: 50%;
+  left: 25%;
   transform: translateX(-50%);
 
   /* nieuw */
