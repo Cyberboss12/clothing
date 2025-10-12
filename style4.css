@@ -541,7 +541,7 @@ body.has-pinned-bar {
   position: absolute;
   top: 0; /* komt bovenaan */
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 10px; /* zelfde hoogte als info-bar, evt. aanpassen */
   background-color: white;
   opacity: 0;
