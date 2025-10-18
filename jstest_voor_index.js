@@ -50,28 +50,35 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-   const grid = document.getElementById("productGrid");
-  const batches = ["batch-one", "batch-two", "batch-three"];
+  const grid = document.getElementById("productGrid");
+  const batches = [
+    "batch-one",
+    "batch-two",
+    "batch-three"
+  ];
   let currentBatch = 0;
   let isAnimating = false;
 
   // ========================
-  // 4. Batches tonen
+  // 4. Batch tonen
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
     if (index === 0) {
-      // Alleen linkerhelft
-      grid.appendChild(createProduct(products[0]));
-      grid.appendChild(document.createElement("div")); // lege rechterkant
+      // batch 1: 2 links/rechts
+      for (let i = 0; i < 2; i++) {
+        grid.appendChild(createProduct(products[i]));
+      }
     } else if (index === 1) {
-      // Alleen rechterhelft
-      grid.appendChild(document.createElement("div")); // lege linkerkant
-      grid.appendChild(createProduct(products[1]));
+      // batch 2: 2 omgekeerd
+      const left = createProduct(products[2]); left.classList.add("reverse-2");
+      const right = createProduct(products[3]); right.classList.add("reverse-1");
+      grid.appendChild(left);
+      grid.appendChild(right);
     } else {
-      // Vier gelijke blokken
+      // batch 3: 4 in het midden
       for (let i = 4; i < 8; i++) {
         grid.appendChild(createProduct(products[i]));
       }
@@ -81,7 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function createProduct(p) {
     const div = document.createElement("div");
     div.className = "product";
-    div.innerHTML = `<img src="${p.img}" alt="${p.label}">`;
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.label}">
+      <div class="product-label">${p.label}</div>
+    `;
     return div;
   }
 
@@ -92,12 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isAnimating) return;
     e.preventDefault();
 
-    if (e.deltaY > 0 && currentBatch < batches.length - 1) {
-      currentBatch++;
-      animateTransition();
-    } else if (e.deltaY < 0 && currentBatch > 0) {
-      currentBatch--;
-      animateTransition();
+    if (e.deltaY > 0) {
+      // naar beneden scroll
+      if (currentBatch < batches.length - 1) {
+        currentBatch++;
+        animateTransition();
+      }
+    } else if (e.deltaY < 0) {
+      // naar boven scroll
+      if (currentBatch > 0) {
+        currentBatch--;
+        animateTransition();
+      }
     }
   }, { passive: false });
 
@@ -115,4 +131,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // 6. Eerste render
   // ========================
   showBatch(currentBatch);
+
 });
