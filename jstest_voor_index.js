@@ -50,290 +50,86 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   // 3. Grid-elementen
   // ========================
-   const section = document.getElementById("productSection");
   const grid = document.getElementById("productGrid");
-  const extraContent = document.getElementById("extraContent");
-
-  if (!section || !grid) {
-    console.error("❌ Fout: 'productSection' of 'productGrid' werd niet gevonden in de DOM.");
-    return;
-  }
-
-  let index = 0;
-  const batchSize = 4;
-  let lock = false;
-  const LOCK_MS = 600;
-  const TOUCH_THRESHOLD = 20;
-  let extraScrollLock = false;
-
+  const batches = [
+    "batch-one",
+    "batch-two",
+    "batch-three"
+  ];
+  let currentBatch = 0;
+  let isAnimating = false;
 
   // ========================
-  // 4. Batch weergave
+  // 4. Batch tonen
   // ========================
-  function showBatch(startIndex) {
+  function showBatch(index) {
+    grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
-    const slice = products.slice(startIndex, startIndex + batchSize);
-    slice.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "product";
-
-      const content = p.link
-        ? `<a href="${p.link}" style="display:block;text-decoration:none;color:inherit;">
-             <img src="${p.img}" alt="${p.label}">
-             <div class="product-label">${p.label}</div>
-           </a>`
-        : `<img src="${p.img}" alt="${p.label}">
-           <div class="product-label">${p.label}</div>`;
-
-      div.innerHTML = content;
-      grid.appendChild(div);
-
-      requestAnimationFrame(() => div.classList.add("loaded"));
-    });
-
-    // afbeeldingscorrecties en hoogte-gelijkmaker
-    fixImageAlignment();
-    equalizeImageHeights();
-  }
-
-
-  // ========================
-  // 5. Navigatie (up/down)
-  // ========================
-  function triggerStep(direction) {
-    if (lock) return;
-
-    if (direction === "down" && index + batchSize < products.length) {
-      index += batchSize;
-      showBatch(index);
-    } else if (direction === "up" && index - batchSize >= 0) {
-      index -= batchSize;
-      showBatch(index);
+    if (index === 0) {
+      // batch 1: 2 links/rechts
+      for (let i = 0; i < 2; i++) {
+        grid.appendChild(createProduct(products[i]));
+      }
+    } else if (index === 1) {
+      // batch 2: 2 omgekeerd
+      const left = createProduct(products[2]); left.classList.add("reverse-2");
+      const right = createProduct(products[3]); right.classList.add("reverse-1");
+      grid.appendChild(left);
+      grid.appendChild(right);
+    } else {
+      // batch 3: 4 in het midden
+      for (let i = 4; i < 8; i++) {
+        grid.appendChild(createProduct(products[i]));
+      }
     }
-
-    lock = true;
-    setTimeout(() => (lock = false), LOCK_MS);
   }
 
-  function atLastBatch() {
-    return index >= products.length - batchSize;
+  function createProduct(p) {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.label}">
+      <div class="product-label">${p.label}</div>
+    `;
+    return div;
   }
 
-
   // ========================
-  // 6. Scrollfuncties
+  // 5. Scroll functionaliteit
   // ========================
-  function scrollToExtraContent() {
-    if (extraContent) extraContent.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function scrollToLastBatch() {
-    if (extraScrollLock) return;
-
-    index = products.length - batchSize;
-    showBatch(index);
-
-    const headerEl = document.getElementById("siteHeader");
-    const infoEl = document.getElementById("infoBar");
-    if (headerEl) headerEl.style.opacity = "1";
-    if (infoEl) infoEl.style.opacity = "1";
-
-    extraScrollLock = true;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => (extraScrollLock = false), 900);
-  }
-
-
-  // ========================
-  // 7. Scroll / toets / touch events
-  // ========================
-  const WHEEL_THRESHOLD = 40;
-  let wheelAccum = 0;
-  let wheelTimeout = null;
-
   window.addEventListener("wheel", e => {
-    const deltaY = e.deltaY;
-    if (!deltaY) return;
+    if (isAnimating) return;
     e.preventDefault();
 
-    wheelAccum += deltaY;
-    clearTimeout(wheelTimeout);
-    wheelTimeout = setTimeout(() => (wheelAccum = 0), 150);
-
-    if (lock) return;
-    if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
-
-    const direction = wheelAccum > 0 ? "down" : "up";
-    wheelAccum = 0;
-
-    if (direction === "down") {
-      if (index + batchSize < products.length) {
-        triggerStep("down");
-      } else if (!extraScrollLock) {
-        extraScrollLock = true;
-        lock = true;
-        scrollToExtraContent();
-        setTimeout(() => {
-          extraScrollLock = false;
-          lock = false;
-        }, LOCK_MS + 200);
+    if (e.deltaY > 0) {
+      // naar beneden scroll
+      if (currentBatch < batches.length - 1) {
+        currentBatch++;
+        animateTransition();
       }
-    } else {
-      if (window.scrollY > section.offsetTop) scrollToLastBatch();
-      else triggerStep("up");
+    } else if (e.deltaY < 0) {
+      // naar boven scroll
+      if (currentBatch > 0) {
+        currentBatch--;
+        animateTransition();
+      }
     }
   }, { passive: false });
 
-
-  window.addEventListener("keydown", e => {
-    if (e.key === "ArrowDown") {
-      if (!atLastBatch()) triggerStep("down");
-      else scrollToExtraContent();
-    } else if (e.key === "ArrowUp") {
-      if (window.scrollY > section.offsetTop) scrollToLastBatch();
-      else triggerStep("up");
-    }
-  });
-
-
-  let touchStartY = null;
-  section.addEventListener("touchstart", e => {
-    if (e.touches && e.touches[0]) touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-
-  section.addEventListener("touchmove", e => {
-    if (touchStartY === null) return;
-    const dy = touchStartY - e.touches[0].clientY;
-
-    if (dy > TOUCH_THRESHOLD) {
-      if (!atLastBatch()) triggerStep("down");
-      else scrollToExtraContent();
-      touchStartY = null;
-    } else if (dy < -TOUCH_THRESHOLD) {
-      if (window.scrollY > section.offsetTop) {
-        e.preventDefault();
-        scrollToLastBatch();
-      } else triggerStep("up");
-      touchStartY = null;
-    }
-  }, { passive: false });
-
-  section.addEventListener("touchend", () => { touchStartY = null; });
-
+  function animateTransition() {
+    isAnimating = true;
+    grid.style.opacity = 0;
+    setTimeout(() => {
+      showBatch(currentBatch);
+      grid.style.opacity = 1;
+      isAnimating = false;
+    }, 500);
+  }
 
   // ========================
-  // 8. Hulpfuncties voor afbeeldingen
+  // 6. Eerste render
   // ========================
-  function waitForImagesInGrid(timeout = 3000) {
-    const imgs = Array.from(grid.querySelectorAll("img"));
-    if (!imgs.length) return Promise.resolve();
-
-    return new Promise(resolve => {
-      let completed = 0;
-      let done = false;
-      function checkDone() {
-        if (done) return;
-        completed++;
-        if (completed >= imgs.length) {
-          done = true;
-          resolve();
-        }
-      }
-      imgs.forEach(img => {
-        if (img.complete) checkDone();
-        else {
-          img.addEventListener("load", checkDone, { once: true });
-          img.addEventListener("error", checkDone, { once: true });
-        }
-      });
-      setTimeout(() => { if (!done) resolve(); }, timeout);
-    });
-  }
-
-  function debounce(fn, wait = 120) {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, args), wait);
-    };
-  }
-
-  function fixImageAlignment() {
-    const images = grid.querySelectorAll("img");
-    images.forEach(img => {
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "top center";
-      img.style.display = "block";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.margin = "0";
-      img.style.padding = "0";
-    });
-  }
-
-  function equalizeImageHeights(columns = 4) {
-    waitForImagesInGrid().then(() => {
-      const productEls = Array.from(grid.querySelectorAll(".product"));
-      if (!productEls.length) return;
-
-      productEls.forEach(p => { p.style.height = ""; });
-      const total = productEls.length;
-      const rows = Math.ceil(total / columns);
-      const rowsToFix = Math.min(2, rows);
-
-      for (let r = 0; r < rowsToFix; r++) {
-        const start = r * columns;
-        const rowItems = productEls.slice(start, start + columns);
-
-        let maxH = 0;
-        rowItems.forEach(item => {
-          const rect = item.getBoundingClientRect();
-          if (rect.height > maxH) maxH = rect.height;
-        });
-
-        if (!maxH || maxH < 10) continue;
-        rowItems.forEach(item => {
-          item.style.height = `${Math.round(maxH)}px`;
-        });
-      }
-    });
-  }
-
-  const recomputeRowsDebounced = debounce(() => {
-    const productEls = Array.from(grid.querySelectorAll(".product"));
-    productEls.forEach(p => { p.style.height = ""; });
-    equalizeImageHeights();
-  }, 150);
-
-  window.addEventListener("resize", recomputeRowsDebounced);
-
-
-  // ========================
-  // 9. Eerste render (preload-fix)
-  // ========================
-  function preloadFirstBatch(callback) {
-    const slice = products.slice(0, batchSize);
-    let loaded = 0;
-    let done = false;
-
-    slice.forEach(p => {
-      const img = new Image();
-      img.src = p.img;
-      img.onload = img.onerror = () => {
-        loaded++;
-        if (!done && loaded === slice.length) {
-          done = true;
-          callback();
-        }
-      };
-    });
-
-    setTimeout(() => { if (!done) callback(); }, 3000);
-  }
-
-  preloadFirstBatch(() => {
-    showBatch(index);
-  });
+  showBatch(currentBatch);
 
 });

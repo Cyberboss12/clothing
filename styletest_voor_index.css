@@ -1,418 +1,169 @@
 /* 1: Algemene styling */
 body {
-    font-family: 'Special Elite';
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    overflow-x: hidden;
-    overflow-y: auto;
+  font-family: 'Special Elite', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  overflow: hidden;
 }
 
-/* Hier moest de header styling komen: */
-
-header {
-  height: 57px;
-  padding: 40px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  color: #222;
-}
-
-header h1 {
-  font-size: 2rem;
-}
-
-/* Main content styling */
-main {
-    padding: 0 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-main h2 {
-    margin-bottom: 20px;
-}
-
-main p {
-    margin-bottom: 20px;
-} 
-
-/* Button styling */
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #555;
-} 
-
-/* Footer styling  */
-footer {
-    padding: 20px;
-    color: #333;
-    margin-top: 40px;
-    height: 200px;
-    background-color: #222;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 2: Bovenste info-balk */
 .info-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  background-color: #C3A580;
+  background: black;
   color: white;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  position: relative;
-  height: 41px;
+  text-align: center;
+  padding: 10px 0;
+  z-index: 10;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
 .info-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-
-  /* nieuw */
-  flex: 1;
-  text-align: center;
   transition: opacity 0.5s ease;
 }
 
-.info-center.hidden {
-  opacity: 0;
-}
+/* ========================================
+   Productsectie
+======================================== */
 
-.info-right {
-  display: flex;
-  gap: 80px; 
-  align-items: center;
-}
-
-/* 3: Hoofdnavigatie */
- .topbar {
-  z-index: 10;
-} 
-
-.navbar li a {
-  color: #C3A580;
-  text-decoration: none;
-  font-size: 16px;
+#productSection {
   position: relative;
-  padding: 5px 0;
-  transition: color 0.3s ease;
-}
-
-/* Hover effect met onderstreep */
-.navbar li a::after {
-  content: "";
-  position: absolute;
-  width: 0%;
-  height: 2px;
-  bottom: -3px;
-  left: 0;
-  background-color: #C3A580;
-  transition: width 0.3s ease;
-}
-
-.navbar li a:hover::after {
   width: 100%;
+  height: 100vh;
+  margin-top: 40px; /* ruimte onder info-bar */
+  overflow: hidden;
 }
 
-/* Actieve link */
-.navbar li a.active {
-  font-weight: bold;
+.grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
 }
 
-/* Navigatiebalk */
-nav {
-  background-color: #333;
+/* ========================================
+   Batch 1: twee kolommen (links/rechts)
+======================================== */
+
+.batch-one {
+  grid-template-columns: 50% 50%;
 }
 
-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-nav ul li {
+.batch-one .product {
   position: relative;
+  overflow: hidden;
 }
 
-nav ul li a {
-  display: block;
-  padding: 14px 20px;
+.batch-one .product img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.batch-one .product .product-label {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  font-size: 2rem;
   color: white;
-  text-decoration: none;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
-nav ul li a:hover {
-  background-color: #555;
+/* ========================================
+   Batch 2: omgekeerd (rechts/links)
+======================================== */
+
+.batch-two {
+  grid-template-columns: 50% 50%;
 }
 
-/* 4: Dropdown menu men */
-.main-navbar {
-  background-color: #333;
+.batch-two .product {
   position: relative;
-  z-index: 10;
-  width: 100%;
+  overflow: hidden;
 }
 
-/* Navigatielinks */
-.navbar {
-  list-style: none;
+.batch-two .reverse-1 {
+  grid-column: 2;
+}
+.batch-two .reverse-2 {
+  grid-column: 1;
+}
+
+.batch-two img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.batch-two .product-label {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  font-size: 2rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* ========================================
+   Batch 3: vier gelijke blokken in het midden
+======================================== */
+
+.batch-three {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 0;
-  gap: 40px;
-}
-
-.navbar li {
-  position: relative;
-}
-
-.navbar li a {
-  color: #C3A580;
-  text-decoration: none;
-  font-size: 16px;
-  padding: 15px 10px;
-  display: inline-block;
-  position: relative;
-}
-
-/* Hover onderstreping */
-.navbar li a::after {
-  content: "";
-  position: absolute;
-  bottom: 5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #C3A580;
-  transition: width 0.3s ease;
-}
-
-.navbar li a:hover::after {
-  width: 100%;
-}
-
-/* Dropdown inhoud */
-.dropdown-content {
-  display: none; 
-  position: fixed;
-  top: 100px;
-  left: 0;
-  width: 100vw;
-  background-color: #333;
-  padding: 40px 80px;
-  box-sizing: border-box;
-  border-top: 1px solid #444;
-  overflow-x: hidden;
-}
-
-/* De vorige wijzigingen
-display: none;
-position: absolute;
-overflow-x: hidden;
-top: 100%; */
-
-/* Toon dropdown bij hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Dropdown layout */
-.dropdown-inner {
-  display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.dropdown-left {
-  flex: 1;
-}
-
-.dropdown-left ul {
-  list-style: none;
-  padding: 0;
-}
-
-.dropdown-left li {
-  margin-bottom: 15px;
-}
-
-.dropdown-left a {
-  color: #fff;
-  font-size: 16px;
-  text-decoration: none;
-  display: inline-block;
-  position: relative;
-}
-
-.dropdown-left a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #fff;
-  transition: width 0.3s ease;
-}
-
-.dropdown-left a:hover::after {
-  width: 100%;
-}
-
-.dropdown-right {
-  display: flex;
   gap: 20px;
 }
 
-.color-block {
-  width: 200px;
-  height: 250px;
+.batch-three .product {
+  width: 20%;
+  aspect-ratio: 1/1;
+  position: relative;
+  overflow: hidden;
+}
+
+.batch-three .product img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.batch-three .product .product-label {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* ========================================
+   Extra content en footer
+======================================== */
+
+#extraContent {
+  height: 120vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: white;
-}
-
-.block-1 {
-  background-color: #333;
-}
-
-.block-2 {
-  background-color: #777;
-}
-
-/* Beginnen met de infinite scroll 4-koloms productgrid: */
-
-/* SECTION met custom scroll gedrag */
-#productSection {
-  height: auto;
-  overflow: hidden;         /* interne scroll verbergen */
-  position: relative;
-  touch-action: none;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  width: 100vw;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Grid container */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 500px; 
-  gap: 0;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  border: 2px solid red; /* tijdelijk, voor debug */
-  align-items: start;     /* bovenaan uitlijnen */
-}
-
-/* Individuele productvakjes */
-.product { 
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;  /* bovenaan uitlijnen */
-  justify-content: center;  /* horizontaal centreren */
-  position: relative;
-  overflow: hidden;
-
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 300ms ease, transform 300ms ease; 
-}
-
-.product.loaded {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Afbeeldingen */
-.product img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;      /* bijsnijden indien nodig */
-  object-position: top;   /* altijd uitgelijnd vanaf de bovenkant */
-  display: block;
-}
-
-/* Klikbare link rondom afbeelding */
-.product a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Label onder afbeelding */
-.product-label {
-  width: 100%;
-  text-align: center;
-  font-size: 1.7rem;
-  margin-top: 8px;
-  font-family: Arial, sans-serif;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-/* Eventueel extra tekst onder label */
-.product h3 {
-  margin: 10px 0 5px;
+  background: #f8f8f8;
+  color: #444;
   font-size: 1.1rem;
 }
 
-.product p {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Exit animations (voor vloeiend wisselen van batches) */
-.product.exit-up {
-  transform: translateY(-20px);
-  opacity: 0;
-  transition: transform 300ms ease, opacity 300ms ease;
-}
-
-.product.exit-down {
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform 300ms ease, opacity 300ms ease;
-}
-
-/* Extra content direct na productSection */
-#extraContent {
-  padding-top: 5px;       
-  height: 100vh;
-  background-color: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background: black;
+  color: white;
 }
