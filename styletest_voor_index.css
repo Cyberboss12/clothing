@@ -12,13 +12,17 @@ body {
   top: 0;
   left: 0;
   width: 100%;
+  height: 40px;            /* vaste hoogte */
+  line-height: 40px;       /* vertical centering */
   background: black;
   color: white;
   text-align: center;
-  padding: 10px 0;
   z-index: 10;
   font-size: 1rem;
   letter-spacing: 0.5px;
+  padding: 0 10px;         /* horizontale padding blijft, geen verticale padding */
+  overflow: hidden;        /* voorkomt dat langere teksten de hoogte verhogen */
+  white-space: nowrap;      /* voorkomt dat tekst naar meerdere regels gaat */
 }
 
 .info-center {
