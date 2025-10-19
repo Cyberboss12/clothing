@@ -1,6 +1,6 @@
 /* 1: Algemene styling */
 body {
-  font-family: 'Special Elite', sans-serif;
+  font-family: 'Baskerville Old Face';
   margin: 0;
   padding: 0;
   color: #333;
@@ -76,7 +76,6 @@ body {
   display: none;
 }
 
-
 .batch-one .product .product-label {
   position: absolute;
   bottom: 10%;
@@ -86,6 +85,18 @@ body {
   background: rgba(0, 0, 0, 0.5);
   padding: 6px 12px;
   border-radius: 8px;
+}
+
+/* Rechterkant: onzichtbaar tekstvak */
+.batch-one .placeholder {
+  grid-column: 2;
+  display: flex;                /* Flexbox voor centreren */
+  align-items: center;          /* Verticaal centreren */
+  justify-content: center;      /* Horizontaal centreren */
+  height: 100%;
+  width: 100%;
+  visibility: hidden;           /* onzichtbaar, maar neemt ruimte in */
+  /* background: rgba(0,0,0,0.1);  optioneel voor debug */
 }
 
 /* ========================================
