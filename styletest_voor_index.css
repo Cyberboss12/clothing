@@ -41,6 +41,14 @@ body {
   overflow: hidden;
 }
 
+.product a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
 .grid {
   display: grid;
   width: 100%;
