@@ -107,6 +107,12 @@ body {
   /* background: rgba(0,0,0,0.1);  optioneel voor debug */
 }
 
+.batch-one .placeholder span {
+  text-align: center;
+  font-size: 1.5rem;
+  color: transparent;           /* maakt de tekst onzichtbaar */
+}
+
 /* ========================================
    Batch 2: omgekeerd (rechts/links)
 ======================================== */
