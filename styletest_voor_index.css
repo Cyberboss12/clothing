@@ -85,12 +85,21 @@ body {
 
 /* Rechterkant: placeholder */
 .batch-one .placeholder {
+  grid-column: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
-  visibility: hidden; /* neemt ruimte in, maar onzichtbaar */
+  background: transparent;
+  /* visibility: hidden; neemt ruimte in, maar onzichtbaar */
+  color: black;
+}
+
+.batch-one .placeholder span {
+  text-align: center;
+  font-size: 1.5rem;
+  opacity: 0.8;            /* subtiel zichtbaar */
 }
 
 /* ========== BATCH 2 ========== */
