@@ -82,23 +82,23 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(createProduct(products[0]));
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
+      placeholder.innerHTML = `<span>MERKNAAM</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
+      placeholder.innerHTML = `<span>MERKNAAM</span>`;
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
 
     } else if (index === 2) {
-      for (let i = 4; i < 8; i++) {
+      for (let i = 2; i < 6; i++) {
         grid.appendChild(createProduct(products[i]));
       }
 
     } else if (index === 3) {
-      const full = createProduct(products[8]);
+      const full = createProduct(products[7]);
       full.classList.add("full-view");
       grid.appendChild(full);
     }
@@ -113,7 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.deltaY < 0) {
       if (currentBatch > 0) currentBatch--;
     }
+
+    if (currentBatch !== prevBatch) {
     animateTransition();
+    }
   }, { passive: false });
 
   function animateTransition() {

@@ -101,13 +101,14 @@ body {
   justify-content: center;
   height: 100%;
   width: 100%;
-  visibility: hidden;
+  /* visibility: hidden; */
+  background-color: black;
 }
 
 .batch-one .placeholder span {
   text-align: center;
-  font-size: 1.5rem;
-  color: transparent;
+  font-size: 3rem;
+  color: black;
 }
 
 /* ========================================
@@ -156,13 +157,14 @@ body {
   justify-content: center;
   height: 100%;
   width: 100%;
-  visibility: hidden;
+  /* visibility: hidden; */
+  background-color: black;
 }
 
 .batch-two .placeholder span {
   text-align: center;
-  font-size: 1.5rem;
-  color: transparent;
+  font-size: 3rem;
+  color: black;
 }
 
 /* ========================================
