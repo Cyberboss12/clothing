@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } else if (index === 1) {
       const placeholder = document.createElement("div");
-      placeholder.className = "placeholder";
+      placeholder.className = "placeholder placeholder-left";
       placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
