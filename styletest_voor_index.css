@@ -7,7 +7,6 @@ body {
   overflow: hidden;
 }
 
-/* ========== INFO-BAR ========== */
 .info-bar {
   position: fixed;
   top: 0;
@@ -18,9 +17,10 @@ body {
   background: black;
   color: white;
   text-align: center;
-  z-index: 1000;
+  z-index: 10;
   font-size: 1rem;
   letter-spacing: 0.5px;
+  padding: 0 10px;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -29,13 +29,23 @@ body {
   transition: opacity 0.5s ease;
 }
 
-/* ========== PRODUCTSECTIE ========== */
+/* ========================================
+   Productsectie
+======================================== */
+
 #productSection {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  margin-top: 40px; /* zorgt dat de info-bar niet overlapt */
+}
+
+.product a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
 .grid {
@@ -45,8 +55,12 @@ body {
   transition: all 0.6s ease-in-out;
 }
 
-/* ========== BATCH 1 ========== */
+/* ========================================
+   Batch 1: linker product + rechter placeholder
+======================================== */
+
 .batch-one {
+  display: grid;
   grid-template-columns: 50% 50%;
 }
 
@@ -59,17 +73,14 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-.batch-one .product a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  z-index: 2;
+.batch-one .product:first-child {
+  grid-column: 1;
+}
+
+.batch-one .product:last-child {
+  display: none;
 }
 
 .batch-one .product .product-label {
@@ -83,7 +94,6 @@ body {
   border-radius: 8px;
 }
 
-/* Rechterkant: placeholder */
 .batch-one .placeholder {
   grid-column: 2;
   display: flex;
@@ -91,26 +101,35 @@ body {
   justify-content: center;
   height: 100%;
   width: 100%;
-  background: transparent;
-  /* visibility: hidden; neemt ruimte in, maar onzichtbaar */
-  color: black;
+  visibility: hidden;
 }
 
 .batch-one .placeholder span {
   text-align: center;
-  font-size: 3rem;
-  opacity: 0.8;            /* subtiel zichtbaar */
+  font-size: 1.5rem;
+  color: transparent;
 }
 
-/* ========== BATCH 2 ========== */
+/* ========================================
+   Batch 2: rechter product + linker placeholder
+======================================== */
+
 .batch-two {
+  display: grid;
   grid-template-columns: 50% 50%;
 }
 
-.batch-two .product,
-.batch-two .placeholder {
+.batch-two .product {
   position: relative;
   overflow: hidden;
+}
+
+.batch-two .product:first-child {
+  display: none;
+}
+
+.batch-two .product:last-child {
+  grid-column: 2;
 }
 
 .batch-two img {
@@ -130,7 +149,26 @@ body {
   border-radius: 8px;
 }
 
-/* ========== BATCH 3 ========== */
+.batch-two .placeholder {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  visibility: hidden;
+}
+
+.batch-two .placeholder span {
+  text-align: center;
+  font-size: 1.5rem;
+  color: transparent;
+}
+
+/* ========================================
+   Batch 3: vier gelijke blokken in het midden
+======================================== */
+
 .batch-three {
   display: flex;
   align-items: center;
@@ -140,12 +178,12 @@ body {
 
 .batch-three .product {
   width: 20%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1/1;
   position: relative;
   overflow: hidden;
 }
 
-.batch-three img {
+.batch-three .product img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -158,12 +196,48 @@ body {
   transform: translateX(-50%);
   font-size: 1.2rem;
   color: white;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0,0,0,0.6);
   padding: 4px 10px;
   border-radius: 8px;
 }
 
-/* ========== EXTRA CONTENT & FOOTER ========== */
+/* ========================================
+   Batch 4: fullscreen afbeelding
+======================================== */
+
+.batch-four {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.batch-four .product.full-view {
+  width: 100%;
+  height: 100vh;
+}
+
+.batch-four .product.full-view img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.batch-four .product .product-label {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: white;
+  background: rgba(0,0,0,0.5);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* ========================================
+   Extra content en footer
+======================================== */
+
 #extraContent {
   height: 120vh;
   display: flex;

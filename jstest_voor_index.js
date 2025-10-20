@@ -46,39 +46,34 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model_muur2.png", label: "Gifts" }
   ];
 
- const grid = document.getElementById("productGrid");
-  const batches = ["batch-one", "batch-two", "batch-three"];
+  const grid = document.getElementById("productGrid");
+  const batches = ["batch-one", "batch-two", "batch-three", "batch-four"];
   let currentBatch = 0;
   let isAnimating = false;
 
-
-  // ========================
-  // 3. PRODUCTAANMAAK
-  // ========================
+  // 4. Helper product div (klikbare links)
   function createProduct(p) {
     const div = document.createElement("div");
     div.className = "product";
-
-    if (p.link) {
-      div.innerHTML = `
-        <a href="${p.link}">
+    if (p.img) {
+      if (p.link) {
+        div.innerHTML = `
+          <a href="${p.link}">
+            <img src="${p.img}" alt="${p.label}">
+            <div class="product-label">${p.label}</div>
+          </a>
+        `;
+      } else {
+        div.innerHTML = `
           <img src="${p.img}" alt="${p.label}">
           <div class="product-label">${p.label}</div>
-        </a>
-      `;
-    } else {
-      div.innerHTML = `
-        <img src="${p.img}" alt="${p.label}">
-        <div class="product-label">${p.label}</div>
-      `;
+        `;
+      }
     }
     return div;
   }
 
-
-  // ========================
-  // 4. BATCH WEERGAVE
-  // ========================
+  // 5. Batch tonen
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
@@ -87,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(createProduct(products[0]));
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>MERKNAAM</span>`;
+      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
@@ -97,28 +92,28 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
 
-    } else {
-      for (let i = 2; i < 7; i++) {
+    } else if (index === 2) {
+      for (let i = 4; i < 8; i++) {
         grid.appendChild(createProduct(products[i]));
       }
+
+    } else if (index === 3) {
+      const full = createProduct(products[8]);
+      full.classList.add("full-view");
+      grid.appendChild(full);
     }
   }
 
-
-  // ========================
-  // 5. SCROLL ANIMATIE
-  // ========================
+  // 6. Scroll functionaliteit
   window.addEventListener("wheel", e => {
     if (isAnimating) return;
     e.preventDefault();
-
-    if (e.deltaY > 0 && currentBatch < batches.length - 1) {
-      currentBatch++;
-      animateTransition();
-    } else if (e.deltaY < 0 && currentBatch > 0) {
-      currentBatch--;
-      animateTransition();
+    if (e.deltaY > 0) {
+      if (currentBatch < batches.length - 1) currentBatch++;
+    } else if (e.deltaY < 0) {
+      if (currentBatch > 0) currentBatch--;
     }
+    animateTransition();
   }, { passive: false });
 
   function animateTransition() {
@@ -131,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // Eerste render
+  // 7. Eerste render
   showBatch(currentBatch);
+
 });
