@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(createProduct(products[0]));
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
+      placeholder.innerHTML = `<span>MERKNAAM</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
