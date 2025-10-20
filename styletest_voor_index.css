@@ -7,46 +7,35 @@ body {
   overflow: hidden;
 }
 
+/* ========== INFO-BAR ========== */
 .info-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 40px;            /* vaste hoogte */
-  line-height: 40px;       /* vertical centering */
+  height: 40px;
+  line-height: 40px;
   background: black;
   color: white;
   text-align: center;
-  z-index: 10;
+  z-index: 1000;
   font-size: 1rem;
   letter-spacing: 0.5px;
-  padding: 0 10px;         /* horizontale padding blijft, geen verticale padding */
-  overflow: hidden;        /* voorkomt dat langere teksten de hoogte verhogen */
-  white-space: nowrap;      /* voorkomt dat tekst naar meerdere regels gaat */
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .info-center {
   transition: opacity 0.5s ease;
 }
 
-/* ========================================
-   Productsectie
-======================================== */
-
+/* ========== PRODUCTSECTIE ========== */
 #productSection {
   position: relative;
   width: 100%;
   height: 100vh;
-  /* margin-top: 40px; */
   overflow: hidden;
-}
-
-.product a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
+  margin-top: 40px; /* zorgt dat de info-bar niet overlapt */
 }
 
 .grid {
@@ -56,12 +45,8 @@ body {
   transition: all 0.6s ease-in-out;
 }
 
-/* ========================================
-   Batch 1: twee kolommen (links/rechts)
-======================================== */
-
+/* ========== BATCH 1 ========== */
 .batch-one {
-  display: grid;
   grid-template-columns: 50% 50%;
 }
 
@@ -74,14 +59,17 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.batch-one .product:first-child {
-  grid-column: 1;
-}
-
-.batch-one .product:last-child {
-  display: none;
+.batch-one .product a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 2;
 }
 
 .batch-one .product .product-label {
@@ -95,44 +83,25 @@ body {
   border-radius: 8px;
 }
 
-/* Rechterkant: onzichtbaar tekstvak */
+/* Rechterkant: placeholder */
 .batch-one .placeholder {
-  grid-column: 2;
-  display: flex;                /* Flexbox voor centreren */
-  align-items: center;          /* Verticaal centreren */
-  justify-content: center;      /* Horizontaal centreren */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
-  visibility: hidden;           /* onzichtbaar, maar neemt ruimte in */
-  /* background: rgba(0,0,0,0.1);  optioneel voor debug */
+  visibility: hidden; /* neemt ruimte in, maar onzichtbaar */
 }
 
-.batch-one .placeholder span {
-  text-align: center;
-  font-size: 1.5rem;
-  color: transparent;           /* maakt de tekst onzichtbaar */
-}
-
-/* ========================================
-   Batch 2: omgekeerd (rechts/links)
-======================================== */
-
+/* ========== BATCH 2 ========== */
 .batch-two {
-  display: grid;
   grid-template-columns: 50% 50%;
 }
 
-.batch-two .product {
+.batch-two .product,
+.batch-two .placeholder {
   position: relative;
   overflow: hidden;
-}
-
-.batch-two .product:first-child {
-  display: none;
-}
-
-.batch-two .product:last-child {
-  grid-column: 2;
 }
 
 .batch-two img {
@@ -152,10 +121,7 @@ body {
   border-radius: 8px;
 }
 
-/* ========================================
-   Batch 3: vier gelijke blokken in het midden
-======================================== */
-
+/* ========== BATCH 3 ========== */
 .batch-three {
   display: flex;
   align-items: center;
@@ -165,12 +131,12 @@ body {
 
 .batch-three .product {
   width: 20%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   position: relative;
   overflow: hidden;
 }
 
-.batch-three .product img {
+.batch-three img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -188,10 +154,7 @@ body {
   border-radius: 8px;
 }
 
-/* ========================================
-   Extra content en footer
-======================================== */
-
+/* ========== EXTRA CONTENT & FOOTER ========== */
 #extraContent {
   height: 120vh;
   display: flex;

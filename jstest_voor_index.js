@@ -46,91 +46,78 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model_muur2.png", label: "Gifts" }
   ];
 
-
-  // ========================
-  // 3. Grid-elementen
-  // ========================
  const grid = document.getElementById("productGrid");
   const batches = ["batch-one", "batch-two", "batch-three"];
   let currentBatch = 0;
   let isAnimating = false;
 
+
   // ========================
-  // 4. Helper om product div te maken (klikbare links)
+  // 3. PRODUCTAANMAAK
   // ========================
   function createProduct(p) {
     const div = document.createElement("div");
     div.className = "product";
 
-    if (p.img) {
-      if (p.link) {
-        div.innerHTML = `
-          <a href="${p.link}">
-            <img src="${p.img}" alt="${p.label}">
-            <div class="product-label">${p.label}</div>
-          </a>
-        `;
-      } else {
-        div.innerHTML = `
+    if (p.link) {
+      div.innerHTML = `
+        <a href="${p.link}">
           <img src="${p.img}" alt="${p.label}">
           <div class="product-label">${p.label}</div>
-        `;
-      }
+        </a>
+      `;
+    } else {
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.label}">
+        <div class="product-label">${p.label}</div>
+      `;
     }
-
     return div;
   }
 
+
   // ========================
-  // 5. Batch tonen
+  // 4. BATCH WEERGAVE
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
     if (index === 0) {
-      // Batch 1: linker product + rechter placeholder
       grid.appendChild(createProduct(products[0]));
-
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
       placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
-      // Batch 2: rechter product + linker placeholder
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
       placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
-
       grid.appendChild(createProduct(products[1]));
 
     } else {
-      // Batch 3: vier producten in het midden
       for (let i = 4; i < 8; i++) {
         grid.appendChild(createProduct(products[i]));
       }
     }
   }
 
+
   // ========================
-  // 6. Scroll functionaliteit
+  // 5. SCROLL ANIMATIE
   // ========================
   window.addEventListener("wheel", e => {
     if (isAnimating) return;
     e.preventDefault();
 
-    if (e.deltaY > 0) {
-      if (currentBatch < batches.length - 1) {
-        currentBatch++;
-        animateTransition();
-      }
-    } else if (e.deltaY < 0) {
-      if (currentBatch > 0) {
-        currentBatch--;
-        animateTransition();
-      }
+    if (e.deltaY > 0 && currentBatch < batches.length - 1) {
+      currentBatch++;
+      animateTransition();
+    } else if (e.deltaY < 0 && currentBatch > 0) {
+      currentBatch--;
+      animateTransition();
     }
   }, { passive: false });
 
@@ -144,9 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // ========================
-  // 7. Eerste render
-  // ========================
+  // Eerste render
   showBatch(currentBatch);
-
 });
