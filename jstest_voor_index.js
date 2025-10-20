@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(createProduct(products[1]));
 
     } else {
-      for (let i = 4; i < 8; i++) {
+      for (let i = 2; i < 5; i++) {
         grid.appendChild(createProduct(products[i]));
       }
     }
