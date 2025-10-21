@@ -47,7 +47,13 @@ body {
   padding: 0;
   border: none;
   line-height: 40px;
-  font-size: 2.5rem;
+}
+
+#textBar #textMessage {
+  font-family: 'Baskerville Old Face';   /* Kies je gewenste font */
+  font-size: 3rem;               /* Pas de tekstgrootte aan */
+  font-weight: 500;                /* Iets vetter voor zichtbaarheid */
+  letter-spacing: 0.5px;           /* Optioneel, geeft wat ruimte tussen letters */
 }
 
 /* ========================================
