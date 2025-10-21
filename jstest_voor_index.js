@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Boodschappen info-bar
   // ========================
   const messages = [
-    "Welkom bij onze webshop!",
+    "Welcome to my world",
     "Gratis verzending vanaf €50",
-    "Vandaag: 10% korting op alle tassen",
-    "Nieuw binnen: lente collectie 🌸",
+    "10% off on your first order",
+    "New fall collection",
     "Sign up to recieve 15% off on your next order!",
     "Free shipping on orders above €150",
     "Sign up to our community newsletter!"
@@ -61,27 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const textBar = document.getElementById("textBar");
   const textMessage = document.getElementById("textMessage");
 
-  const textMessages = [
-    "Bekijk onze accessoires en unieke producten 👜",
-    "Laat je inspireren door onze nieuwste collectie ✨",
-    "Alles voor jouw perfecte look 💎"
-  ];
+  const textMessages = "MERKNAAM";
 
   let textIndex = 0;
-
-  function rotateTextMessage() {
-    if (textBar.style.opacity === "1") { // alleen roteren als zichtbaar
-      textMessage.classList.add('hidden');
-      setTimeout(() => {
-        textIndex = (textIndex + 1) % textMessages.length;
-        textMessage.textContent = textMessages[textIndex];
-        textMessage.classList.remove('hidden');
-      }, 400);
-    }
-  }
-
-  setInterval(rotateTextMessage, 5000);
-
 
   // ========================
   // 5. Helper om product div te maken (klikbare links)
@@ -128,23 +110,23 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(createProduct(products[0]));
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
+      placeholder.innerHTML = `<span>MERKNAAM</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
+      placeholder.innerHTML = `<span>MERKNAAM</span>`;
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
 
     } else if (index === 2) {
-      for (let i = 4; i < 8; i++) {
+      for (let i = 2; i < 6; i++) {
         grid.appendChild(createProduct(products[i]));
       }
 
     } else if (index === 3) {
-      const full = createProduct(products[11]);
+      const full = createProduct(products[7]);
       full.style.gridColumn = "1 / -1";
       grid.appendChild(full);
     }
