@@ -202,12 +202,12 @@ body {
 
 .batch-three {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);  /* 2 kolommen */
-  grid-template-rows: repeat(2, auto);    /* 2 rijen */
-  gap: 20px;                              /* ruimte tussen afbeeldingen */
-  justify-content: center;
-  align-content: center;
-  height: 100vh;                          /* vult hele scherm */
+  grid-template-columns: repeat(2, 1fr);   /* 2 kolommen */
+  grid-template-rows: repeat(2, 1fr);      /* 2 rijen, even groot */
+  gap: 20px;                               /* wat meer ademruimte */
+  justify-items: center;
+  align-items: center;
+  height: 100vh;
   padding: 40px;
   box-sizing: border-box;
 }
@@ -216,7 +216,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   /* width: 20%; */
   /* aspect-ratio: 1/1; */
   /* position: relative; */
@@ -238,7 +238,7 @@ body {
   /* transform: translateX(-50%); */
   margin-top: 10px;
   font-size: 1.2rem;
-  color: white;
+  color: black;
   font-family: 'Baskerville Old Face';
   /* background: rgba(0,0,0,0.6); */
   /* padding: 4px 10px; */
@@ -255,6 +255,7 @@ body {
   height: 100vh;
   align-items: center;
   justify-content: center;
+  margin-top: 60px;
 }
 
 .batch-four .product.full-view {
