@@ -140,53 +140,6 @@ body {
   color: black;
 }
 
-/* === Hamburger menu in batch 1 === */
-.batch-one .menu-container {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  z-index: 5;
-}
-
-.batch-one .hamburger {
-  width: 24px;
-  height: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.batch-one .hamburger span {
-  display: block;
-  height: 3px;
-  width: 100%;
-  background-color: white;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-/* Optioneel: effect bij hover */
-.batch-one .menu-container:hover .hamburger span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.batch-one .menu-container:hover .hamburger span:nth-child(2) {
-  opacity: 0;
-}
-.batch-one .menu-container:hover .hamburger span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-.batch-one .menu-text {
-  color: white;
-  font-size: 1.2rem;
-  letter-spacing: 0.5px;
-  font-family: 'Baskerville Old Face';
-}
-
 /* ========================================
    Batch 2: rechter product + linker placeholder
 ======================================== */
