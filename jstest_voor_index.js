@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 3. Grid-elementen
   // ========================
   const grid = document.getElementById("productGrid");
-  const batches = ["batch-one", "batch-two", "batch-three"];
+  const batches = ["batch-one", "batch-two", "batch-three", "batch-four"];
   let currentBatch = 0;
   let isAnimating = false;
 
@@ -61,37 +61,48 @@ document.addEventListener("DOMContentLoaded", () => {
     const div = document.createElement("div");
     div.className = "product";
 
-    if (p.img) {
-      if (batch === 3) {
-        // Batch 3: tekst onder de afbeelding
-        if (p.link) {
-          div.innerHTML = `
-            <a href="${p.link}">
-              <img src="${p.img}" alt="${p.label}">
-            </a>
-            <div class="product-label">${p.label}</div>
-          `;
-        } else {
-          div.innerHTML = `
+    if (batch === 3) {
+      // Batch 3: tekst onder afbeelding
+      if (p.link) {
+        div.innerHTML = `
+          <a href="${p.link}">
             <img src="${p.img}" alt="${p.label}">
-            <div class="product-label">${p.label}</div>
-          `;
-        }
+          </a>
+          <div class="product-label">${p.label}</div>
+        `;
       } else {
-        // Batch 1 & 2: tekst in de afbeelding
-        if (p.link) {
-          div.innerHTML = `
-            <a href="${p.link}">
-              <img src="${p.img}" alt="${p.label}">
-              <div class="product-label">${p.label}</div>
-            </a>
-          `;
-        } else {
-          div.innerHTML = `
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.label}">
+          <div class="product-label">${p.label}</div>
+        `;
+      }
+    } else if (batch === 4) {
+      // Batch 4: één grote afbeelding
+      if (p.link) {
+        div.innerHTML = `
+          <a href="${p.link}">
+            <img src="${p.img}" alt="${p.label}">
+          </a>
+        `;
+      } else {
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.label}">
+        `;
+      }
+    } else {
+      // Batch 1 & 2: tekst in afbeelding
+      if (p.link) {
+        div.innerHTML = `
+          <a href="${p.link}">
             <img src="${p.img}" alt="${p.label}">
             <div class="product-label">${p.label}</div>
-          `;
-        }
+          </a>
+        `;
+      } else {
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.label}">
+          <div class="product-label">${p.label}</div>
+        `;
       }
     }
 
@@ -105,29 +116,37 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
-    if (index === 0) {
-      // Batch 1: linker product + rechter placeholder
-      grid.appendChild(createProduct(products[0], 1));
+    switch(index) {
+      case 0:
+        // Batch 1: linker product + rechter placeholder
+        grid.appendChild(createProduct(products[0], 1));
+        const placeholder1 = document.createElement("div");
+        placeholder1.className = "placeholder";
+        placeholder1.innerHTML = `<span>Hier kan tekst komen</span>`;
+        grid.appendChild(placeholder1);
+        break;
 
-      const placeholder = document.createElement("div");
-      placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
-      grid.appendChild(placeholder);
+      case 1:
+        // Batch 2: rechter product + linker placeholder
+        const placeholder2 = document.createElement("div");
+        placeholder2.className = "placeholder";
+        placeholder2.innerHTML = `<span>Hier kan tekst komen</span>`;
+        grid.appendChild(placeholder2);
 
-    } else if (index === 1) {
-      // Batch 2: rechter product + linker placeholder
-      const placeholder = document.createElement("div");
-      placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
-      grid.appendChild(placeholder);
+        grid.appendChild(createProduct(products[1], 2));
+        break;
 
-      grid.appendChild(createProduct(products[1], 2));
+      case 2:
+        // Batch 3: vier producten in het midden
+        for (let i = 3; i < 7; i++) {
+          grid.appendChild(createProduct(products[i], 3));
+        }
+        break;
 
-    } else {
-      // Batch 3: vier producten in het midden, tekst onder afbeeldingen
-      for (let i = 4; i < 8; i++) {
-        grid.appendChild(createProduct(products[i], 3));
-      }
+      case 3:
+        // Batch 4: één grote afbeelding
+        grid.appendChild(createProduct(products[2], 4));
+        break;
     }
   }
 
@@ -138,16 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isAnimating) return;
     e.preventDefault();
 
-    if (e.deltaY > 0) {
-      if (currentBatch < batches.length - 1) {
-        currentBatch++;
-        animateTransition();
-      }
-    } else if (e.deltaY < 0) {
-      if (currentBatch > 0) {
-        currentBatch--;
-        animateTransition();
-      }
+    if (e.deltaY > 0 && currentBatch < batches.length - 1) {
+      currentBatch++;
+      animateTransition();
+    } else if (e.deltaY < 0 && currentBatch > 0) {
+      currentBatch--;
+      animateTransition();
     }
   }, { passive: false });
 
