@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
     { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
     { img: "afbeeldingen/Black square_test.png", label: "Discover", link: "discover.html" },
-    { img: "afbeeldingen/Black square_test.png", label: "5" },
+    { img: "afbeeldingen/Black square_test.png", label: "Heritage" },
     { img: "afbeeldingen/model.jpg", label: "Bags" },
     { img: "afbeeldingen/strandpalen.jpg", label: "Shoes" },
     { img: "afbeeldingen/model.jpg", label: "Jewelry and watches" },
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
  // ========================
-  // 3. Grid-elementen
+  // 3. Grid en batches
   // ========================
   const grid = document.getElementById("productGrid");
   const batches = ["batch-one", "batch-two", "batch-three", "batch-four"];
@@ -55,14 +55,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAnimating = false;
 
   // ========================
-  // 4. Helper om product div te maken
+  // 4. Helper: maak product-element
+  //    - gedrag per batch meegeven via 'batchIndex' (1..4)
   // ========================
-  function createProduct(p, batch) {
+  function createProduct(p, batchIndex) {
     const div = document.createElement("div");
     div.className = "product";
 
-    if (batch === 3) {
-      // Batch 3: tekst onder afbeelding
+    // batchIndex gebruikt voor layoutkeuzes
+    if (batchIndex === 3) {
+      // Batch 3: afbeelding + label **onder** (tekst onder de afbeelding)
       if (p.link) {
         div.innerHTML = `
           <a href="${p.link}">
@@ -76,8 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="product-label">${p.label}</div>
         `;
       }
-    } else if (batch === 4) {
-      // Batch 4: één grote afbeelding
+    } else if (batchIndex === 4) {
+      // Batch 4: fullscreen single image (label optioneel)
+      div.classList.add("full-view");
       if (p.link) {
         div.innerHTML = `
           <a href="${p.link}">
@@ -85,12 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </a>
         `;
       } else {
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.label}">
-        `;
+        div.innerHTML = `<img src="${p.img}" alt="${p.label}">`;
       }
     } else {
-      // Batch 1 & 2: tekst in afbeelding
+      // Batch 1 & 2: image with label overlay (in image)
       if (p.link) {
         div.innerHTML = `
           <a href="${p.link}">
@@ -110,75 +111,101 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================
-  // 5. Batch tonen
+  // 5. Toon batch (duidelijke, expliciete mapping)
+  //    - batch 0 => batch-one (product[0] + placeholder)
+  //    - batch 1 => batch-two (placeholder + product[1])
+  //    - batch 2 => batch-three (four products: products[2..5])
+  //    - batch 3 => batch-four (single fullscreen product products[6])
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
     switch(index) {
-      case 0:
-        // Batch 1: linker product + rechter placeholder
+      case 0: // batch-one
         grid.appendChild(createProduct(products[0], 1));
-        const placeholder1 = document.createElement("div");
-        placeholder1.className = "placeholder";
-        placeholder1.innerHTML = `<span>Hier kan tekst komen</span>`;
-        grid.appendChild(placeholder1);
-        break;
-
-      case 1:
-        // Batch 2: rechter product + linker placeholder
-        const placeholder2 = document.createElement("div");
-        placeholder2.className = "placeholder";
-        placeholder2.innerHTML = `<span>Hier kan tekst komen</span>`;
-        grid.appendChild(placeholder2);
-
-        grid.appendChild(createProduct(products[1], 2));
-        break;
-
-      case 2:
-        // Batch 3: vier producten in het midden
-        for (let i = 3; i < 7; i++) {
-          grid.appendChild(createProduct(products[i], 3));
+        {
+          const placeholder = document.createElement("div");
+          placeholder.className = "placeholder";
+          placeholder.innerHTML = `
+            <div class="placeholder-inner">
+              <span class="placeholder-text">Hier kan tekst komen</span>
+            </div>
+          `;
+          grid.appendChild(placeholder);
         }
         break;
 
-      case 3:
-        // Batch 4: één grote afbeelding
-        grid.appendChild(createProduct(products[2], 4));
+      case 1: // batch-two
+        {
+          const placeholder = document.createElement("div");
+          placeholder.className = "placeholder";
+          placeholder.innerHTML = `
+            <div class="placeholder-inner">
+              <span class="placeholder-text">Hier kan tekst komen</span>
+            </div>
+          `;
+          grid.appendChild(placeholder);
+        }
+        grid.appendChild(createProduct(products[1], 2));
+        break;
+
+      case 2: // batch-three (4 items: indices 2,3,4,5)
+        {
+          const indices = [2,3,4,5];
+          indices.forEach(i => {
+            if (products[i]) grid.appendChild(createProduct(products[i], 3));
+          });
+        }
+        break;
+
+      case 3: // batch-four (single fullscreen image)
+        // kies een product dat visueel geschikt is; hier products[6]
+        if (products[6]) grid.appendChild(createProduct(products[6], 4));
         break;
     }
   }
 
   // ========================
-  // 6. Scroll functionaliteit
+  // 6. Scroll handler (preventDefault alleen als batch verandert)
   // ========================
   window.addEventListener("wheel", e => {
     if (isAnimating) return;
-    e.preventDefault();
 
+    const prev = currentBatch;
     if (e.deltaY > 0 && currentBatch < batches.length - 1) {
       currentBatch++;
-      animateTransition();
     } else if (e.deltaY < 0 && currentBatch > 0) {
       currentBatch--;
+    }
+
+    if (currentBatch !== prev) {
+      // alleen blokkeren als we echt naar een andere batch gaan
+      e.preventDefault();
       animateTransition();
     }
   }, { passive: false });
 
+  // ========================
+  // 7. Animatie overgang
+  // ========================
   function animateTransition() {
     isAnimating = true;
+    grid.style.transition = "opacity 0.45s ease";
     grid.style.opacity = 0;
     setTimeout(() => {
       showBatch(currentBatch);
-      grid.style.opacity = 1;
-      isAnimating = false;
-    }, 500);
+      // kleine timeout zodat browser de innerHTML render kan maken voor measurements
+      requestAnimationFrame(() => {
+        grid.style.opacity = 1;
+        // release lock na transitie
+        setTimeout(() => { isAnimating = false; }, 300);
+      });
+    }, 300);
   }
 
   // ========================
-  // 7. Eerste render
+  // 8. Eerste render
   // ========================
   showBatch(currentBatch);
-
 });
