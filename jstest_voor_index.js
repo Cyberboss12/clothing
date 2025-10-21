@@ -191,18 +191,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================
   function animateTransition() {
     isAnimating = true;
-    grid.style.transition = "opacity 0.45s ease";
     grid.style.opacity = 0;
-    setTimeout(() => {
-      showBatch(currentBatch);
-      // kleine timeout zodat browser de innerHTML render kan maken voor measurements
-      requestAnimationFrame(() => {
-        grid.style.opacity = 1;
-        // release lock na transitie
-        setTimeout(() => { isAnimating = false; }, 300);
-      });
-    }, 300);
-  }
+
+  setTimeout(() => {
+    showBatch(currentBatch);
+    grid.style.opacity = 1;
+
+    // Tekstbar tonen of verbergen afhankelijk van batch
+    const textBar = document.querySelector('.text-bar');
+    const textMessage = document.querySelector('#textMessage');
+
+    if (currentBatch === 2) { // let op: batch 3 heeft index 2 (0 = batch 1)
+      textBar.style.opacity = 1;
+      textMessage.textContent = "Ontdek onze unieke collectie"; // <--- jouw tekst hier
+    } else {
+      textBar.style.opacity = 0;
+    }
+
+    isAnimating = false;
+  }, 500);
+}
 
   // ========================
   // 8. Eerste render
