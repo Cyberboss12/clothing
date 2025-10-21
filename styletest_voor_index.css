@@ -50,8 +50,9 @@ body {
 }
 
 #textBar #textMessage {
+  margin-top: 5px;
   font-family: 'Baskerville Old Face';   /* Kies je gewenste font */
-  font-size: 3rem;               /* Pas de tekstgrootte aan */
+  font-size: 2rem;               /* Pas de tekstgrootte aan */
   font-weight: 500;                /* Iets vetter voor zichtbaarheid */
   letter-spacing: 0.5px;           /* Optioneel, geeft wat ruimte tussen letters */
 }
