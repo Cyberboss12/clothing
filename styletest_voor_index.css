@@ -208,28 +208,35 @@ body {
 }
 
 .batch-three .product {
-  width: 20%;
-  aspect-ratio: 1/1;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* width: 20%; */
+  /* aspect-ratio: 1/1; */
+  /* position: relative; */
   overflow: hidden;
 }
 
 .batch-three .product img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  border-radius: 10px;
+  /* object-fit: cover; */
 }
 
 .batch-three .product .product-label {
-  position: absolute;
-  bottom: 8%;
-  left: 50%;
-  transform: translateX(-50%);
+  /* position: absolute; */
+  /* bottom: 8%; */
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
+  margin-top: 10px;
   font-size: 1.2rem;
   color: white;
-  background: rgba(0,0,0,0.6);
-  padding: 4px 10px;
-  border-radius: 8px;
+  font-family: 'Baskerville Old Face';
+  /* background: rgba(0,0,0,0.6); */
+  /* padding: 4px 10px; */
+  /* border-radius: 8px; */
 }
 
 /* ========================================

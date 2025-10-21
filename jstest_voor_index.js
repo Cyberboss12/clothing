@@ -46,95 +46,93 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model_muur2.png", label: "Gifts" }
   ];
 
-  // ========================
+ // ========================
   // 3. Grid-elementen
   // ========================
   const grid = document.getElementById("productGrid");
-  const batches = ["batch-one", "batch-two", "batch-three", "batch-four"];
+  const batches = ["batch-one", "batch-two", "batch-three"];
   let currentBatch = 0;
   let isAnimating = false;
 
-
   // ========================
-  // 4. Text-bar setup
+  // 4. Helper om product div te maken
   // ========================
-  const textBar = document.getElementById("textBar");
-  const textMessage = document.getElementById("textMessage");
-
-  const textMessages = "MERKNAAM";
-
-  let textIndex = 0;
-
-  // ========================
-  // 5. Helper om product div te maken (klikbare links)
-  // ========================
-  function createProduct(p) {
+  function createProduct(p, batch) {
     const div = document.createElement("div");
     div.className = "product";
 
     if (p.img) {
-      if (p.link) {
-        div.innerHTML = `
-          <a href="${p.link}">
+      if (batch === 3) {
+        // Batch 3: tekst onder de afbeelding
+        if (p.link) {
+          div.innerHTML = `
+            <a href="${p.link}">
+              <img src="${p.img}" alt="${p.label}">
+            </a>
+            <div class="product-label">${p.label}</div>
+          `;
+        } else {
+          div.innerHTML = `
             <img src="${p.img}" alt="${p.label}">
             <div class="product-label">${p.label}</div>
-          </a>
-        `;
+          `;
+        }
       } else {
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.label}">
-          <div class="product-label">${p.label}</div>
-        `;
+        // Batch 1 & 2: tekst in de afbeelding
+        if (p.link) {
+          div.innerHTML = `
+            <a href="${p.link}">
+              <img src="${p.img}" alt="${p.label}">
+              <div class="product-label">${p.label}</div>
+            </a>
+          `;
+        } else {
+          div.innerHTML = `
+            <img src="${p.img}" alt="${p.label}">
+            <div class="product-label">${p.label}</div>
+          `;
+        }
       }
     }
 
     return div;
   }
 
-
   // ========================
-  // 6. Batch tonen
+  // 5. Batch tonen
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
-    // toon/verberg textbar afhankelijk van batch
-    if (index === 2) { 
-      textBar.style.opacity = 1;
-    } else {
-      textBar.style.opacity = 0;
-    }
-
     if (index === 0) {
-      grid.appendChild(createProduct(products[0]));
+      // Batch 1: linker product + rechter placeholder
+      grid.appendChild(createProduct(products[0], 1));
+
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>MERKNAAM</span>`;
+      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
 
     } else if (index === 1) {
+      // Batch 2: rechter product + linker placeholder
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>MERKNAAM</span>`;
+      placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
-      grid.appendChild(createProduct(products[1]));
 
-    } else if (index === 2) {
-      for (let i = 2; i < 6; i++) {
-        grid.appendChild(createProduct(products[i]));
+      grid.appendChild(createProduct(products[1], 2));
+
+    } else {
+      // Batch 3: vier producten in het midden, tekst onder afbeeldingen
+      for (let i = 4; i < 8; i++) {
+        grid.appendChild(createProduct(products[i], 3));
       }
-
-    } else if (index === 3) {
-      const full = createProduct(products[7]);
-      full.style.gridColumn = "1 / -1";
-      grid.appendChild(full);
     }
   }
 
-
   // ========================
-  // 7. Scroll functionaliteit
+  // 6. Scroll functionaliteit
   // ========================
   window.addEventListener("wheel", e => {
     if (isAnimating) return;
@@ -163,9 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-
   // ========================
-  // 8. Eerste render
+  // 7. Eerste render
   // ========================
   showBatch(currentBatch);
 
