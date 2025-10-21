@@ -116,7 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (index === 1) {
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
-      placeholder.innerHTML = `<span>MERKNAAM</span>`;
+      placeholder.innerHTML = `
+      
+        <div class="menu-container">
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="menu-text">Menu</div>
+        </div>`;
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
 
