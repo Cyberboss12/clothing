@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/Black square_test.png", label: "Discover", link: "discover.html" },
     { img: "afbeeldingen/Black square_test.png", label: "5" },
     { img: "afbeeldingen/model.jpg", label: "Bags" },
-    { img: "afbeeldingen/model.jpg", label: "Shoes" },
+    { img: "afbeeldingen/strandpalen.jpg", label: "Shoes" },
     { img: "afbeeldingen/model.jpg", label: "Jewelry and watches" },
     { img: "afbeeldingen/model.jpg", label: "9" },
     { img: "afbeeldingen/model.jpg", label: "10" },
