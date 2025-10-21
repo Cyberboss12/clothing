@@ -54,8 +54,37 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentBatch = 0;
   let isAnimating = false;
 
+
   // ========================
-  // 4. Helper: maak product div (klikbare link)
+  // 4. Text-bar setup
+  // ========================
+  const textBar = document.getElementById("textBar");
+  const textMessage = document.getElementById("textMessage");
+
+  const textMessages = [
+    "Bekijk onze accessoires en unieke producten 👜",
+    "Laat je inspireren door onze nieuwste collectie ✨",
+    "Alles voor jouw perfecte look 💎"
+  ];
+
+  let textIndex = 0;
+
+  function rotateTextMessage() {
+    if (textBar.style.opacity === "1") { // alleen roteren als zichtbaar
+      textMessage.classList.add('hidden');
+      setTimeout(() => {
+        textIndex = (textIndex + 1) % textMessages.length;
+        textMessage.textContent = textMessages[textIndex];
+        textMessage.classList.remove('hidden');
+      }, 400);
+    }
+  }
+
+  setInterval(rotateTextMessage, 5000);
+
+
+  // ========================
+  // 5. Helper om product div te maken (klikbare links)
   // ========================
   function createProduct(p) {
     const div = document.createElement("div");
@@ -80,61 +109,68 @@ document.addEventListener("DOMContentLoaded", () => {
     return div;
   }
 
+
   // ========================
-  // 5. Toon batch
+  // 6. Batch tonen
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
+    // toon/verberg textbar afhankelijk van batch
+    if (index === 2) { 
+      textBar.style.opacity = 1;
+    } else {
+      textBar.style.opacity = 0;
+    }
+
     if (index === 0) {
-      // Batch 1: linker product + rechter placeholder
       grid.appendChild(createProduct(products[0]));
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
       placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
+
     } else if (index === 1) {
-      // Batch 2: rechter product + linker placeholder
       const placeholder = document.createElement("div");
       placeholder.className = "placeholder";
       placeholder.innerHTML = `<span>Hier kan tekst komen</span>`;
       grid.appendChild(placeholder);
       grid.appendChild(createProduct(products[1]));
+
     } else if (index === 2) {
-      // Batch 3: vier producten in het midden
-      for (let i = 2; i < 6; i++) {
+      for (let i = 4; i < 8; i++) {
         grid.appendChild(createProduct(products[i]));
       }
+
     } else if (index === 3) {
-      // Batch 4: één grote afbeelding over hele viewport
-      grid.appendChild(createProduct(products[6]));
+      const full = createProduct(products[11]);
+      full.style.gridColumn = "1 / -1";
+      grid.appendChild(full);
     }
   }
 
+
   // ========================
-  // 6. Scroll functionaliteit
+  // 7. Scroll functionaliteit
   // ========================
   window.addEventListener("wheel", e => {
     if (isAnimating) return;
+    e.preventDefault();
 
-    let prevBatch = currentBatch;
-
-    if (e.deltaY > 0 && currentBatch < batches.length - 1) {
-      currentBatch++;
-    } else if (e.deltaY < 0 && currentBatch > 0) {
-      currentBatch--;
-    }
-
-    if (currentBatch !== prevBatch) {
-      e.preventDefault(); // alleen blokkeren bij echte batch overgang
-      animateTransition();
+    if (e.deltaY > 0) {
+      if (currentBatch < batches.length - 1) {
+        currentBatch++;
+        animateTransition();
+      }
+    } else if (e.deltaY < 0) {
+      if (currentBatch > 0) {
+        currentBatch--;
+        animateTransition();
+      }
     }
   }, { passive: false });
 
-  // ========================
-  // 7. Animatie overgang
-  // ========================
   function animateTransition() {
     isAnimating = true;
     grid.style.opacity = 0;
@@ -144,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isAnimating = false;
     }, 500);
   }
+
 
   // ========================
   // 8. Eerste render
