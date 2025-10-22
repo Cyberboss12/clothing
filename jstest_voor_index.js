@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/model_muur2.png", label: "Gifts" }
   ];
 
-// ========================
+ // ========================
   // 3. Grid & batches
   // ========================
   const grid = document.getElementById("productGrid");
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================
-  // 5. Toon batch direct
+  // 5. Toon batch
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
@@ -94,14 +94,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch(index) {
       case 0:
+        // ==============================
+        // Batch 1: linker afbeelding + rechter placeholder + hamburger menu
+        // ==============================
         grid.appendChild(createProduct(products[0], 1));
+
         const placeholder0 = document.createElement("div");
         placeholder0.className = "placeholder";
-        placeholder0.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
+
+        const placeholderInner = document.createElement("div");
+        placeholderInner.className = "placeholder-inner";
+
+        // Tekst in het midden
+        const placeholderText = document.createElement("span");
+        placeholderText.className = "placeholder-text";
+        placeholderText.textContent = "Hier kan tekst komen";
+        placeholderInner.appendChild(placeholderText);
+
+        // Hamburger menu rechtsboven
+        const hamburgerMenu = document.createElement("div");
+        hamburgerMenu.className = "hamburger-menu";
+
+        const menuHeader = document.createElement("div");
+        menuHeader.className = "menu-header";
+        menuHeader.textContent = "☰ Menu";
+        hamburgerMenu.appendChild(menuHeader);
+
+        const menuContent = document.createElement("div");
+        menuContent.className = "menu-content";
+
+        const menuItems = [
+          { label: "Men", link: "men.html" },
+          { label: "Women", link: "women.html" },
+          { label: "Children", link: "children.html" },
+          { label: "Discover", link: "discover.html" }
+        ];
+
+        menuItems.forEach(item => {
+          const a = document.createElement("a");
+          a.href = item.link;
+          a.textContent = item.label;
+          menuContent.appendChild(a);
+        });
+
+        hamburgerMenu.appendChild(menuContent);
+        placeholderInner.appendChild(hamburgerMenu);
+        placeholder0.appendChild(placeholderInner);
         grid.appendChild(placeholder0);
+
+        // Klik-event toggle menu
+        menuHeader.addEventListener("click", () => {
+          menuContent.style.display = menuContent.style.display === "flex" ? "none" : "flex";
+        });
+
         break;
 
       case 1:
+        // ==============================
+        // Batch 2: rechter product + linker placeholder
+        // ==============================
         const placeholder1 = document.createElement("div");
         placeholder1.className = "placeholder";
         placeholder1.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
@@ -110,17 +161,25 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
 
       case 2:
+        // ==============================
+        // Batch 3: vier gelijke blokken
+        // ==============================
         [2,3,4,5].forEach(i => {
           if (products[i]) grid.appendChild(createProduct(products[i], 3));
         });
         break;
 
       case 3:
+        // ==============================
+        // Batch 4: fullscreen product
+        // ==============================
         if (products[6]) grid.appendChild(createProduct(products[6], 4));
         break;
     }
 
-    // Tekstbar alleen bij batch 3
+    // ==============================
+    // Text-bar alleen bij batch 3
+    // ==============================
     const textBar = document.querySelector('.text-bar');
     const textMessage = document.querySelector('#textMessage');
     if (index === 2) {
@@ -132,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================
-  // 6. Scroll handler (zonder fade)
+  // 6. Scroll handler
   // ========================
   window.addEventListener("wheel", (e) => {
     if (isScrolling) return;
@@ -147,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentBatch !== prev) {
       isScrolling = true;
       showBatch(currentBatch);
-      setTimeout(() => { isScrolling = false; }, 400); // cooldown
+      setTimeout(() => { isScrolling = false; }, 400);
     }
   }, { passive: false });
 
@@ -155,4 +214,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // 7. Eerste render
   // ========================
   showBatch(currentBatch);
+
 });
