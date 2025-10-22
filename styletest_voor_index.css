@@ -204,7 +204,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;       /* maakt 2 rijen van 2 blokken */
   gap: 20px;
   height: 100vh;
   padding: 40px;
@@ -212,8 +211,8 @@ body {
 }
 
 .batch-three .product {
-  width: 40%;             /* zorgt voor 2 per rij */
-  aspect-ratio: 1/1;
+  width: 20%;             /* zorgt voor 2 per rij */
+  /* aspect-ratio: 1/1; */
   position: relative;
   overflow: hidden;
   display: flex;
@@ -232,7 +231,7 @@ body {
 /* Tekst onder de afbeelding, niet in de afbeelding */
 .batch-three .product .product-label {
   margin-top: 10px;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: black;
   font-family: 'Baskerville Old Face';
   text-align: center;
