@@ -61,43 +61,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const div = document.createElement("div");
     div.className = "product";
 
-    if (batchIndex === 3) {
-      // Batch 3: tekst onder afbeelding
+    if (batchIndex === 3) { // batch 3: tekst onder afbeelding
       if (p.link) {
-        div.innerHTML = `
-          <a href="${p.link}">
-            <img src="${p.img}" alt="${p.label}">
-          </a>
-          <div class="product-label">${p.label}</div>
-        `;
+        div.innerHTML = `<a href="${p.link}"><img src="${p.img}" alt="${p.label}"></a><div class="product-label">${p.label}</div>`;
       } else {
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.label}">
-          <div class="product-label">${p.label}</div>
-        `;
+        div.innerHTML = `<img src="${p.img}" alt="${p.label}"><div class="product-label">${p.label}</div>`;
       }
-    } else if (batchIndex === 4) {
-      // Batch 4: fullscreen
+    } else if (batchIndex === 4) { // batch 4: fullscreen
       div.classList.add("full-view");
       if (p.link) {
         div.innerHTML = `<a href="${p.link}"><img src="${p.img}" alt="${p.label}"></a>`;
       } else {
         div.innerHTML = `<img src="${p.img}" alt="${p.label}">`;
       }
-    } else {
-      // Batch 1 & 2: label over afbeelding
+    } else { // batch 1 & 2: label over afbeelding
       if (p.link) {
-        div.innerHTML = `
-          <a href="${p.link}">
-            <img src="${p.img}" alt="${p.label}">
-            <div class="product-label">${p.label}</div>
-          </a>
-        `;
+        div.innerHTML = `<a href="${p.link}"><img src="${p.img}" alt="${p.label}"><div class="product-label">${p.label}</div></a>`;
       } else {
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.label}">
-          <div class="product-label">${p.label}</div>
-        `;
+        div.innerHTML = `<img src="${p.img}" alt="${p.label}"><div class="product-label">${p.label}</div>`;
       }
     }
 
@@ -105,46 +86,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================
-  // 5. Toon batch
+  // 5. Toon batch direct
   // ========================
   function showBatch(index) {
     grid.className = "grid " + batches[index];
     grid.innerHTML = "";
 
     switch(index) {
-      case 0: // batch-one
+      case 0:
         grid.appendChild(createProduct(products[0], 1));
-        {
-          const placeholder = document.createElement("div");
-          placeholder.className = "placeholder";
-          placeholder.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
-          grid.appendChild(placeholder);
-        }
+        const placeholder0 = document.createElement("div");
+        placeholder0.className = "placeholder";
+        placeholder0.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
+        grid.appendChild(placeholder0);
         break;
 
-      case 1: // batch-two
-        {
-          const placeholder = document.createElement("div");
-          placeholder.className = "placeholder";
-          placeholder.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
-          grid.appendChild(placeholder);
-        }
+      case 1:
+        const placeholder1 = document.createElement("div");
+        placeholder1.className = "placeholder";
+        placeholder1.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
+        grid.appendChild(placeholder1);
         grid.appendChild(createProduct(products[1], 2));
         break;
 
-      case 2: // batch-three: 4 afbeeldingen in één rij
-        const indices = [2,3,4,5];
-        indices.forEach(i => {
+      case 2:
+        [2,3,4,5].forEach(i => {
           if (products[i]) grid.appendChild(createProduct(products[i], 3));
         });
         break;
 
-      case 3: // batch-four fullscreen
+      case 3:
         if (products[6]) grid.appendChild(createProduct(products[6], 4));
         break;
     }
 
-    // Tekstbar zichtbaar alleen bij batch 3
+    // Tekstbar alleen bij batch 3
     const textBar = document.querySelector('.text-bar');
     const textMessage = document.querySelector('#textMessage');
     if (index === 2) {
@@ -156,11 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================
-  // 6. Scroll handler
+  // 6. Scroll handler (zonder fade)
   // ========================
   window.addEventListener("wheel", (e) => {
     if (isScrolling) return;
-    e.preventDefault();
 
     const prev = currentBatch;
     if (e.deltaY > 50 && currentBatch < batches.length - 1) {
@@ -172,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentBatch !== prev) {
       isScrolling = true;
       showBatch(currentBatch);
-      setTimeout(() => { isScrolling = false; }, 600); // cooldown
+      setTimeout(() => { isScrolling = false; }, 400); // cooldown
     }
   }, { passive: false });
 
