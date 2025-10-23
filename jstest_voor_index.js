@@ -143,8 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
         grid.appendChild(placeholder0);
 
         // Klik-event toggle menu
-        menuHeader.addEventListener("click", () => {
+        menuHeader.addEventListener("click", (e) => {
+        e.stopPropagation(); // voorkomt dat buitenklik direct sluit
         menuContent.classList.toggle("open");
+        });
+
+        // Sluit menu bij klik buiten het menu
+        document.addEventListener("click", (e) => {
+        if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
+        menuContent.classList.remove("open");
+        }
         });
 
         break;
