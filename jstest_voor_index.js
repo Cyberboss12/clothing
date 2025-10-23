@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Klik-event toggle menu
         menuHeader.addEventListener("click", () => {
-          menuContent.style.display = menuContent.style.display === "flex" ? "none" : "flex";
+        menuContent.classList.toggle("open");
         });
 
         break;
