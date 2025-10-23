@@ -337,15 +337,13 @@ footer {
   transition: 0.3s ease;
 }
 
-.menu-header:hover {
-  background: rgba(0, 0, 0, 0.85);
-}
 
 /* Het uitklapmenu */
 .menu-content {
   display: none;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.95);
+  width: 50vw;
+  background: black;
   border-radius: 8px;
   margin-top: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
