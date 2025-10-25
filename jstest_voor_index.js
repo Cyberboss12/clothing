@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Tekst in het midden
         const placeholderText = document.createElement("span");
         placeholderText.className = "placeholder-text";
-        placeholderText.textContent = "Hier kan tekst komen";
+        placeholderText.textContent = "Merknaam";
         placeholderInner.appendChild(placeholderText);
 
         // Hamburger menu rechtsboven
