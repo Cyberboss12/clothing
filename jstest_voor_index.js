@@ -148,6 +148,21 @@ document.addEventListener("DOMContentLoaded", () => {
         menuContent.classList.toggle("open");
         });
 
+        menuHeader.addEventListener("click", (e) => {
+        e.stopPropagation(); // voorkomt dat buitenklik het direct sluit
+        const isOpen = menuContent.classList.toggle("open");
+        menuHeader.textContent = isOpen ? "✕ Close" : "☰ Menu";
+        });
+
+        // Klik buiten menu = sluit menu en herstel icoon
+        document.addEventListener("click", (e) => {
+        const isClickInside = hamburgerMenu.contains(e.target);
+        if (!isClickInside) {
+        menuContent.classList.remove("open");
+        menuHeader.textContent = "☰ Menu";
+        }
+        });
+
         // Sluit menu bij klik buiten het menu
         document.addEventListener("click", (e) => {
         if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
