@@ -118,7 +118,7 @@ body {
   bottom: 10%;
   left: 10%;
   font-size: 2rem;
-  color: white;
+  color: black;
   /* background: rgba(0, 0, 0, 0.5); */
   padding: 6px 12px;
   border-radius: 8px;
@@ -174,7 +174,7 @@ body {
   bottom: 10%;
   right: 10%;
   font-size: 2rem;
-  color: white;
+  color: black;
   /* background: rgba(0, 0, 0, 0.5); */
   padding: 6px 12px;
   border-radius: 8px;
