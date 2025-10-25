@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 2. Productdata
   // ========================
   const products = [
-    { img: "afbeeldingen/Vraagteken_ai.png", label: "Men", link: "men.html" },
+    { img: "afbeeldingen/AI_vraagteken.png", label: "Men", link: "men.html" },
     { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
     { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
     { img: "afbeeldingen/Black square_test.png", label: "Discover", link: "discover.html" },
