@@ -117,7 +117,7 @@ body {
   position: absolute;
   bottom: 10%;
   left: 10%;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: black;
   /* background: rgba(0, 0, 0, 0.5); */
   padding: 6px 12px;
@@ -317,7 +317,7 @@ footer {
 
 .hamburger-menu {
   position: absolute;
-  top: 38px;
+  top: 43px;
   right: 40px;
   z-index: 100;
   font-family: 'Baskerville Old Face', serif;
