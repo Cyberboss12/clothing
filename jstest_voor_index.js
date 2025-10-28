@@ -144,31 +144,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Klik-event toggle menu
         menuHeader.addEventListener("click", (e) => {
-        e.stopPropagation(); // voorkomt dat buitenklik direct sluit
-        menuContent.classList.toggle("open");
-        });
+  e.stopPropagation(); // voorkomt directe sluiting
+  const isOpen = menuContent.classList.toggle("open");
 
-        menuHeader.addEventListener("click", (e) => {
-        e.stopPropagation(); // voorkomt dat buitenklik het direct sluit
-        const isOpen = menuContent.classList.toggle("open");
-        menuHeader.textContent = isOpen ? "✕ Close" : "☰ Menu";
-        });
+  if (isOpen) {
+    menuHeader.textContent = "✕ Close";
+    menuHeader.style.position = "fixed";
+    menuHeader.style.right = "60px";
+    menuHeader.style.top = "40px";
+    menuHeader.style.zIndex = "101";
+  } else {
+    menuHeader.textContent = "☰ Menu";
+    menuHeader.removeAttribute("style");
+  }
+});
 
-        // Klik buiten menu = sluit menu en herstel icoon
-        document.addEventListener("click", (e) => {
-        const isClickInside = hamburgerMenu.contains(e.target);
-        if (!isClickInside) {
-        menuContent.classList.remove("open");
-        menuHeader.textContent = "☰ Menu";
-        }
-        });
-
-        // Sluit menu bij klik buiten het menu
-        document.addEventListener("click", (e) => {
-        if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
-        menuContent.classList.remove("open");
-        }
-        });
+// Sluit menu bij klik buiten menu
+document.addEventListener("click", (e) => {
+  const menuIsOpen = menuContent.classList.contains("open");
+  if (
+    menuIsOpen &&
+    !hamburgerMenu.contains(e.target) &&
+    e.target !== menuHeader
+  ) {
+    menuContent.classList.remove("open");
+    menuHeader.textContent = "☰ Menu";
+    menuHeader.removeAttribute("style");
+  }
+});
 
         break;
 
