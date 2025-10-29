@@ -395,10 +395,10 @@ footer {
 .clickable-box {
   position: absolute;               /* absoluut binnen .placeholder */
   left: 50%;                        /* gecentreerd horizontaal */
-  top: calc(50% + 70px);            /* schuift onder de merknaam — pas dit getal naar wens */
+  top: calc(50% + 55px);            /* schuift onder de merknaam — pas dit getal naar wens */
   transform: translateX(-50%);      /* perfecte horizontale centrering */
-  width: min(140px, 22vw);          /* max 140px maar schaalt op kleinere schermen */
-  aspect-ratio: 1 / 1;              /* houdt het vak vierkant */
+  width: min(210px, 30vw);          /* max 140px maar schaalt op kleinere schermen */
+  aspect-ratio: 2 / 1;              /* houdt het vak vierkant */
   display: flex;
   align-items: center;
   justify-content: center;
