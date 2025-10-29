@@ -395,7 +395,7 @@ footer {
 .clickable-box {
   position: absolute;               /* absoluut binnen .placeholder */
   left: 50%;                        /* gecentreerd horizontaal */
-  top: calc(50% + 55px);            /* schuift onder de merknaam — pas dit getal naar wens */
+  top: calc(50% + 25px);            /* schuift onder de merknaam — pas dit getal naar wens */
   transform: translateX(-50%);      /* perfecte horizontale centrering */
   width: min(210px, 30vw);          /* max 140px maar schaalt op kleinere schermen */
   aspect-ratio: 2 / 1;              /* houdt het vak vierkant */
@@ -424,7 +424,7 @@ footer {
   bottom: 40px;                 /* afstand vanaf onderkant */
   right: 40px;                  /* afstand vanaf rechterkant */
   padding: 15px 25px;           /* grootte van het vak */
-  background: rgba(0,0,0,0.7);  /* semi-transparant zwart */
+  /* background: rgba(0,0,0,0.7);   */
   color: #fff;
   text-decoration: none;
   font-size: 1.2rem;
