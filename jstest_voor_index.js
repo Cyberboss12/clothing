@@ -105,11 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const placeholderInner = document.createElement("div");
         placeholderInner.className = "placeholder-inner";
 
-        // Tekst in het midden
+        // Tekst in het midden bovenaan
         const placeholderText = document.createElement("span");
         placeholderText.className = "placeholder-text";
         placeholderText.textContent = "Merknaam";
         placeholderInner.appendChild(placeholderText);
+
+        // ---------- Klikbaar vierkant tekstvak onder het woord ----------
+        const clickableBox = document.createElement("a");
+        clickableBox.href = "jouw-pagina.html"; // vervang door gewenste link
+        clickableBox.className = "clickable-box";
+        clickableBox.textContent = "Ontdek meer";
+        placeholderInner.appendChild(clickableBox);
+        // -----------------------------------------------------------------
 
         // Hamburger menu rechtsboven
         const hamburgerMenu = document.createElement("div");
@@ -144,34 +152,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Klik-event toggle menu
         menuHeader.addEventListener("click", (e) => {
-  e.stopPropagation(); // voorkomt directe sluiting
-  const isOpen = menuContent.classList.toggle("open");
+          e.stopPropagation();
+          menuContent.classList.toggle("open");
+          menuHeader.classList.toggle("open"); // kan gebruikt worden om ☰ → × te veranderen via CSS
+        });
 
-  if (isOpen) {
-    menuHeader.textContent = "✕ Close";
-    menuHeader.style.position = "fixed";
-    menuHeader.style.right = "60px";
-    menuHeader.style.top = "40px";
-    menuHeader.style.zIndex = "101";
-  } else {
-    menuHeader.textContent = "☰ Menu";
-    menuHeader.removeAttribute("style");
-  }
-});
-
-// Sluit menu bij klik buiten menu
-document.addEventListener("click", (e) => {
-  const menuIsOpen = menuContent.classList.contains("open");
-  if (
-    menuIsOpen &&
-    !hamburgerMenu.contains(e.target) &&
-    e.target !== menuHeader
-  ) {
-    menuContent.classList.remove("open");
-    menuHeader.textContent = "☰ Menu";
-    menuHeader.removeAttribute("style");
-  }
-});
+        // Sluit menu bij klik buiten
+        document.addEventListener("click", (e) => {
+          if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
+            menuContent.classList.remove("open");
+            menuHeader.classList.remove("open");
+          }
+        });
 
         break;
 

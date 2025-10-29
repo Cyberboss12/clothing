@@ -387,3 +387,25 @@ footer {
 .placeholder {
   position: relative; 
 }
+
+/* Vierkante klikbare box onder het woord in batch 1 */
+.clickable-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;          /* breedte van het vak */
+  height: 150px;         /* hoogte van het vak */
+  background-color: black;
+  color: white;
+  font-size: 1.2rem;
+  text-decoration: none;
+  margin-top: 20px;      /* ruimte onder het woord */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.clickable-box:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
