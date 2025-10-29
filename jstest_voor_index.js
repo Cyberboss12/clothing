@@ -180,19 +180,44 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 3: vier gelijke blokken
         // ==============================
-        [2,3,4,5].forEach(i => {
-        if (products[i]) {
-        const productDiv = createProduct(products[i], 3);
-        // Zorg dat de .product-label zichtbaar blijft
-        if (!productDiv.querySelector('.product-label')) {
-        const label = document.createElement('div');
-        label.className = 'product-label';
-        label.textContent = products[i].label;
+       [2, 3, 4, 5].forEach(i => {
+    if (products[i]) {
+      const productDiv = createProduct(products[i], 3);
+
+      // Zorg dat de .product-label zichtbaar is onder de afbeelding
+      const label = productDiv.querySelector('.product-label');
+      const img = productDiv.querySelector('img');
+
+      if (label && img) {
+        // Verplaats label onder de afbeelding
         productDiv.appendChild(label);
-        }
-        grid.appendChild(productDiv);
-        }
-        });
+
+        // Stijl label
+        label.style.position = 'static';
+        label.style.marginTop = '10px';
+        label.style.textAlign = 'center';
+        label.style.zIndex = '2';
+        label.style.display = 'block';
+      }
+
+      // Forceer gelijke grootte van alle afbeeldingen
+      if (img) {
+        img.style.width = '100%';
+        img.style.height = '300px'; // vaste hoogte voor uniformiteit
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '0'; // scherpe hoeken
+      }
+
+      // Zorg dat productDiv zelf flexbox column blijft
+      productDiv.style.display = 'flex';
+      productDiv.style.flexDirection = 'column';
+      productDiv.style.alignItems = 'center';
+      productDiv.style.justifyContent = 'flex-start';
+      productDiv.style.borderRadius = '0';
+
+      grid.appendChild(productDiv);
+    }
+  });
         break;
 
       case 3:
@@ -242,3 +267,4 @@ document.addEventListener("DOMContentLoaded", () => {
   showBatch(currentBatch);
 
 });
+
