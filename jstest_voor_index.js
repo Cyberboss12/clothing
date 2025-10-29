@@ -97,74 +97,72 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 1: linker afbeelding + rechter placeholder + hamburger menu
         // ==============================
-        grid.appendChild(createProduct(products[0], 1));
+          grid.appendChild(createProduct(products[0], 1));
 
-        const placeholder0 = document.createElement("div");
-        placeholder0.className = "placeholder";
+  const placeholder0 = document.createElement("div");
+  placeholder0.className = "placeholder";
 
-        const placeholderInner = document.createElement("div");
-        placeholderInner.className = "placeholder-inner";
+  const placeholderInner = document.createElement("div");
+  placeholderInner.className = "placeholder-inner";
 
-        // Tekst in het midden bovenaan
-        const placeholderText = document.createElement("span");
-        placeholderText.className = "placeholder-text";
-        placeholderText.textContent = "Merknaam";
-        placeholderInner.appendChild(placeholderText);
+  // Tekst in het midden (merknaam)
+  const placeholderText = document.createElement("span");
+  placeholderText.className = "placeholder-text";
+  placeholderText.textContent = "Merknaam";
+  placeholderInner.appendChild(placeholderText);
 
-        // ---------- Klikbaar vierkant tekstvak onder het woord ----------
-        const clickableBox = document.createElement("a");
-        clickableBox.href = "jouw-pagina.html"; // vervang door gewenste link
-        clickableBox.className = "clickable-box";
-        clickableBox.textContent = "Ontdek meer";
-        placeholderInner.appendChild(clickableBox);
-        // -----------------------------------------------------------------
+  // Hamburger menu rechtsboven
+  const hamburgerMenu = document.createElement("div");
+  hamburgerMenu.className = "hamburger-menu";
 
-        // Hamburger menu rechtsboven
-        const hamburgerMenu = document.createElement("div");
-        hamburgerMenu.className = "hamburger-menu";
+  const menuHeader = document.createElement("div");
+  menuHeader.className = "menu-header";
+  menuHeader.textContent = "☰ Menu";
+  hamburgerMenu.appendChild(menuHeader);
 
-        const menuHeader = document.createElement("div");
-        menuHeader.className = "menu-header";
-        menuHeader.textContent = "☰ Menu";
-        hamburgerMenu.appendChild(menuHeader);
+  const menuContent = document.createElement("div");
+  menuContent.className = "menu-content";
 
-        const menuContent = document.createElement("div");
-        menuContent.className = "menu-content";
+  const menuItems = [
+    { label: "Men", link: "men.html" },
+    { label: "Women", link: "women.html" },
+    { label: "Children", link: "children.html" },
+    { label: "Discover", link: "discover.html" }
+  ];
 
-        const menuItems = [
-          { label: "Men", link: "men.html" },
-          { label: "Women", link: "women.html" },
-          { label: "Children", link: "children.html" },
-          { label: "Discover", link: "discover.html" }
-        ];
+  menuItems.forEach(item => {
+    const a = document.createElement("a");
+    a.href = item.link;
+    a.textContent = item.label;
+    menuContent.appendChild(a);
+  });
 
-        menuItems.forEach(item => {
-          const a = document.createElement("a");
-          a.href = item.link;
-          a.textContent = item.label;
-          menuContent.appendChild(a);
-        });
+  hamburgerMenu.appendChild(menuContent);
+  placeholderInner.appendChild(hamburgerMenu);
+  placeholder0.appendChild(placeholderInner);
 
-        hamburgerMenu.appendChild(menuContent);
-        placeholderInner.appendChild(hamburgerMenu);
-        placeholder0.appendChild(placeholderInner);
-        grid.appendChild(placeholder0);
+  // ---------- Clickable box onder merknaam ----------
+  const clickableBox = document.createElement("a");
+  clickableBox.className = "clickable-box";
+  clickableBox.textContent = "Ontdek nu!";
+  clickableBox.href = "specifieke_pagina.html"; // pas de link aan
+  placeholder0.appendChild(clickableBox);
 
-        // Klik-event toggle menu
-        menuHeader.addEventListener("click", (e) => {
-          e.stopPropagation();
-          menuContent.classList.toggle("open");
-          menuHeader.classList.toggle("open"); // kan gebruikt worden om ☰ → × te veranderen via CSS
-        });
+  grid.appendChild(placeholder0);
 
-        // Sluit menu bij klik buiten
-        document.addEventListener("click", (e) => {
-          if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
-            menuContent.classList.remove("open");
-            menuHeader.classList.remove("open");
-          }
-        });
+  // Klik-event toggle menu
+  menuHeader.addEventListener("click", (e) => {
+    e.stopPropagation(); // voorkomt dat buitenklik direct sluit
+    menuContent.classList.toggle("open");
+  });
 
+  // Sluit menu bij klik buiten het menu
+  document.addEventListener("click", (e) => {
+    if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
+      menuContent.classList.remove("open");
+    }
+  });
+  
         break;
 
       case 1:
