@@ -224,7 +224,20 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 4: fullscreen product
         // ==============================
-        if (products[6]) grid.appendChild(createProduct(products[6], 4));
+        if (products[6]) {
+    const productDiv = createProduct(products[6], 4);
+
+    // Maak klikbaar tekstvak
+    const clickableBox = document.createElement('a');
+    clickableBox.className = 'clickable-box-batch4';
+    clickableBox.href = 'jouw-pagina.html'; // pas link aan
+    clickableBox.textContent = 'Ontdek meer';
+
+    // Voeg toe aan de fullscreen product div
+    productDiv.appendChild(clickableBox);
+
+    grid.appendChild(productDiv);
+  }
         break;
     }
 

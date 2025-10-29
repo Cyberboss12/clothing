@@ -417,3 +417,24 @@ footer {
   transform: translateX(-50%) scale(1.04);
   background-color: #222;
 }
+
+/* Klikbaar tekstvak rechtsonder in batch 4 */
+.clickable-box-batch4 {
+  position: absolute;           /* absoluut binnen product */
+  bottom: 40px;                 /* afstand vanaf onderkant */
+  right: 40px;                  /* afstand vanaf rechterkant */
+  padding: 15px 25px;           /* grootte van het vak */
+  background: rgba(0,0,0,0.7);  /* semi-transparant zwart */
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 50;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.clickable-box-batch4:hover {
+  background-color: rgba(0,0,0,0.9);
+  transform: scale(1.05);
+}
