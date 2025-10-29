@@ -420,21 +420,25 @@ footer {
 
 /* Klikbaar tekstvak rechtsonder in batch 4 */
 .clickable-box-batch4 {
-  position: absolute;           /* absoluut binnen product */
-  bottom: 40px;                 /* afstand vanaf onderkant */
-  right: 40px;                  /* afstand vanaf rechterkant */
-  padding: 15px 25px;           /* grootte van het vak */
-  /* background: rgba(0,0,0,0.7);   */
+  position: absolute;        /* absoluut binnen de productDiv */
+  bottom: 20px;              /* afstand vanaf onderkant */
+  right: 20px;               /* afstand vanaf rechterkant */
+  width: 150px;              /* smaller */
+  height: 40px;              /* lager */
+  background: rgba(0,0,0,0.6);
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  font-size: 1.2rem;
-  border-radius: 8px;
+  font-size: 1rem;
+  border-radius: 6px;
   cursor: pointer;
-  z-index: 50;
+  z-index: 10;
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .clickable-box-batch4:hover {
-  background-color: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.8);
   transform: scale(1.05);
 }
