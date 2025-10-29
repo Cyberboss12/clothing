@@ -213,6 +213,7 @@ body {
 
 .batch-three .product {
   width: 20%;             /* zorgt voor 2 per rij */
+  height: 300px;
   /* aspect-ratio: 1/1; */
   position: relative;
   overflow: hidden;
@@ -220,13 +221,14 @@ body {
   flex-direction: column; /* tekst onder afbeelding */
   align-items: center;
   justify-content: flex-start;
+  border-radius: 0;
 }
 
 .batch-three .product img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 /* Tekst onder de afbeelding, niet in de afbeelding */
@@ -249,7 +251,7 @@ body {
   height: 100vh;
   align-items: center;
   justify-content: center;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 
 .batch-four .product.full-view {
