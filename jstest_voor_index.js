@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
       menuContent.classList.remove("open");
     }
   });
-  
+
         break;
 
       case 1:
@@ -181,7 +181,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // Batch 3: vier gelijke blokken
         // ==============================
         [2,3,4,5].forEach(i => {
-          if (products[i]) grid.appendChild(createProduct(products[i], 3));
+        if (products[i]) {
+        const productDiv = createProduct(products[i], 3);
+        // Zorg dat de .product-label zichtbaar blijft
+        if (!productDiv.querySelector('.product-label')) {
+        const label = document.createElement('div');
+        label.className = 'product-label';
+        label.textContent = products[i].label;
+        productDiv.appendChild(label);
+        }
+        grid.appendChild(productDiv);
+        }
         });
         break;
 
