@@ -97,8 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 1: linker afbeelding + rechter placeholder + hamburger menu
         // ==============================
-          grid.appendChild(createProduct(products[0], 1));
+            grid.appendChild(createProduct(products[0], 1));
 
+  // Placeholder rechts
   const placeholder0 = document.createElement("div");
   placeholder0.className = "placeholder";
 
@@ -111,15 +112,24 @@ document.addEventListener("DOMContentLoaded", () => {
   placeholderText.textContent = "Merknaam";
   placeholderInner.appendChild(placeholderText);
 
-  // Hamburger menu rechtsboven
+  // Hamburger menu container
   const hamburgerMenu = document.createElement("div");
   hamburgerMenu.className = "hamburger-menu";
 
+  // Zoekicoon links van het menu
+  const searchIcon = document.createElement('a');
+  searchIcon.className = 'search-icon';
+  searchIcon.href = '#'; // Pas link aan naar zoekpagina
+  searchIcon.textContent = '🔍';
+  hamburgerMenu.appendChild(searchIcon);
+
+  // Menu header (☰ Menu)
   const menuHeader = document.createElement("div");
   menuHeader.className = "menu-header";
   menuHeader.textContent = "☰ Menu";
   hamburgerMenu.appendChild(menuHeader);
 
+  // Menu content
   const menuContent = document.createElement("div");
   menuContent.className = "menu-content";
 
@@ -139,28 +149,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   hamburgerMenu.appendChild(menuContent);
   placeholderInner.appendChild(hamburgerMenu);
-  placeholder0.appendChild(placeholderInner);
 
-  // ---------- Clickable box onder merknaam ----------
+  // Clickable box onder merknaam
   const clickableBox = document.createElement("a");
   clickableBox.className = "clickable-box";
   clickableBox.textContent = "Ontdek nu!";
-  clickableBox.href = "specifieke_pagina.html"; // pas de link aan
-  placeholder0.appendChild(clickableBox);
+  clickableBox.href = "specifieke_pagina.html"; // pas link aan
+  placeholderInner.appendChild(clickableBox);
 
+  placeholder0.appendChild(placeholderInner);
   grid.appendChild(placeholder0);
 
-  // Klik-event toggle menu
+  // -----------------
+  // Event listeners
+  // -----------------
+
+  // Toggle menu bij klik
   menuHeader.addEventListener("click", (e) => {
     e.stopPropagation(); // voorkomt dat buitenklik direct sluit
     menuContent.classList.toggle("open");
   });
 
-  // Sluit menu bij klik buiten het menu
+  // Sluit menu bij klik buiten
   document.addEventListener("click", (e) => {
-    if (!menuContent.contains(e.target) && !menuHeader.contains(e.target)) {
+    if (!menuContent.contains(e.target) && !menuHeader.contains(e.target) && !searchIcon.contains(e.target)) {
       menuContent.classList.remove("open");
     }
+  });
+
+  // Klik-event voor zoekicoon
+  searchIcon.addEventListener('click', (e) => {
+    e.stopPropagation(); // voorkomt dat het menu sluit
+    window.location.href = 'zoekpagina.html'; // pas aan naar jouw zoekpagina
   });
 
         break;

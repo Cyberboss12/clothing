@@ -391,6 +391,17 @@ footer {
   position: relative; 
 }
 
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;       /* grootte van het vergrootglas */
+  color: black;             /* kleur van het vergrootglas */
+  text-decoration: none;    /* geen onderstreping */
+  margin-right: 10px;       /* ruimte tussen vergrootglas en hamburger */
+  cursor: pointer;
+}
+
 /* Vierkante klikbare box onder het woord in batch 1 */
 .clickable-box {
   position: absolute;               /* absoluut binnen .placeholder */
