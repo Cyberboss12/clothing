@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Forceer gelijke grootte van alle afbeeldingen
       if (img) {
         img.style.width = '100%';
-        img.style.height = '300px'; // vaste hoogte voor uniformiteit
+        img.style.height = 'auto'; // vaste hoogte voor uniformiteit
         img.style.objectFit = 'cover';
         img.style.borderRadius = '0'; // scherpe hoeken
       }

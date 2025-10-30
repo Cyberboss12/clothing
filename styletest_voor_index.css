@@ -214,10 +214,11 @@ body {
 
 .batch-three .product {
   width: 20%;             /* zorgt voor 2 per rij */
-  height: 300px;
+  height: auto;
+  min-height: 300px;
   /* aspect-ratio: 1/1; */
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column; /* tekst onder afbeelding */
   align-items: center;
