@@ -398,6 +398,10 @@ footer {
   color: #666;
 }
 
+.placeholder {
+  position: relative; 
+}
+
 .search-icon {
   position: static;
   order: -1;
