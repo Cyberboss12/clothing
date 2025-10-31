@@ -142,6 +142,12 @@ body {
   justify-content: center;
 }
 
+.batch-one .placeholder-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 /* ========================================
    Batch 2: rechter product + linker placeholder
 ======================================== */
@@ -322,7 +328,7 @@ footer {
 }
 
 .hamburger-menu {
-  position: relative;
+  position: absolute;
   gap: 10px;
   align-items: center;
   top: 43px;
@@ -392,17 +398,14 @@ footer {
   color: #666;
 }
 
-.placeholder {
-  position: relative; 
-}
-
 .search-icon {
+  position: static;
   order: -1;
   margin: 0;
   top: 43px;
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   font-size: 1.5rem;       /* grootte van het vergrootglas */
   color: black;             /* kleur van het vergrootglas */
   text-decoration: none;    /* geen onderstreping */
