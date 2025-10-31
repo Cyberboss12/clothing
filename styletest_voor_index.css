@@ -51,10 +51,10 @@ body {
 
 #textBar #textMessage {
   margin-top: 5px;
-  font-family: 'Baskerville Old Face';   /* Kies je gewenste font */
-  font-size: 2rem;               /* Pas de tekstgrootte aan */
-  font-weight: 500;                /* Iets vetter voor zichtbaarheid */
-  letter-spacing: 0.5px;           /* Optioneel, geeft wat ruimte tussen letters */
+  font-family: 'Baskerville Old Face';
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   align-items: center;
 }
 
@@ -82,7 +82,6 @@ body {
   width: 100%;
   max-width: 100vw;
   height: 100%;
-  /* transition: all 0.6s ease-in-out; */
 }
 
 /* ========================================
@@ -119,7 +118,6 @@ body {
   left: 10%;
   font-size: 2.5rem;
   color: black;
-  /* background: rgba(0, 0, 0, 0.5); */
   padding: 6px 12px;
   border-radius: 8px;
 }
@@ -132,14 +130,6 @@ body {
   height: 100%;
   width: 100%;
   visibility: visible;
-  /* background-color: black; */
-}
-
-.batch-one .placeholder span {
-  text-align: center;
-  font-size: 3rem;
-  color: black;
-  justify-content: center;
 }
 
 .batch-one .placeholder-inner {
@@ -147,15 +137,138 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;      /* verticaal centreren */
-  justify-content: center;  /* horizontaal centreren */
-  flex-direction: column;   /* alles netjes onder elkaar */
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: black;
+  z-index: 90;
+  text-align: center;
+}
+
+/* Wrapper voor vergrootglas + hamburger menu */
+.menu-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+}
+
+.search-icon {
+  position: relative;
+  top: 0;
+  margin: 0;
+  font-size: 1.5rem;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hamburger-menu {
+  position: relative;
+  gap: 10px;
+  align-items: center;
+  font-family: 'Baskerville Old Face', serif;
+}
+
+.menu-header {
+  cursor: pointer;
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  color: black;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease;
+}
+
+.menu-header:hover {
+  transform: scale(1.05);
+}
+
+.menu-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(255,255,255,0.98);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+  transition: width 0.4s ease, padding 0.4s ease;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 99;
+  pointer-events: none;
+}
+
+.menu-content.open {
+  width: 50vw;
+  padding: 0 60px;
+  pointer-events: auto;
+}
+
+.menu-content a {
+  text-decoration: none;
+  color: black;
+  font-size: 1.8rem;
+  margin: 15px 0;
+  text-align: right;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.4s ease;
+}
+
+.menu-content.open a {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.menu-content a:hover {
+  color: #666;
+}
+
+.clickable-box {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 50px);
+  height: 60px;
+  transform: translateX(-50%);
+  width: min(210px, 30vw);
+  aspect-ratio: 2 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 80;
+  transition: transform 0.14s ease, background-color 0.14s ease;
+}
+
+.clickable-box:hover {
+  transform: translateX(-50%) scale(1.04);
+  background-color: #222;
 }
 
 /* ========================================
-   Batch 2: rechter product + linker placeholder
+   Batch 2
 ======================================== */
-
 .batch-two {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -186,7 +299,6 @@ body {
   right: 10%;
   font-size: 2rem;
   color: whitesmoke;
-  /* background: rgba(0, 0, 0, 0.5); */
   padding: 6px 12px;
   border-radius: 8px;
 }
@@ -199,7 +311,6 @@ body {
   height: 100%;
   width: 100%;
   visibility: visible;
-  /* background-color: black; */
 }
 
 .batch-two .placeholder span {
@@ -209,9 +320,8 @@ body {
 }
 
 /* ========================================
-   Batch 3: vier gelijke blokken in het midden
+   Batch 3: vier gelijke blokken
 ======================================== */
-
 .batch-three {
   display: flex;
   align-items: center;
@@ -221,18 +331,13 @@ body {
   height: 100vh;
   padding: 40px;
   box-sizing: border-box;
-  border-radius: 0;
 }
 
 .batch-three .product {
-  width: 20%;             /* zorgt voor 2 per rij */
-  height: auto;
+  width: 20%;
   min-height: 300px;
-  /* aspect-ratio: 1/1; */
-  position: relative;
-  overflow: visible;
   display: flex;
-  flex-direction: column; /* tekst onder afbeelding */
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   border-radius: 0;
@@ -240,12 +345,11 @@ body {
 
 .batch-three .product img {
   width: 100%;
-  height: 300px;
+  height: 300px; /* uniforme hoogte voor alle afbeeldingen */
   object-fit: cover;
   border-radius: 0;
 }
 
-/* Tekst onder de afbeelding, niet in de afbeelding */
 .batch-three .product .product-label {
   margin-top: 10px;
   font-size: 1.5rem;
@@ -254,18 +358,15 @@ body {
   text-align: center;
 }
 
-
 /* ========================================
-   Batch 4: fullscreen afbeelding
+   Batch 4: fullscreen
 ======================================== */
-
 .batch-four {
   display: flex;
   width: 100%;
   height: 100vh;
   align-items: center;
   justify-content: center;
-  /* margin-top: 60px; */
 }
 
 .batch-four .product.full-view {
@@ -298,12 +399,6 @@ body {
   overflow: hidden;
 }
 
-.batch-four .product img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;       /* vult de container zonder vervorming */
-}
-
 .batch-four img {
   width: 100%;
   height: 100vh;
@@ -313,7 +408,6 @@ body {
 /* ========================================
    Extra content en footer
 ======================================== */
-
 #extraContent {
   height: 120vh;
   display: flex;
@@ -329,147 +423,4 @@ footer {
   padding: 20px 0;
   background: black;
   color: white;
-}
-
-.hamburger-menu {
-  position: absolute;
-  gap: 10px;
-  align-items: center;
-  top: 43px;
-  right: 40px;
-  z-index: 100;
-  font-family: 'Baskerville Old Face', serif;
-}
-
-.menu-header {
-  cursor: pointer;
-  font-size: 1.2rem;
-  background: none;
-  border: none;
-  color: black;
-  letter-spacing: 1px;
-  transition: transform 0.2s ease;
-}
-
-.menu-header:hover {
-  transform: scale(1.05);
-}
-
-/* Het zijmenu zelf */
-.menu-content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  background: rgba(255,255,255,0.98);
-  box-shadow: -5px 0 20px rgba(0,0,0,0.2);
-  transition: width 0.4s ease, padding 0.4s ease;
-  padding: 0;                  /* ← start zonder padding */
-  box-sizing: border-box;
-  z-index: 99;
-  pointer-events: none;
-}
-
-.menu-content.open {
-  width: 50vw;
-  padding: 0 60px;             /* ← pas bij openen */
-  pointer-events: auto;
-}
-
-.menu-content a {
-  text-decoration: none;
-  color: black;
-  font-size: 1.8rem;
-  margin: 15px 0;
-  text-align: right;
-  opacity: 0;
-  transform: translateX(50px);
-  transition: all 0.4s ease;
-}
-
-.menu-content.open a {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.menu-content a:hover {
-  color: #666;
-}
-
-.placeholder {
-  position: relative; 
-}
-
-.search-icon {
-  position: absolute;
-  order: -1;
-  margin: 0;
-  top: 43px;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
-  font-size: 1.5rem;       /* grootte van het vergrootglas */
-  color: black;             /* kleur van het vergrootglas */
-  text-decoration: none;    /* geen onderstreping */
-  margin-right: 10px;       /* ruimte tussen vergrootglas en hamburger */
-  cursor: pointer;
-}
-
-/* Vierkante klikbare box onder het woord in batch 1 */
-.clickable-box {
-  position: absolute;               /* absoluut binnen .placeholder */
-  left: 50%;                        /* gecentreerd horizontaal */
-  top: calc(50% + 50px);            /* schuift onder de merknaam — pas dit getal naar wens */
-  height: 60px;
-  transform: translateX(-50%);      /* perfecte horizontale centrering */
-  width: min(210px, 30vw);          /* max 140px maar schaalt op kleinere schermen */
-  aspect-ratio: 2 / 1;              /* houdt het vak vierkant */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 80;                      /* boven andere placeholder-inhoud */
-  transition: transform 0.14s ease, background-color 0.14s ease;
-}
-
-/* hover-effect behoudt subtiele schaal, niet te groot */
-.clickable-box:hover {
-  transform: translateX(-50%) scale(1.04);
-  background-color: #222;
-}
-
-/* Klikbaar tekstvak rechtsonder in batch 4 */
-.clickable-box-batch4 {
-  position: absolute;        /* absoluut binnen de productDiv */
-  bottom: 20px;              /* afstand vanaf onderkant */
-  right: 20px;               /* afstand vanaf rechterkant */
-  width: 150px;              /* smaller */
-  height: 40px;              /* lager */
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  z-index: 10;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.clickable-box-batch4:hover {
-  background: rgba(0,0,0,0.8);
-  transform: scale(1.05);
 }

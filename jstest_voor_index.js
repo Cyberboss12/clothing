@@ -97,91 +97,109 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 1: linker afbeelding + rechter placeholder + hamburger menu
         // ==============================
-            grid.appendChild(createProduct(products[0], 1));
+        grid.appendChild(createProduct(products[0], 1));
 
-  // Placeholder rechts
-  const placeholder0 = document.createElement("div");
-  placeholder0.className = "placeholder";
+        // Placeholder rechts
+        const placeholder0 = document.createElement("div");
+        placeholder0.className = "placeholder";
 
-  const placeholderInner = document.createElement("div");
-  placeholderInner.className = "placeholder-inner";
+        const placeholderInner = document.createElement("div");
+        placeholderInner.className = "placeholder-inner";
 
-  // Tekst in het midden (merknaam)
-  const placeholderText = document.createElement("span");
-  placeholderText.className = "placeholder-text";
-  placeholderText.textContent = "Merknaam";
-  placeholderInner.appendChild(placeholderText);
+        // Tekst in het midden (merknaam)
+        const placeholderText = document.createElement("span");
+        placeholderText.className = "placeholder-text";
+        placeholderText.textContent = "Merknaam";
 
-  // Hamburger menu container
-  const hamburgerMenu = document.createElement("div");
-  hamburgerMenu.className = "hamburger-menu";
+        // Centraal positioneren
+        placeholderText.style.position = "absolute";
+        placeholderText.style.top = "50%";
+        placeholderText.style.left = "50%";
+        placeholderText.style.transform = "translate(-50%, -50%)";
+        placeholderText.style.fontSize = "3rem";
+        placeholderText.style.zIndex = "10";
 
-  // Zoekicoon links van het menu
-  const searchIcon = document.createElement('a');
-  searchIcon.className = 'search-icon';
-  searchIcon.href = '#'; // Pas link aan naar zoekpagina
-  searchIcon.textContent = '🔍';
-  hamburgerMenu.appendChild(searchIcon);
+        placeholderInner.appendChild(placeholderText);
 
-  // Menu header (☰ Menu)
-  const menuHeader = document.createElement("div");
-  menuHeader.className = "menu-header";
-  menuHeader.textContent = "☰ Menu";
-  hamburgerMenu.appendChild(menuHeader);
+        // Hamburger menu container
+        const hamburgerMenu = document.createElement("div");
+        hamburgerMenu.className = "hamburger-menu";
+        hamburgerMenu.style.position = "absolute";
+        hamburgerMenu.style.top = "20px";
+        hamburgerMenu.style.right = "20px";
+        hamburgerMenu.style.display = "flex";
+        hamburgerMenu.style.alignItems = "center";
+        hamburgerMenu.style.gap = "10px";
+        hamburgerMenu.style.zIndex = "20";
 
-  // Menu content
-  const menuContent = document.createElement("div");
-  menuContent.className = "menu-content";
+        // Zoekicoon links van het menu
+        const searchIcon = document.createElement('a');
+        searchIcon.className = 'search-icon';
+        searchIcon.href = '#'; // Pas link aan naar zoekpagina
+        searchIcon.textContent = '🔍';
+        searchIcon.style.order = "-1";
 
-  const menuItems = [
-    { label: "Men", link: "men.html" },
-    { label: "Women", link: "women.html" },
-    { label: "Children", link: "children.html" },
-    { label: "Discover", link: "discover.html" }
-  ];
+        hamburgerMenu.appendChild(searchIcon);
 
-  menuItems.forEach(item => {
-    const a = document.createElement("a");
-    a.href = item.link;
-    a.textContent = item.label;
-    menuContent.appendChild(a);
-  });
+        // Menu header (☰ Menu)
+        const menuHeader = document.createElement("div");
+        menuHeader.className = "menu-header";
+        menuHeader.textContent = "☰ Menu";
+        hamburgerMenu.appendChild(menuHeader);
 
-  hamburgerMenu.appendChild(menuContent);
-  placeholderInner.appendChild(hamburgerMenu);
+        // Menu content
+        const menuContent = document.createElement("div");
+        menuContent.className = "menu-content";
 
-  // Clickable box onder merknaam
-  const clickableBox = document.createElement("a");
-  clickableBox.className = "clickable-box";
-  clickableBox.textContent = "Ontdek nu!";
-  clickableBox.href = "specifieke_pagina.html"; // pas link aan
-  placeholderInner.appendChild(clickableBox);
+        const menuItems = [
+          { label: "Men", link: "men.html" },
+          { label: "Women", link: "women.html" },
+          { label: "Children", link: "children.html" },
+          { label: "Discover", link: "discover.html" }
+        ];
 
-  placeholder0.appendChild(placeholderInner);
-  grid.appendChild(placeholder0);
+        menuItems.forEach(item => {
+          const a = document.createElement("a");
+          a.href = item.link;
+          a.textContent = item.label;
+          menuContent.appendChild(a);
+        });
 
-  // -----------------
-  // Event listeners
-  // -----------------
+        hamburgerMenu.appendChild(menuContent);
+        placeholderInner.appendChild(hamburgerMenu);
 
-  // Toggle menu bij klik
-  menuHeader.addEventListener("click", (e) => {
-    e.stopPropagation(); // voorkomt dat buitenklik direct sluit
-    menuContent.classList.toggle("open");
-  });
+        // Clickable box onder merknaam
+        const clickableBox = document.createElement("a");
+        clickableBox.className = "clickable-box";
+        clickableBox.textContent = "Ontdek nu!";
+        clickableBox.href = "specifieke_pagina.html"; // pas link aan naar gewenste pagina
+        placeholderInner.appendChild(clickableBox);
 
-  // Sluit menu bij klik buiten
-  document.addEventListener("click", (e) => {
-    if (!menuContent.contains(e.target) && !menuHeader.contains(e.target) && !searchIcon.contains(e.target)) {
-      menuContent.classList.remove("open");
-    }
-  });
+        placeholder0.appendChild(placeholderInner);
+        grid.appendChild(placeholder0);
 
-  // Klik-event voor zoekicoon
-  searchIcon.addEventListener('click', (e) => {
-    e.stopPropagation(); // voorkomt dat het menu sluit
-    window.location.href = 'zoekpagina.html'; // pas aan naar jouw zoekpagina
-  });
+        // -----------------
+        // Event listeners
+        // -----------------
+
+        // Toggle menu bij klik
+        menuHeader.addEventListener("click", (e) => {
+          e.stopPropagation(); // voorkomt dat buitenklik direct sluit
+          menuContent.classList.toggle("open");
+        });
+
+        // Sluit menu bij klik buiten
+        document.addEventListener("click", (e) => {
+          if (!menuContent.contains(e.target) && !menuHeader.contains(e.target) && !searchIcon.contains(e.target)) {
+            menuContent.classList.remove("open");
+          }
+        });
+
+        // Klik-event voor zoekicoon
+        searchIcon.addEventListener('click', (e) => {
+          e.stopPropagation(); // voorkomt dat het menu sluit
+          window.location.href = 'zoekpagina.html'; // pas aan naar jouw zoekpagina
+        });
 
         break;
 
@@ -201,43 +219,36 @@ document.addEventListener("DOMContentLoaded", () => {
         // Batch 3: vier gelijke blokken
         // ==============================
        [2, 3, 4, 5].forEach(i => {
-    if (products[i]) {
-      const productDiv = createProduct(products[i], 3);
+          if (products[i]) {
+            const productDiv = createProduct(products[i], 3);
 
-      // Zorg dat de .product-label zichtbaar is onder de afbeelding
-      const label = productDiv.querySelector('.product-label');
-      const img = productDiv.querySelector('img');
+            const label = productDiv.querySelector('.product-label');
+            const img = productDiv.querySelector('img');
 
-      if (label && img) {
-        // Verplaats label onder de afbeelding
-        productDiv.appendChild(label);
+            if (label && img) {
+              productDiv.appendChild(label);
+              label.style.position = 'static';
+              label.style.marginTop = '10px';
+              label.style.textAlign = 'center';
+              label.style.display = 'block';
+            }
 
-        // Stijl label
-        label.style.position = 'static';
-        label.style.marginTop = '10px';
-        label.style.textAlign = 'center';
-        label.style.zIndex = '2';
-        label.style.display = 'block';
-      }
+            if (img) {
+              img.style.width = '100%';
+              img.style.height = '300px';
+              img.style.objectFit = 'cover';
+              img.style.borderRadius = '0';
+            }
 
-      // Forceer gelijke grootte van alle afbeeldingen
-      if (img) {
-        img.style.width = '100%';
-        img.style.height = 'auto'; // vaste hoogte voor uniformiteit
-        img.style.objectFit = 'cover';
-        img.style.borderRadius = '0'; // scherpe hoeken
-      }
+            productDiv.style.display = 'flex';
+            productDiv.style.flexDirection = 'column';
+            productDiv.style.alignItems = 'center';
+            productDiv.style.justifyContent = 'flex-start';
+            productDiv.style.borderRadius = '0';
 
-      // Zorg dat productDiv zelf flexbox column blijft
-      productDiv.style.display = 'flex';
-      productDiv.style.flexDirection = 'column';
-      productDiv.style.alignItems = 'center';
-      productDiv.style.justifyContent = 'flex-start';
-      productDiv.style.borderRadius = '0';
-
-      grid.appendChild(productDiv);
-    }
-  });
+            grid.appendChild(productDiv);
+          }
+        });
         break;
 
       case 3:
@@ -245,19 +256,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // Batch 4: fullscreen product
         // ==============================
         if (products[6]) {
-    const productDiv = createProduct(products[6], 4);
+          const productDiv = createProduct(products[6], 4);
 
-    // Maak klikbaar tekstvak
-    const clickableBox = document.createElement('a');
-    clickableBox.className = 'clickable-box-batch4';
-    clickableBox.href = 'jouw-pagina.html'; // pas link aan
-    clickableBox.textContent = 'Ontdek meer';
+          const clickableBox = document.createElement('a');
+          clickableBox.className = 'clickable-box-batch4';
+          clickableBox.href = 'jouw-pagina.html'; // pas link aan
+          clickableBox.textContent = 'Ontdek meer';
+          productDiv.appendChild(clickableBox);
 
-    // Voeg toe aan de fullscreen product div
-    productDiv.appendChild(clickableBox);
-
-    grid.appendChild(productDiv);
-  }
+          grid.appendChild(productDiv);
+        }
         break;
     }
 
@@ -300,4 +308,3 @@ document.addEventListener("DOMContentLoaded", () => {
   showBatch(currentBatch);
 
 });
-
