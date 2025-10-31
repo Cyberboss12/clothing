@@ -146,6 +146,10 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;      /* verticaal centreren */
+  justify-content: center;  /* horizontaal centreren */
+  flex-direction: column;   /* alles netjes onder elkaar */
 }
 
 /* ========================================
@@ -403,7 +407,7 @@ footer {
 }
 
 .search-icon {
-  position: static;
+  position: absolute;
   order: -1;
   margin: 0;
   top: 43px;
