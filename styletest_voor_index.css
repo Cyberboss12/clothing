@@ -165,6 +165,7 @@ body {
 
 .search-icon {
   position: relative;
+  top: 55px;
   top: 0;
   margin: 0;
   font-size: 1.5rem;
@@ -175,6 +176,7 @@ body {
 
 .hamburger-menu {
   position: relative;
+  top: 55px;
   gap: 10px;
   align-items: center;
   font-family: 'Baskerville Old Face', serif;
@@ -317,6 +319,15 @@ body {
   text-align: center;
   font-size: 3rem;
   color: black;
+}
+
+.batch-two .placeholder-inner {
+  display: flex;
+  align-items: center;       /* verticaal centreren */
+  justify-content: center;   /* horizontaal centreren */
+  height: 100%;
+  width: 100%;
+  text-align: center;
 }
 
 /* ========================================
