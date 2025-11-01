@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Clickable box onder merknaam
         const clickableBox = document.createElement("a");
         clickableBox.className = "clickable-box";
-        clickableBox.textContent = "Ontdek nu!";
+        clickableBox.textContent = "SS26";
         clickableBox.href = "specifieke_pagina.html"; // pas link aan naar gewenste pagina
         placeholderInner.appendChild(clickableBox);
 
