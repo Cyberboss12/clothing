@@ -322,6 +322,7 @@ body {
 }
 
 .batch-two .placeholder-inner {
+  position: relative;
   display: flex;
   align-items: center;       /* verticaal centreren */
   justify-content: center;   /* horizontaal centreren */
