@@ -97,93 +97,109 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         // Batch 1: linker afbeelding + rechter placeholder + hamburger menu
         // ==============================
+        grid.appendChild(createProduct(products[0], 1));
+
+        // Placeholder rechts
+        const placeholder0 = document.createElement("div");
+        placeholder0.className = "placeholder";
+
+        const placeholderInner = document.createElement("div");
+        placeholderInner.className = "placeholder-inner";
+
+        // Tekst in het midden (merknaam)
+        const placeholderText = document.createElement("span");
+        placeholderText.className = "placeholder-text";
+        placeholderText.textContent = "Merknaam";
+
+        // Centraal positioneren
+        placeholderText.style.position = "absolute";
+        placeholderText.style.top = "50%";
+        placeholderText.style.left = "50%";
+        placeholderText.style.transform = "translate(-50%, -50%)";
+        placeholderText.style.fontSize = "3rem";
+        placeholderText.style.zIndex = "10";
+
+        placeholderInner.appendChild(placeholderText);
+
+        // Hamburger menu container
         const hamburgerMenu = document.createElement("div");
-hamburgerMenu.className = "hamburger-menu";
-hamburgerMenu.style.position = "absolute";
-hamburgerMenu.style.top = "45px";
-hamburgerMenu.style.right = "20px";
-hamburgerMenu.style.display = "flex";
-hamburgerMenu.style.alignItems = "center";
-hamburgerMenu.style.gap = "17px";
-hamburgerMenu.style.zIndex = "20";
+        hamburgerMenu.className = "hamburger-menu";
+        hamburgerMenu.style.position = "absolute";
+        hamburgerMenu.style.top = "45px";
+        hamburgerMenu.style.right = "20px";
+        hamburgerMenu.style.display = "flex";
+        hamburgerMenu.style.alignItems = "center";
+        hamburgerMenu.style.gap = "17px";
+        hamburgerMenu.style.zIndex = "20";
 
-// Zoekicoon links van het menu (SVG)
-const searchIcon = document.createElement('a');
-searchIcon.className = 'search-icon';
-searchIcon.href = '#'; // Pas link aan naar zoekpagina
-searchIcon.innerHTML = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="11" cy="11" r="8"/>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-`;
-searchIcon.style.order = "-1";
-searchIcon.style.display = "flex";
-searchIcon.style.alignItems = "center";
-searchIcon.style.justifyContent = "center";
-searchIcon.querySelector('svg').style.verticalAlign = 'middle';
+        // Zoekicoon links van het menu
+        const searchIcon = document.createElement('a');
+        searchIcon.className = 'search-icon';
+        searchIcon.href = '#'; // Pas link aan naar zoekpagina
+        searchIcon.textContent = '🔍';
+        searchIcon.style.order = "-1";
 
-hamburgerMenu.appendChild(searchIcon);
+        hamburgerMenu.appendChild(searchIcon);
 
-// Menu header (☰ Menu)
-const menuHeader = document.createElement("div");
-menuHeader.className = "menu-header";
-menuHeader.textContent = "☰ Menu";
-hamburgerMenu.appendChild(menuHeader);
+        // Menu header (☰ Menu)
+        const menuHeader = document.createElement("div");
+        menuHeader.className = "menu-header";
+        menuHeader.textContent = "☰ Menu";
+        hamburgerMenu.appendChild(menuHeader);
 
-// Menu content
-const menuContent = document.createElement("div");
-menuContent.className = "menu-content";
+        // Menu content
+        const menuContent = document.createElement("div");
+        menuContent.className = "menu-content";
 
-const menuItems = [
-  { label: "Men", link: "men.html" },
-  { label: "Women", link: "women.html" },
-  { label: "Children", link: "children.html" },
-  { label: "Discover", link: "discover.html" }
-];
+        const menuItems = [
+          { label: "Men", link: "men.html" },
+          { label: "Women", link: "women.html" },
+          { label: "Children", link: "children.html" },
+          { label: "Discover", link: "discover.html" }
+        ];
 
-menuItems.forEach(item => {
-  const a = document.createElement("a");
-  a.href = item.link;
-  a.textContent = item.label;
-  menuContent.appendChild(a);
-});
+        menuItems.forEach(item => {
+          const a = document.createElement("a");
+          a.href = item.link;
+          a.textContent = item.label;
+          menuContent.appendChild(a);
+        });
 
-hamburgerMenu.appendChild(menuContent);
-placeholderInner.appendChild(hamburgerMenu);
+        hamburgerMenu.appendChild(menuContent);
+        placeholderInner.appendChild(hamburgerMenu);
 
-// Clickable box onder merknaam
-const clickableBox = document.createElement("a");
-clickableBox.className = "clickable-box";
-clickableBox.textContent = "Ontdek nu!";
-clickableBox.href = "specifieke_pagina.html"; // pas link aan naar gewenste pagina
-placeholderInner.appendChild(clickableBox);
+        // Clickable box onder merknaam
+        const clickableBox = document.createElement("a");
+        clickableBox.className = "clickable-box";
+        clickableBox.textContent = "Ontdek nu!";
+        clickableBox.href = "specifieke_pagina.html"; // pas link aan naar gewenste pagina
+        placeholderInner.appendChild(clickableBox);
 
-placeholder0.appendChild(placeholderInner);
-grid.appendChild(placeholder0);
+        placeholder0.appendChild(placeholderInner);
+        grid.appendChild(placeholder0);
 
-// -----------------
-// Event listeners
-// -----------------
+        // -----------------
+        // Event listeners
+        // -----------------
 
-// Toggle menu bij klik
-menuHeader.addEventListener("click", (e) => {
-  e.stopPropagation();
-  menuContent.classList.toggle("open");
-});
+        // Toggle menu bij klik
+        menuHeader.addEventListener("click", (e) => {
+          e.stopPropagation(); // voorkomt dat buitenklik direct sluit
+          menuContent.classList.toggle("open");
+        });
 
-// Sluit menu bij klik buiten
-document.addEventListener("click", (e) => {
-  if (!menuContent.contains(e.target) && !menuHeader.contains(e.target) && !searchIcon.contains(e.target)) {
-    menuContent.classList.remove("open");
-  }
-});
+        // Sluit menu bij klik buiten
+        document.addEventListener("click", (e) => {
+          if (!menuContent.contains(e.target) && !menuHeader.contains(e.target) && !searchIcon.contains(e.target)) {
+            menuContent.classList.remove("open");
+          }
+        });
 
-// Klik-event voor zoekicoon
-searchIcon.addEventListener('click', (e) => {
-  e.stopPropagation();
-  window.location.href = 'zoekpagina.html'; // pas aan naar jouw zoekpagina
-});
+        // Klik-event voor zoekicoon
+        searchIcon.addEventListener('click', (e) => {
+          e.stopPropagation(); // voorkomt dat het menu sluit
+          window.location.href = 'zoekpagina.html'; // pas aan naar jouw zoekpagina
+        });
 
         break;
 
