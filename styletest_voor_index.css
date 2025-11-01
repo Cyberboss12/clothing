@@ -109,7 +109,10 @@ body {
 
 .batch-one .product:first-child {
   grid-column: 1;
-  height: 50%;
+}
+
+.batch-one .product:first-child img {
+  height: 60px;
 }
 
 .batch-one .product:last-child {
