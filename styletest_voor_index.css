@@ -291,6 +291,28 @@ body {
   background-color: #222;
 }
 
+.shopping-bag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;       /* grootte van de shopping bag */
+  color: black;
+  border: 2px solid black; /* zwarte outline */
+  background: transparent;  /* geen vullingkleur */
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;       /* afgeronde hoeken */
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.shopping-bag:hover {
+  transform: scale(1.1);
+  color: #555;  /* iets donkerder bij hover */
+  border-color: #555;
+}
+
 /* ========================================
    Batch 2
 ======================================== */

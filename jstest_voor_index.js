@@ -147,6 +147,13 @@ document.addEventListener("DOMContentLoaded", () => {
         menuHeader.textContent = "☰ Menu";
         hamburgerMenu.appendChild(menuHeader);
 
+        // Shopping bag icoon toevoegen
+        const shoppingBag = document.createElement('a');
+        shoppingBag.className = 'shopping-bag';
+        shoppingBag.href = 'shoppingcart.html'; // link naar winkelmandpagina
+        shoppingBag.textContent = '🛍️';          // emoji als placeholder
+        hamburgerMenu.appendChild(shoppingBag);
+
         // Menu content
         const menuContent = document.createElement("div");
         menuContent.className = "menu-content";
