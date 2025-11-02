@@ -111,17 +111,24 @@ body {
 /* Speciale styling voor het logo links */
 .batch-one .product:first-child {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;            /* stel gewenste hoogte in */
+  align-items: center;      /* verticaal centreren */
+  justify-content: center;  /* horizontaal centreren */
+  height: 100%;             /* vult de hele helft van de grid */
   overflow: hidden;
+  position: relative;
 }
 
 .batch-one .product:first-child img {
   max-width: 80%;
   max-height: 80%;
   object-fit: contain;
-  object-position: center;
+  object-position: center center;  /* zorgt dat de afbeelding perfect in het midden blijft */
+  display: block;
+  margin: auto;                    /* extra zekerheid voor centrering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* exacte middenplaatsing */
 }
 
 .batch-one .product:last-child {
