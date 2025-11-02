@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // ==============================
         const placeholder1 = document.createElement("div");
         placeholder1.className = "placeholder";
-        placeholder1.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Hier kan tekst komen</span></div>`;
+        placeholder1.innerHTML = `<div class="placeholder-inner"><span class="placeholder-text">Merknaam</span></div>`;
         grid.appendChild(placeholder1);
         grid.appendChild(createProduct(products[1], 2));
         break;
