@@ -119,8 +119,8 @@ body {
 }
 
 .batch-one .product:first-child img {
-  max-width: 80%;
-  max-height: 80%;
+  max-width: 87%;
+  max-height: 87%;
   object-fit: contain;
   object-position: center center;  /* zorgt dat de afbeelding perfect in het midden blijft */
   display: block;
