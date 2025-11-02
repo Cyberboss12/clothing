@@ -123,36 +123,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Hamburger menu container
         const hamburgerMenu = document.createElement("div");
-        hamburgerMenu.className = "hamburger-menu";
-        hamburgerMenu.style.position = "absolute";
-        hamburgerMenu.style.top = "45px";
-        hamburgerMenu.style.right = "20px";
-        hamburgerMenu.style.display = "flex";
-        hamburgerMenu.style.alignItems = "center";
-        hamburgerMenu.style.gap = "17px";
-        hamburgerMenu.style.zIndex = "20";
+hamburgerMenu.className = "hamburger-menu";
+hamburgerMenu.style.position = "absolute";
+hamburgerMenu.style.top = "45px";
+hamburgerMenu.style.right = "20px";
+hamburgerMenu.style.display = "flex";
+hamburgerMenu.style.flexDirection = "column"; // stapelt rijen verticaal
+hamburgerMenu.style.alignItems = "flex-end"; // rechts uitlijnen
+hamburgerMenu.style.gap = "10px"; 
+hamburgerMenu.style.zIndex = "20";
 
-        // Zoekicoon links van het menu
-        const searchIcon = document.createElement('a');
-        searchIcon.className = 'search-icon';
-        searchIcon.href = '#'; // Pas link aan naar zoekpagina
-        searchIcon.textContent = '🔍';
-        searchIcon.style.order = "-1";
+// Maak een rij voor search + menu header
+const topRow = document.createElement("div");
+topRow.style.display = "flex";
+topRow.style.alignItems = "center";
+topRow.style.gap = "17px";
 
-        hamburgerMenu.appendChild(searchIcon);
+// Zoekicoon
+const searchIcon = document.createElement('a');
+searchIcon.className = 'search-icon';
+searchIcon.href = '#';
+searchIcon.textContent = '🔍';
 
-        // Menu header (☰ Menu)
-        const menuHeader = document.createElement("div");
-        menuHeader.className = "menu-header";
-        menuHeader.textContent = "☰ Menu";
-        hamburgerMenu.appendChild(menuHeader);
+// Menu header
+const menuHeader = document.createElement("div");
+menuHeader.className = "menu-header";
+menuHeader.textContent = "☰ Menu";
 
-        // Shopping bag icoon toevoegen
-        const shoppingBag = document.createElement('a');
-        shoppingBag.className = 'shopping-bag';
-        shoppingBag.href = 'shoppingcart.html'; // link naar winkelmandpagina
-        shoppingBag.textContent = '🛍️';          // emoji als placeholder
-        hamburgerMenu.appendChild(shoppingBag);
+// Voeg search + menu header toe aan topRow
+topRow.appendChild(searchIcon);
+topRow.appendChild(menuHeader);
+
+// Voeg topRow toe aan hamburgerMenu
+hamburgerMenu.appendChild(topRow);
+
+// Shopping bag onder de menu header
+const shoppingBag = document.createElement('a');
+shoppingBag.className = 'shopping-bag';
+shoppingBag.href = 'shoppingcart.html';
+shoppingBag.textContent = '🛍️';
+hamburgerMenu.appendChild(shoppingBag);
 
         // Menu content
         const menuContent = document.createElement("div");
