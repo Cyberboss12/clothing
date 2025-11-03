@@ -35,11 +35,6 @@ if (!firstSection) console.warn('script3.js: geen .fullscreen-section:first-of-t
 if (!infoBar) console.warn('script3.js: geen #infoBar gevonden.');
 if (!closeBtn) console.warn('script3.js: geen #closeInfoBar gevonden.');
 
-/**
- * Past de hoogte van de eerste <section> aan.
- * Als de info-bar zichtbaar is: section height = 100vh - infoBarHeight
- * Als de info-bar verborgen is: section height = 100vh
- */
 function adjustFirstSection() {
   if (!firstSection) return;
 
@@ -56,16 +51,15 @@ function adjustFirstSection() {
 }
 
 // Run na DOM ready en ook na volledige window load (voor alle images/layout)
-window.addEventListener('DOMContentLoaded', () => {
-  // korte vertraging om zeker te zijn dat CSS is toegepast
-  adjustFirstSection();
-});
-window.addEventListener('load', () => {
-  adjustFirstSection();
-});
-window.addEventListener('resize', () => {
-  adjustFirstSection();
-});
+// window.addEventListener('DOMContentLoaded', () => {
+//   adjustFirstSection();
+// });
+// window.addEventListener('load', () => {
+//   adjustFirstSection();
+// });
+// window.addEventListener('resize', () => {
+//   adjustFirstSection();
+// });
 
 // Klik op kruisje: animatie -> verberg -> pas section aan
 if (closeBtn && infoBar) {
