@@ -64,11 +64,12 @@ function adjustFirstSection() {
 // Klik op kruisje: animatie -> verberg -> pas section aan
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
+    // Start de sluitanimatie
     infoBar.classList.add('closing');
 
-    // Wacht tot de sluitanimatie klaar is
+    // Zodra de animatie klaar is: verberg de balk volledig
     const onTransitionEnd = (ev) => {
-      if (ev.target !== infoBar) return;
+      if (ev.propertyName !== 'transform') return; // alleen reageren op transform
       infoBar.classList.add('hidden');
       infoBar.classList.remove('closing');
       infoBar.removeEventListener('transitionend', onTransitionEnd);
@@ -76,13 +77,13 @@ if (closeBtn && infoBar) {
 
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
-    // Fallback (voor zekerheid)
+    // Fallback als de animatie niet vuurt
     setTimeout(() => {
       if (!infoBar.classList.contains('hidden')) {
         infoBar.classList.add('hidden');
         infoBar.classList.remove('closing');
       }
-    }, 400);
+    }, 500);
   });
 }
 

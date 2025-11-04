@@ -210,7 +210,7 @@ footer {
   align-items: center;            /* centreert het kruisje horizontaal */
   justify-content: center;        /* centreert de tekst verticaal */
   z-index: 9999;
-  transition: transform 0.35s ease;
+  transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 /* Sluitknop bovenaan */
@@ -251,6 +251,7 @@ footer {
 /* Animatie bij sluiten */
 .info-bar.closing {
   transform: translateX(-100%);
+  opacity: 0;
 }
 
 .info-bar.hidden {
