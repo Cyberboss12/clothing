@@ -64,27 +64,23 @@ function adjustFirstSection() {
 // Klik op kruisje: animatie -> verberg -> pas section aan
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
-    // start closing animation
     infoBar.classList.add('closing');
 
-    // na overgang: uit DOM-flow halen en aanpassen
+    // Wacht tot de sluitanimatie klaar is
     const onTransitionEnd = (ev) => {
-      // alleen reageren op de transition van de info-bar zelf
       if (ev.target !== infoBar) return;
-      infoBar.classList.add('hidden');       // display:none
-      infoBar.classList.remove('closing');   // reset state
-      adjustFirstSection();                  // pas eerste section aan nu info-bar niet meer in flow is
+      infoBar.classList.add('hidden');
+      infoBar.classList.remove('closing');
       infoBar.removeEventListener('transitionend', onTransitionEnd);
     };
 
     infoBar.addEventListener('transitionend', onTransitionEnd);
 
-    // Fallback: als transitionend niet firet (bv oudere browsers), forceer na 350ms
+    // Fallback (voor zekerheid)
     setTimeout(() => {
       if (!infoBar.classList.contains('hidden')) {
         infoBar.classList.add('hidden');
         infoBar.classList.remove('closing');
-        adjustFirstSection();
       }
     }, 400);
   });

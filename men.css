@@ -207,8 +207,8 @@ footer {
   box-shadow: 2px 0 10px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;        /* Voor de verticale tekst in het midden */
+  align-items: center;            /* centreert het kruisje horizontaal */
+  justify-content: center;        /* centreert de tekst verticaal */
   z-index: 9999;
   transition: transform 0.35s ease;
 }
@@ -216,28 +216,36 @@ footer {
 /* Sluitknop bovenaan */
 #closeInfoBar {
   position: absolute;
-  top: 10px;
-  right: 10px;                    /* binnen de balk rechts uitgelijnd */
+  top: 15px;
+  left: 50%;                      /* gecentreerd */
+  transform: translateX(-50%);    /* echt in het midden */
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 24px;
   cursor: pointer;
-  color: #333;
-  transition: color 0.2s ease;
+  color: #555;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
 #closeInfoBar:hover {
   color: #000;
+  transform: translateX(-50%) scale(1.2);
 }
 
 .vertical-text {
-  writing-mode: vertical-rl;      /* Maakt de tekst verticaal */
-  transform: rotate(180deg);      /* Zorgt dat hij van beneden naar boven leest */
-  text-align: center;
+  display: flex;
+  flex-direction: column; /* Zet de letters onder elkaar */
+  align-items: center;    /* Centreer horizontaal */
+  justify-content: center;/* Centreer verticaal */
   font-size: 18px;
   font-weight: 500;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   color: #333;
+  height: 100%;
+}
+
+.vertical-text span {
+  display: block;
 }
 
 /* Animatie bij sluiten */
@@ -248,25 +256,6 @@ footer {
 .info-bar.hidden {
   display: none;
 }
-
-/* .info-center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  flex: 1;
-  text-align: center;
-  transition: opacity 0.5s ease;
-} */
-
-/* .info-center.hidden {
-  opacity: 0;
-} */
-
-/* .info-right {
-  display: flex;
-  gap: 80px; 
-  align-items: center;
-} */
 
 /* 3: Hoofdnavigatie */
  .topbar {
