@@ -258,6 +258,64 @@ footer {
   display: none;
 }
 
+/* === SPLIT-GRID (naast info-bar) === */
+.split-grid {
+  position: relative;
+  margin-left: 90px; /* zelfde breedte als info-bar */
+  width: calc(100vw - 90px);
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  transition: margin-left 0.5s ease, width 0.5s ease;
+}
+
+.vak {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+.vak img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.vak:hover img {
+  transform: scale(1.05);
+}
+
+.text-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.vak:hover .text-overlay {
+  opacity: 1;
+}
+
+.text-overlay h2 {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.text-overlay p {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
 /* 3: Hoofdnavigatie */
  .topbar {
   z-index: 10;
@@ -467,14 +525,6 @@ nav ul li a:hover {
   font-size: 20px;
   cursor: pointer;
   margin-left: 20px;
-}
-
-.close-btn:hover {
-  color: #222; /* contrast bij hover */
-}
-
-.info-bar.hidden {
-  display: none;
 }
 
 
