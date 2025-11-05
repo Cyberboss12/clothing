@@ -261,12 +261,19 @@ footer {
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
   position: relative;
-  margin-left: 90px;           /* naast info-bar */
-  width: calc(100vw - 90px);
-  height: 500px;                /* ✅ niet 100vh, maar zo hoog als de afbeelding */
+  margin-left: 80px; /* past naast info-bar */
+  width: calc(100vw - 80px);
+  height: auto; /* hoogte afhankelijk van inhoud */
   display: grid;
-  grid-template-columns: 1fr;  /* één afbeelding */
+  grid-template-columns: 1fr;
   place-items: center;
+}
+
+.split-grid img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
 }
 
 .vak {
