@@ -201,7 +201,7 @@ footer {
   top: 0;
   left: 0;
   height: 100vh;                  /* Volledige hoogte */
-  width: 70px;                    /* Smalle verticale balk */
+  width: 60px;                    /* Smalle verticale balk */
   background-color: white;
   border-right: 1px solid #ddd;
   box-shadow: 2px 0 10px rgba(0,0,0,0.05);
@@ -283,10 +283,6 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.vak:hover img {
-  transform: scale(1.03);
 }
 
 /* Tekst-overlay links onder */
