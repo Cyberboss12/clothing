@@ -50,6 +50,12 @@ function adjustFirstSection() {
   }
 }
 
+if (closeBtn && infoBar) {
+  closeBtn.addEventListener('click', () => {
+    infoBar.classList.add('hidden');
+  });
+}
+
 // Run na DOM ready en ook na volledige window load (voor alle images/layout)
 // window.addEventListener('DOMContentLoaded', () => {
 //   adjustFirstSection();

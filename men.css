@@ -201,7 +201,7 @@ footer {
   top: 0;
   left: 0;
   height: 100vh;                  /* Volledige hoogte */
-  width: 80px;                    /* Smalle verticale balk */
+  width: 70px;                    /* Smalle verticale balk */
   background-color: white;
   border-right: 1px solid #ddd;
   box-shadow: 2px 0 10px rgba(0,0,0,0.05);
@@ -255,7 +255,9 @@ footer {
 }
 
 .info-bar.hidden {
-  display: none;
+  /* display: none; */
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 /* === SPLIT-GRID (naast info-bar) === */
