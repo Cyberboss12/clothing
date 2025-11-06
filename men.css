@@ -261,30 +261,27 @@ footer {
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
   position: relative;
-  margin-left: 80px; /* past naast info-bar */
-  width: calc(100vw - 80px);
-  height: auto; /* hoogte afhankelijk van inhoud */
+  margin-left: 90px; /* zelfde breedte als info-bar */
+  width: calc(100vw - 90px);
+  height: 100vh;
   display: grid;
-  grid-template-columns: 1fr;
   place-items: center;
-}
-
-.split-grid img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  display: block;
+  transition: margin-left 0.5s ease, width 0.5s ease;
 }
 
 .vak {
+  position: relative;
   width: 100%;
-  height: auto;                /* ✅ laat hoogte afhangen van afbeelding */
+  height: 100%;
+  overflow: hidden;
+  display: block;
 }
 
 .vak img {
   width: 100%;
-  height: auto;                /* ✅ behoud verhoudingen */
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
 }
 
 .vak:hover img {
