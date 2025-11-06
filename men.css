@@ -30,8 +30,8 @@ section,
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   margin: 0;
   padding: 0;
   line-height: 0;
@@ -265,7 +265,7 @@ footer {
   width: calc(100vw - 90px);
   height: 100vh;
   display: grid;
-  place-items: center;
+  place-items: stretch;
   transition: margin-left 0.5s ease, width 0.5s ease;
 }
 
