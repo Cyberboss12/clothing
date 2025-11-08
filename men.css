@@ -276,7 +276,7 @@ footer {
   border: none;
   cursor: pointer;
   width: 22px;
-  height: 14px;
+  height: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -290,10 +290,6 @@ footer {
   background-color: #000;
   border-radius: 1px;
   transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.hamburger-btn:hover span {
-  background-color: #666;
 }
 
 /* Zoekicoon */
