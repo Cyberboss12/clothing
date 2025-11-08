@@ -261,13 +261,13 @@ footer {
 
 .info-icons {
   position: absolute;
-  top: 40px;              /* iets lager op de balk */
+  top: 28px;              /* iets lager op de balk */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;              /* afstand tussen menu en vergrootglas */
+  gap: 24px;              /* afstand tussen menu en vergrootglas */
 }
 
 /* Hamburgerstijl voor de info-bar */
@@ -276,7 +276,7 @@ footer {
   border: none;
   cursor: pointer;
   width: 22px;
-  height: 10px;
+  height: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
