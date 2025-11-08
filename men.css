@@ -333,9 +333,11 @@ footer {
 
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
-  position: relative;
-  margin-left: 90px; /* zelfde breedte als info-bar */
-  width: calc(100vw - 90px);
+  position: absolute;
+  top: 0;
+  left: 60px;
+  /* margin-left: 90px; zelfde breedte als info-bar */
+  width: calc(100vw - 60px);
   height: 100vh;
   display: grid;
   place-items: stretch;
