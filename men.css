@@ -361,9 +361,41 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 45% center;
+  object-position: center;
   margin: 0;
   padding: 0;
+}
+
+.text-grid {
+  position: fixed;
+  top: 0;
+  right: 60px; /* zelfde breedte als je info-bar */
+  height: 35vh; /* 35% van de viewport */
+  width: 400px; /* pas aan naar wens */
+  background-color: rgba(255, 255, 255, 0.85); /* subtiele achtergrond */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -4px 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 9000;
+  border-radius: 8px 0 0 8px; /* afgeronde hoeken links */
+}
+
+.text-content {
+  text-align: left;
+  font-family: 'Baskerville Old Face';
+  color: #222;
+}
+
+.text-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.text-content p {
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* Tekst-overlay links onder */
