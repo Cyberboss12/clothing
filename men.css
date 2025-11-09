@@ -213,6 +213,16 @@ footer {
   font-family: 'Baskerville Old Face';
 }
 
+.info-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;                /* zeer dunne lijn */
+  height: 100%;
+  background-color: black;   /* kleur van de lijn */
+}
+
 /* Sluitknop bovenaan */
 #closeInfoBar {
   position: absolute;
