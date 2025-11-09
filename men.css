@@ -217,8 +217,8 @@ footer {
   content: "";
   position: absolute;
   top: 0;
-  right: 0;
-  width: 1px;                /* zeer dunne lijn */
+  right: -1px;
+  width: 1.7px;                /* zeer dunne lijn */
   height: 100%;
   background-color: black;   /* kleur van de lijn */
 }
