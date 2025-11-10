@@ -56,17 +56,6 @@ if (closeBtn && infoBar) {
   });
 }
 
-// Run na DOM ready en ook na volledige window load (voor alle images/layout)
-// window.addEventListener('DOMContentLoaded', () => {
-//   adjustFirstSection();
-// });
-// window.addEventListener('load', () => {
-//   adjustFirstSection();
-// });
-// window.addEventListener('resize', () => {
-//   adjustFirstSection();
-// });
-
 // Klik op kruisje: animatie -> verberg -> pas section aan
 if (closeBtn && infoBar) {
   closeBtn.addEventListener('click', () => {
