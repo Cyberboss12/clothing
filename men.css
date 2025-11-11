@@ -381,7 +381,7 @@ footer {
   top: 0;
   left: calc(30px + 100%); /* 60px voor infobalk + breedte afbeelding */
   height: 35vh;            /* jouw gewenste hoogte */
-  width: calc(100vw - (60px + 100%)); /* rest van de pagina tot rechterrand */
+  width: calc(100vw - (30px + 100%)); /* rest van de pagina tot rechterrand */
   background-color: rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
