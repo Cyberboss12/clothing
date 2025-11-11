@@ -378,18 +378,18 @@ footer {
 
 .text-grid {
   position: absolute;
-  right: 0;
-  top: 35%;
-  transform: translateY(-50%);
-  height: 30vh;                      /* vaste hoogte */
-  width: calc(100% - 60px - 50%);    /* neemt de rechterhelft van de pagina in, min info-bar */
-  background-color: rgba(255, 255, 255, 0.9);
+  top: 0;
+  left: calc(60px + 100%); /* 60px voor infobalk + breedte afbeelding */
+  height: 35vh;            /* jouw gewenste hoogte */
+  width: calc(100vw - (60px + 100%)); /* rest van de pagina tot rechterrand */
+  background-color: rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: -4px 4px 10px rgba(0,0,0,0.08);
-  padding: 40px 60px;
-  z-index: 5;
+  box-shadow: -4px 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 9000;
+  border-radius: 8px 0 0 8px;
 }
 
 .text-content {
