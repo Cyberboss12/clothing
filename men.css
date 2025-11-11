@@ -390,6 +390,7 @@ footer {
   padding: 20px;
   z-index: 9000;
   border-radius: 8px 0 0 8px;
+  border-style: red;
 }
 
 .text-content {
