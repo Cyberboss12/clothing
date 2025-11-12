@@ -343,20 +343,20 @@ footer {
 
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 60px;
   /* margin-left: 90px; zelfde breedte als info-bar */
   width: calc(100vw - 60px);
   height: 100vh;
-  display: grid;
+  display: flex;
   place-items: stretch;
   /* transition: margin-left 0.5s ease, width 0.5s ease; */
 }
 
 .vak {
   position: relative;
-  width: 100%;
+  width: 50%;
   height: 100%;
   overflow: hidden;
   object-fit: cover;
@@ -377,20 +377,19 @@ footer {
 }
 
 .text-grid {
-  position: absolute;        /* positioneert binnen split-grid */
-  top: 0;                    /* tegen bovenkant van container */
-  right: 0;                  /* tegen rechterrand afbeelding */
-  height: 30vh;              /* vaste hoogte */
-  width: calc(100% - var(--image-width, 50%)); 
-  /* vervang 50% door de werkelijke breedte van je afbeelding als die bekend is */
-  
+  position: absolute;
+  top: 0;
+  left: 100%; /* direct rechts van de afbeelding */
+  height: 30vh;
+  width: 50%; /* vult de rechterhelft */
   background-color: rgba(255, 255, 255, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 28px;
-  box-shadow: -4px 4px 10px rgba(0,0,0,0.08);
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.08);
   z-index: 9000;
+  border-radius: 8px 0 0 8px;
 }
 
 
