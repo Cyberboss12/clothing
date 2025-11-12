@@ -377,11 +377,11 @@ footer {
 }
 
 .text-grid {
-  position: absolute;
-  top: 0;
-  left: calc(65px + 100%); /* 60px voor infobalk + breedte afbeelding */
-  height: 35vh;            /* jouw gewenste hoogte */
-  width: calc(100vw - (65px + 100%)); /* rest van de pagina tot rechterrand */
+  position: absolute; /* ipv fixed, zodat het binnen dezelfde container als .vak zit */
+  top: 0;             /* tegen de bovenkant van de container */
+  left: 100%;         /* direct rechts van de afbeelding */
+  width: calc(100vw - 60px - 100%); /* totale viewport minus info-bar minus afbeelding */
+  height: 30vh;       /* zoals gewenst */
   background-color: rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
