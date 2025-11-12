@@ -377,20 +377,22 @@ footer {
 }
 
 .text-grid {
-  position: fixed;         /* buiten flow zodat afbeelding niet verschuift */
-  top: 0;                  /* tegen top van viewport */
-  right: 0;                /* tegen rechterkant van viewport */
-  height: 30vh;            /* gewenste hoogte */
-  width: 400px;            /* vaste breedte — pas aan naar wens */
-  background-color: rgba(255,255,255,0.92);
+  position: absolute;        /* positioneert binnen split-grid */
+  top: 0;                    /* tegen bovenkant van container */
+  right: 0;                  /* tegen rechterrand afbeelding */
+  height: 30vh;              /* vaste hoogte */
+  width: calc(100% - var(--image-width, 50%)); 
+  /* vervang 50% door de werkelijke breedte van je afbeelding als die bekend is */
+  
+  background-color: rgba(255, 255, 255, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 28px;
   box-shadow: -4px 4px 10px rgba(0,0,0,0.08);
-  z-index: 9000;           /* boven content, niet ernaartoe duwen */
-  border-radius: 0 0 0 0;  /* geen ronding tenzij gewenst */
+  z-index: 9000;
 }
+
 
 .text-grid .text-content {
   max-width: 100%;
