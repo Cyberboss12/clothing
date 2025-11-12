@@ -377,23 +377,23 @@ footer {
 }
 
 .text-grid {
-  position: absolute; /* ipv fixed, zodat het binnen dezelfde container als .vak zit */
-  top: 0;             /* tegen de bovenkant van de container */
-  left: 100%;         /* direct rechts van de afbeelding */
-  width: calc(100vw - 60px - 100%); /* totale viewport minus info-bar minus afbeelding */
-  height: 30vh;       /* zoals gewenst */
-  background-color: rgba(255, 255, 255, 0.85);
+  position: fixed;         /* buiten flow zodat afbeelding niet verschuift */
+  top: 0;                  /* tegen top van viewport */
+  right: 0;                /* tegen rechterkant van viewport */
+  height: 30vh;            /* gewenste hoogte */
+  width: 400px;            /* vaste breedte — pas aan naar wens */
+  background-color: rgba(255,255,255,0.92);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: -4px 4px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  z-index: 9000;
-  border-radius: 8px 0 0 8px;
-  border-style: red;
+  padding: 20px 28px;
+  box-shadow: -4px 4px 10px rgba(0,0,0,0.08);
+  z-index: 9000;           /* boven content, niet ernaartoe duwen */
+  border-radius: 0 0 0 0;  /* geen ronding tenzij gewenst */
 }
 
-.text-content {
+.text-grid .text-content {
+  max-width: 100%;
   text-align: left;
   font-family: 'Baskerville Old Face';
   color: #222;
@@ -401,12 +401,14 @@ footer {
 
 .text-content h2 {
   font-size: 1.8rem;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  margin: 0 0 6px 0;
 }
 
 .text-content p {
   font-size: 1rem;
   line-height: 1.5;
+  margin: 0;
 }
 
 /* Tekst-overlay links onder */
