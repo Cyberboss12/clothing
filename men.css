@@ -342,70 +342,70 @@ footer {
 }
 
 /* === SPLIT-GRID (naast info-bar) === */
-.split-grid {
-  position: absolute;
-  top: 0;
-  left: 60px;
-  /* margin-left: 90px; zelfde breedte als info-bar */
-  width: calc(100vw - 60px);
-  height: 100vh;
-  display: grid;
-  place-items: stretch;
-  /* transition: margin-left 0.5s ease, width 0.5s ease; */
-}
-
-.vak {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-.vak img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  margin: 0;
-  padding: 0;
-}
-
-.text-grid {
-  position: absolute; /* ipv fixed, zodat het binnen dezelfde container als .vak zit */
-  top: 0;             /* tegen de bovenkant van de container */
-  left: 100%;         /* direct rechts van de afbeelding */
-  width: calc(100vw - 60px - 100%); /* totale viewport minus info-bar minus afbeelding */
-  height: 30vh;       /* zoals gewenst */
-  background-color: rgba(255, 255, 255, 0.85);
+/* 3: Split-grid en tekstsectie (gewijzigd) */
+.fullscreen-section.split-grid {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: -4px 4px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  z-index: 9000;
-  border-radius: 8px 0 0 8px;
-  border-style: red;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-.text-content {
+/* Nieuwe structuur om afbeelding en tekst naast elkaar te positioneren */
+.vak-container {
+  display: flex;
+  height: 100vh;
+  width: calc(100vw - 60px);   /* rekening houden met de info-bar */
+  margin-left: 60px;
+  position: relative;
+}
+
+/* Linkerzijde: afbeelding */
+.vak-container .vak {
+  flex: 0 0 50%;   /* afbeelding neemt 50% van de breedte */
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.vak-container .vak img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Rechterzijde: tekstgrid */
+.vak-container .text-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* tekst vanaf boven */
+  align-items: flex-start;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 60px;
+  height: 100%;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+  border-radius: 0 8px 8px 0;
+  position: relative;
+  z-index: 9000;
+}
+
+.text-grid .text-content {
+  max-width: 80%;
   text-align: left;
   font-family: 'Baskerville Old Face';
   color: #222;
 }
 
-.text-content h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+.text-grid h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
 }
 
-.text-content p {
-  font-size: 1rem;
+.text-grid p {
+  font-size: 1.1rem;
   line-height: 1.5;
 }
 
