@@ -343,7 +343,7 @@ footer {
 
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: 1.6fr 0.8fr; /* Linker kant wordt breder */
   align-items: flex-start;
   justify-content: flex-start;
