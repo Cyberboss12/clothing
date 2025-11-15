@@ -47,62 +47,13 @@ section img,
   margin: 0;
 }
 
-.top-overlay {
-  position: absolute;
-  top: 25px;             /* altijd dezelfde afstand van bovenkant */
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  color: black;
-  z-index: 5;
-  max-width: 90%;
-}
-
-/* Tekststijl */
-.top-overlay h1 {
-  /* font-size: 2,5rem;  */
-  margin: 0;
-  line-height: 1.2;
-  text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-}
-
-/* Fade in/out effect */
-.top-overlay .switch-item {
-  display: flex;              /* tekst of logo in een flexbox */
-  align-items: center;        /* verticaal centreren */
-  justify-content: center;    /* horizontaal centreren */
-  font-size: 2.3rem;
-  font-family: "Baskerville Old Face";
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.top-overlay .switch-item.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.top-overlay .switch-item img {
-  height: 1.5rem; /* zelfde hoogte als tekst */
-  width: auto;
-}
-
-.top-overlay .switch-item img.logo {
-  margin-top: -18px;
-  height: 30px;   /* pas aan naar wens */
-  width: auto;    /* behoud verhoudingen */
-}
-
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
   display: flex;
-  grid-template-columns: 1.6fr 0.8fr; /* Linker kant wordt breder */
   align-items: flex-start;
   justify-content: flex-start;
   width: 100vw;
-  height: 100vh;
+  height: 70vh;
   position: relative;
   overflow: hidden;
 }
@@ -128,7 +79,7 @@ section img,
 /* Afbeelding stabiel */
 .split-grid .vak img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   display: block;
 }
