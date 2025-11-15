@@ -36,7 +36,7 @@ body::-webkit-scrollbar {
   height: 100vh;
   background: white;
   border-right: 2px solid black;
-  transform: translateX(calc(-1 * (var(--image-width) + var(--vertical-bar))));
+  transform: translateX(-100%);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.4s ease;
   z-index: 99999; /* heel hoog zodat het alles overschrijdt */
