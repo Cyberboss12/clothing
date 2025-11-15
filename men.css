@@ -363,71 +363,25 @@ footer {
   transform: scale(1.1);
 }
 
-/* Dropdown inhoud */
-.dropdown-content {
-  display: none; 
+.right-bar {
   position: fixed;
-  top: 100px;
-  left: 0;
-  width: 100vw;
-  background-color: #333;
-  padding: 40px 80px;
-  box-sizing: border-box;
-  border-top: 1px solid #444;
-  overflow-x: hidden;
-}
-
-/* Toon dropdown bij hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Dropdown layout */
-.dropdown-inner {
+  top: 0;
+  right: 0;
+  width: 60px;                 /* breedte van de balk */
+  height: 100vh;               /* over hele hoogte */
+  border-left: 2px solid black;/* verticale lijn links in de balk */
   display: flex;
-  max-width: 1400px;
-  margin: 0 auto;
+  align-items: center;         /* center verticaal */
+  justify-content: center;     /* center horizontaal */
+  z-index: 9999;
+  background: transparent;     /* doorzichtig */
 }
 
-.dropdown-left {
-  flex: 1;
-}
-
-.dropdown-left ul {
-  list-style: none;
-  padding: 0;
-}
-
-.dropdown-left li {
-  margin-bottom: 15px;
-}
-
-.dropdown-left a {
-  color: #fff;
-  font-size: 16px;
-  text-decoration: none;
-  display: inline-block;
-  position: relative;
-}
-
-.dropdown-left a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #fff;
-  transition: width 0.3s ease;
-}
-
-.dropdown-left a:hover::after {
-  width: 100%;
-}
-
-.dropdown-right {
-  display: flex;
-  gap: 20px;
+.right-bar span {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  font-family: 'Baskerville Old Face';
 }
 
 .close-btn {
