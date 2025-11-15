@@ -95,6 +95,18 @@ section img,
   width: auto;    /* behoud verhoudingen */
 }
 
+/* === SPLIT-GRID (naast info-bar) === */
+.split-grid {
+  display: flex;
+  grid-template-columns: 1.6fr 0.8fr; /* Linker kant wordt breder */
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
 .split-grid .vak {
   position: relative;      /* nodig voor overlay */
@@ -341,32 +353,6 @@ footer {
   transform: scale(1.1);
 }
 
-/* === SPLIT-GRID (naast info-bar) === */
-.split-grid {
-  display: flex;
-  grid-template-columns: 1.6fr 0.8fr; /* Linker kant wordt breder */
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Afbeeldingsvak blijft onaangetast */
-.split-grid .vak {
-  flex: 0 0 auto; /* vaste breedte */
-  position: relative;
-}
-
-.split-grid .vak img {
-  display: block;
-  height: auto;     /* behoud natuurlijke hoogte */
-  width: auto;      /* behoud natuurlijke breedte */
-  max-height: 100vh; /* voorkomt overmatige hoogte */
-  object-fit: cover;
-}
-
 .text-grid {
   position: absolute;
   top: 0;
@@ -380,7 +366,6 @@ footer {
   padding: 20px;
   z-index: 10;
 }
-
 
 .text-grid .text-content {
   max-width: 100%;
