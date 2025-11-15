@@ -22,6 +22,52 @@ body::-webkit-scrollbar {
   height: 0;
 }
 
+:root {
+  --image-width: 40vw;    /* breedte afbeelding */
+  --vertical-bar: 60px;   /* breedte van je zwarte verticale infobar */
+}
+
+/* Main dropdown */
+.dropdown-menu {
+  position: fixed;
+  top: 0;
+  left: var(--vertical-bar);  
+  width: var(--image-width);  
+  height: 100vh;
+  background: white;
+  border-right: 2px solid black;
+  transform: translateX(calc(-1 * (var(--image-width) + var(--vertical-bar))));
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 99999; /* heel hoog zodat het alles overschrijdt */
+  padding: 40px 30px;
+  box-sizing: border-box;
+}
+
+/* Zichtbaar */
+.dropdown-menu.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Styling binnenin */
+.dropdown-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropdown-menu li {
+  margin: 22px 0;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: #000;
+  font-size: 1.8rem;
+  font-family: "Baskerville Old Face";
+}
+
 /* ===== Fullscreen sections (zorg dat ze exact 100vh zijn) ===== */
 section,
 .fullscreen-section {
