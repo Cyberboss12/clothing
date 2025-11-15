@@ -26,7 +26,7 @@ body::-webkit-scrollbar {
 section,
 .fullscreen-section {
   width: 100%;
-  height: 100vh;          /* precies 1 viewport */
+  height: 70vh;          /* precies 1 viewport */
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
