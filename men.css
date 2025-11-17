@@ -235,6 +235,7 @@ section img,
   width: 1.7px;                /* zeer dunne lijn */
   height: 100%;
   background-color: black;   /* kleur van de lijn */
+  pointer-events: none;
 }
 
 /* Sluitknop bovenaan */
@@ -266,6 +267,7 @@ section img,
   letter-spacing: 3px;
   color: #333;
   height: 100%;
+  pointer-events: none;
 }
 
 .vertical-text span {
