@@ -48,6 +48,7 @@ body::-webkit-scrollbar {
 .dropdown-menu.active {
   transform: translateX(0);
   opacity: 1;
+  pointer-events: auto;
 }
 
 /* Styling binnenin */
@@ -309,6 +310,7 @@ section img,
   flex-direction: column;
   justify-content: space-between;
   padding: 0;
+  z-index: 10002;
 }
 
 .hamburger-btn span {
