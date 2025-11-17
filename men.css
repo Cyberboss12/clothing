@@ -102,7 +102,6 @@ section img,
   height: 100vh;
   position: relative;
   overflow: hidden;
-  z-index: 30;
 }
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
@@ -170,7 +169,7 @@ section img,
   justify-content: center;
   box-sizing: border-box;
   padding: 20px;
-  z-index: 20;
+  z-index: 10;
 }
 
 .text-grid .text-content {
@@ -222,7 +221,7 @@ section img,
   flex-direction: column;
   align-items: center;            /* centreert het kruisje horizontaal */
   /* justify-content: center; */
-  z-index: 10;
+  z-index: 9999;
   transition: transform 0.35s ease, opacity 0.35s ease;
   font-family: 'Baskerville Old Face';
 }
@@ -365,7 +364,7 @@ section img,
   display: flex;
   align-items: center;         /* center verticaal */
   justify-content: center;     /* center horizontaal */
-  z-index: 30;
+  z-index: 9999;
   background: transparent;     /* doorzichtig */
 }
 
