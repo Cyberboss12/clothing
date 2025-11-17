@@ -85,3 +85,32 @@ dropdownItems.forEach(item => {
   const link = item.querySelector('a');
   if (link) link.addEventListener('click', closeMenu);
 });
+
+// ===== Horizontaal scrollen via rechter pijltje =====
+
+// Selecteer rechter verticale bar pijltje
+const rightArrow = document.querySelector('.right-bar span');
+
+// Alle horizontale sections
+const sections = document.querySelectorAll('.horizontal-section');
+
+// Huidige index bijhouden
+let currentIndex = 0;
+
+// Klik event voor rechterpijltje
+rightArrow.addEventListener('click', () => {
+  if (currentIndex < sections.length - 1) {
+    currentIndex++;
+    sections[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+  }
+});
+
+// Update currentIndex bij handmatig scrollen
+window.addEventListener('scroll', () => {
+  const scrollLeft = window.scrollX;
+  sections.forEach((section, i) => {
+    if (scrollLeft >= section.offsetLeft - 10) {  // marge van 10px
+      currentIndex = i;
+    }
+  });
+});

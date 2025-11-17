@@ -9,10 +9,11 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;    /* voorkom horizontale scroll */
-  overflow-y: auto;      /* laat scrollen toe wanneer nodig */
+  overflow-x: auto;    /* voorkom horizontale scroll */
+  overflow-y: hidden;      /* laat scrollen toe wanneer nodig */
   -ms-overflow-style: none;   /* IE 10+ */
   scrollbar-width: none;      /* Firefox */
+  scroll-behavior: smooth; /* voor smooth scrolling */
 }
 
 /* WebKit (Chrome, Safari, Edge) — verberg de zichtbare balk door width 0 */
@@ -25,6 +26,15 @@ body::-webkit-scrollbar {
 :root {
   --image-width: 40vw;    /* breedte afbeelding */
   --vertical-bar: 60px;   /* breedte van je zwarte verticale infobar */
+}
+
+.horizontal-section {
+  flex: 0 0 100vw;   /* elke section 100% van viewport breedte */
+  height: 100vh;     /* volle hoogte */
+  display: flex;     /* zodat content netjes naast elkaar staat */
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;  /* voorkom dat content buiten de section zichtbaar is */
 }
 
 /* Main dropdown */
