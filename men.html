@@ -8,70 +8,85 @@
 </head>
 <body>
 
-<!-- Verticale info-bar -->
 <div id="infoBar" class="info-bar vertical">
+
   <div class="info-icons">
-  <button id="menuButton" class="hamburger-btn">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
 
-<nav id="dropdownMenu" class="dropdown-menu">
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Men</a></li>
-    <li><a href="#">Women</a></li>
-    <li><a href="#">Collectie</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
-</nav>
-  
-  <!-- Vergrootglas onder het menu -->
-  <button id="searchButton" class="search-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="8" cy="8" r="6"></circle>
-      <line x1="13" y1="13" x2="17" y2="17"></line>
+    <!-- Hamburger menu -->
+    <button id="menuButton" class="hamburger-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Dropdown menu -->
+    <nav id="dropdownMenu" class="dropdown-menu">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Men</a></li>
+        <li><a href="#">Women</a></li>
+        <li><a href="#">Collectie</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Zoekicoon -->
+    <button id="searchButton" class="search-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="8" cy="8" r="6"></circle>
+        <line x1="13" y1="13" x2="17" y2="17"></line>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- Profiel icoon -->
+  <div class="profile-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="black" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
     </svg>
-  </button>
-</div>
+  </div>
 
-<!-- Profielicoon onderaan de info-bar -->
-<div class="profile-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="black" viewBox="0 0 24 24">
-    <circle cx="12" cy="8" r="4" />
-    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-  </svg>
-</div>
-
+  <!-- Verticale tekst -->
   <div class="vertical-text">
-  <span>Q</span>
-  <span>U</span>
-  <span>A</span>
-  <span>L</span>
-  <span>F</span>
-  <span>U</span>
-  <span>R</span>
-  <span>Y</span>
-</div>
-</div>
+    <span>Q</span>
+    <span>U</span>
+    <span>A</span>
+    <span>L</span>
+    <span>F</span>
+    <span>U</span>
+    <span>R</span>
+    <span>Y</span>
+  </div>
 
-<section class="split-grid">
+</div> <!-- EINDE INFOBAR -->
+
+
+<!-- ========================= -->
+<!--   EERSTE HORIZONTALE VIEW -->
+<!-- ========================= -->
+<section class="horizontal-section split-grid">
+
   <a href="men.html" class="vak">
     <img src="afbeeldingen/model_bank2.JPG" alt="Vak 1">
   </a>
 
-  <!-- Zet de text-grid hiernaast -->
   <div class="text-grid">
     <div class="text-content">
       <h2>For him</h2>
       <p>Ontdek onze nieuwste items en stijlvolle essentials.</p>
     </div>
   </div>
+
 </section>
 
+
+<!-- ========================= -->
+<!--   RECHTER NAVIGATIE-BAR   -->
+<!-- ========================= -->
 <div class="right-bar">
-    <span>&gt;</span>
+  <span>&gt;</span>
 </div>
 
 <script src="men.js"></script>
