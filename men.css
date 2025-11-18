@@ -52,6 +52,7 @@ body::-webkit-scrollbar {
   z-index: 99999; /* heel hoog zodat het alles overschrijdt */
   padding: 40px 30px;
   box-sizing: border-box;
+  pointer-events: none;
 }
 
 /* Zichtbaar */
