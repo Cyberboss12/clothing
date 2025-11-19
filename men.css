@@ -376,7 +376,7 @@ section img,
   position: fixed;
   top: 0;
   right: 0;
-  width: 60px;                 /* breedte van de balk */
+  width: 30px;                 /* breedte van de balk */
   height: 100vh;               /* over hele hoogte */
   border-left: 2px solid black;/* verticale lijn links in de balk */
   display: flex;
@@ -387,7 +387,7 @@ section img,
 }
 
 .right-bar span {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: black;
   font-family: 'Baskerville Old Face';
