@@ -41,7 +41,7 @@ body::-webkit-scrollbar {
 .dropdown-menu {
   position: fixed;
   top: 0;
-  left: var(--vertical-bar);  
+  left: calc(var(--vertical-bar) + 2px);
   width: var(--image-width);  
   height: 100vh;
   background: white;
