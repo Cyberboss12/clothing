@@ -382,8 +382,9 @@ section img,
   display: flex;
   align-items: center;         /* center verticaal */
   justify-content: center;     /* center horizontaal */
-  z-index: 1000;
+  z-index: 10000;
   background: transparent;     /* doorzichtig */
+  pointer-events: auto;
 }
 
 .right-bar span {
