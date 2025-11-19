@@ -24,7 +24,7 @@ body::-webkit-scrollbar {
 }
 
 :root {
-  --image-width: 40vw;    /* breedte afbeelding */
+  --image-width: 35vw;    /* breedte afbeelding */
   --vertical-bar: 60px;   /* breedte van je zwarte verticale infobar */
 }
 
