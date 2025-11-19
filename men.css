@@ -387,11 +387,32 @@ section img,
   pointer-events: auto;
 }
 
-.right-bar span {
+/* .right-bar span {
   font-size: 1.5rem;
   font-weight: bold;
   color: black;
   font-family: 'Baskerville Old Face';
+} */
+
+.right-bar button {
+  background: none;
+  border: none;
+  width: 100%;
+  height: 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: black;
+  font-family: 'Baskerville Old Face';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.right-bar button:hover {
+  transform: scale(1.1);
+  color: #555;
+  transition: transform 0.2s, color 0.2s;
 }
 
 .close-btn {

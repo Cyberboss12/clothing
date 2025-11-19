@@ -89,7 +89,7 @@ dropdownItems.forEach(item => {
 // ===== Horizontaal scrollen via rechter pijltje =====
 document.addEventListener("DOMContentLoaded", () => {
 
-  const rightArrow = document.querySelector(".right-bar span");
+  const rightArrow = document.getElementById('rightArrowBtn');
   const sections = document.querySelectorAll(".horizontal-section");
   let currentIndex = 0;
 
