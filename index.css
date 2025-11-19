@@ -164,6 +164,18 @@ body {
   justify-content: center;
 }
 
+/* Verticale scheidingslijn voor batch 1 */
+.batch-one .divider {
+  position: absolute;
+  top: 40px; /* direct onder de info-bar */
+  left: 50%; /* midden van het scherm */
+  transform: translateX(-50%);
+  width: 1px; /* dunne lijn */
+  height: calc(100% - 40px); /* vult vanaf info-bar tot onderkant van de viewport */
+  background-color: rgba(0, 0, 0, 0.3); /* licht zwarte lijn */
+  z-index: 5;
+}
+
 .placeholder-text {
   position: absolute;
   top: 50%;
@@ -269,7 +281,7 @@ body {
   position: absolute;
   left: 50%;
   top: calc(50% + 50px);
-  height: 60px;
+  height: 45px;
   transform: translateX(-50%);
   width: min(210px, 30vw);
   aspect-ratio: 2 / 1;
