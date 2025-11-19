@@ -49,7 +49,7 @@ body::-webkit-scrollbar {
   transform: translateX(-100%);
   opacity: 0;
   transition: transform 0.4s ease, opacity 0.4s ease;
-  z-index: 99999; /* heel hoog zodat het alles overschrijdt */
+  z-index: 50000; /* heel hoog zodat het alles overschrijdt */
   padding: 40px 30px;
   box-sizing: border-box;
   pointer-events: none;
@@ -382,7 +382,7 @@ section img,
   display: flex;
   align-items: center;         /* center verticaal */
   justify-content: center;     /* center horizontaal */
-  z-index: 100000;
+  z-index: 10005;
   background: transparent;     /* doorzichtig */
   pointer-events: auto;
 }

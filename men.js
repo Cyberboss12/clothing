@@ -87,30 +87,45 @@ dropdownItems.forEach(item => {
 });
 
 // ===== Horizontaal scrollen via rechter pijltje =====
+document.addEventListener("DOMContentLoaded", () => {
 
-// Selecteer rechter verticale bar pijltje
-const rightArrow = document.querySelector('.right-bar span');
+  const rightArrow = document.querySelector(".right-bar span");
+  const sections = document.querySelectorAll(".horizontal-section");
+  let currentIndex = 0;
 
-// Alle horizontale sections
-const sections = document.querySelectorAll('.horizontal-section');
+  if (!rightArrow || sections.length === 0) return;
 
-// Huidige index bijhouden
-let currentIndex = 0;
+  // Functie om naar een specifieke section te scrollen
+  function scrollToSection(index) {
+    const target = sections[index];
+    if (!target) return;
 
-// Klik event voor rechterpijltje
-rightArrow.addEventListener('click', () => {
-  if (currentIndex < sections.length - 1) {
-    currentIndex++;
-    sections[currentIndex].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    window.scrollTo({
+      left: target.offsetLeft,
+      top: 0,
+      behavior: "smooth"
+    });
   }
-});
 
-// Update currentIndex bij handmatig scrollen
-window.addEventListener('scroll', () => {
-  const scrollLeft = window.scrollX;
-  sections.forEach((section, i) => {
-    if (scrollLeft >= section.offsetLeft - 10) {  // marge van 10px
-      currentIndex = i;
+  // Klik event rechterpijltje
+  rightArrow.addEventListener("click", () => {
+    if (currentIndex < sections.length - 1) {
+      currentIndex++;
+      scrollToSection(currentIndex);
     }
   });
+
+  // Detecteer handmatig scrollen en update currentIndex
+  window.addEventListener("scroll", () => {
+    const scrollLeft = window.scrollX;
+
+    sections.forEach((section, i) => {
+      if (scrollLeft >= section.offsetLeft - 10) { // marge van 10px
+        currentIndex = i;
+      }
+    });
+  });
+
+  // Optioneel: initial scroll naar eerste section bij page load
+  scrollToSection(currentIndex);
 });
