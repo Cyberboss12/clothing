@@ -382,7 +382,7 @@ section img,
   display: flex;
   align-items: center;         /* center verticaal */
   justify-content: center;     /* center horizontaal */
-  z-index: 10000;
+  z-index: 50000;
   background: transparent;     /* doorzichtig */
   pointer-events: auto;
 }
