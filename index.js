@@ -35,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
     { img: "afbeeldingen/AI_vraagteken.png", label: "Men", link: "men.html" },
     { img: "afbeeldingen/model.jpg", label: "Women", link: "women.html" },
     { img: "afbeeldingen/model.jpg", label: "Children", link: "children.html" },
-    { img: "afbeeldingen/Black square_test.png", label: "Bags", link: "" },
-    { img: "afbeeldingen/Black square_test.png", label: "Gifts", link: "" },
+    { img: "Vcloseup2.png", label: "Bags", link: "" },
+    { img: "flash_logo.png", label: "Gifts", link: "" },
     { img: "afbeeldingen/model.jpg", label: "Heritage", link: "heritage.html" },
-    { img: "afbeeldingen/strandpalen.jpg", label: "Discover" },  /*(was eerst discover.html)*/
+    { img: "afbeeldingen/strandpalen.jpg", label: "Discover", link: "" },  /*(was eerst discover.html)*/
     { img: "afbeeldingen/model.jpg", label: "Jewelry and watches" },
     { img: "afbeeldingen/model.jpg", label: "9" },
     { img: "afbeeldingen/model.jpg", label: "10" },
