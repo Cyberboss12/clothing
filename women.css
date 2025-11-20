@@ -8,7 +8,7 @@ body {
 html, body {
   height: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0; 
   overflow-x: hidden;    /* voorkom horizontale scroll */
   overflow-y: auto;      /* laat scrollen toe wanneer nodig */
   -ms-overflow-style: none;   /* IE 10+ */
@@ -219,7 +219,7 @@ body.has-info-bar .black-line {
 
 .info-center {
   position: absolute;
-  left: 48%;
+  left: 49%;
   transform: translateX(-50%);
 
   /* nieuw */
@@ -511,11 +511,11 @@ body.has-pinned-bar {
   display: flex;
   flex-direction: row;            /* woorden naast elkaar */
   flex-wrap: nowrap;                /* breken als scherm te klein is */
-  gap: 100px;                      /* extra spacing tussen de woorden */
+  gap: 130px;                      /* extra spacing tussen de woorden */
   justify-content: flex-start;        /* gecentreerd op breedte */
   align-items: flex-start;        /* bovenaan uitgelijnd */
   width: 100%;                    /* neemt volledige breedte */
-  max-width: 980px;               /* niet breder dan 980px */
+  max-width: 1400px;               /* niet breder dan 980px */
 }
 
 .menu-grid a {
@@ -523,9 +523,14 @@ body.has-pinned-bar {
   background-color: transparent;
   color: whitesmoke;
   text-decoration: none;
-  font-size: 1.5rem;              /* iets groter voor balans */
+  font-size: 1.1rem;              /* iets groter voor balans */
   transition: color 0.2s ease, transform 0.15s ease;
 }
+
+.menu-grid a:first-child {
+  margin-left: 36px; /* pas dit getal aan naar wens */
+}
+
 .menu-grid a:hover {
   color: #C3A580;
   transform: translateY(-3px);
@@ -536,7 +541,7 @@ body.has-pinned-bar {
   position: absolute;
   top: 0; /* komt bovenaan */
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 10px; /* zelfde hoogte als info-bar, evt. aanpassen */
   background-color: white;
   opacity: 0;
@@ -585,9 +590,6 @@ body.has-pinned-bar {
   justify-self: center;
   margin: 0 auto ;
   padding: 0 25px;
-
-  /* position: static; */
-  /* position: relative; */
 }
 
 /* Zwarte lijn daar net boven */
@@ -624,7 +626,6 @@ body.has-pinned-bar {
 
 .white-bar .top-overlay {
   position: static !important;
-  /* top: auto !important; */
   justify-content: center;
   margin: 0 auto;
   display: flex;
