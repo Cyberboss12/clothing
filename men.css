@@ -10,8 +10,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: auto;    /* voorkom horizontale scroll */
-  overflow-y: hidden;      /* laat scrollen toe wanneer nodig */
+  overflow: hidden;
   -ms-overflow-style: none;   /* IE 10+ */
   scrollbar-width: none;      /* Firefox */
   scroll-behavior: smooth; /* voor smooth scrolling */
@@ -30,6 +29,7 @@ body::-webkit-scrollbar {
 }
 
 .horizontal-section {
+  position: relative;
   flex: 0 0 100vw;   /* elke section 100% van viewport breedte */
   height: 100vh;     /* volle hoogte */
   display: flex;     /* zodat content netjes naast elkaar staat */
@@ -37,6 +37,25 @@ body::-webkit-scrollbar {
   justify-content: flex-start;
   overflow: hidden;  /* voorkom dat content buiten de section zichtbaar is */
   pointer-events: auto;
+  z-index: 0;
+}
+
+.horizontal-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+
+  /* dit is CRUCIAAL → maakt de right-bar echt bovenop */
+  position: relative;
+  z-index: 0;
+}
+
+.horizontal-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 /* Main dropdown */
@@ -96,6 +115,8 @@ section,
   padding: 0;
   line-height: 0;
   position: relative;
+  pointer-events: auto;
+  z-index: 0;
 }
 
 section img,
@@ -109,6 +130,7 @@ section img,
 
 /* === SPLIT-GRID (naast info-bar) === */
 .split-grid {
+  position: relative;
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
@@ -116,7 +138,8 @@ section img,
   height: 100vh;
   position: relative;
   overflow: hidden;
-  z-index: 1;
+  z-index: 0;
+  pointer-events: auto;
 }
 
 /* Split-grid layout (3 gelijke vakken naast elkaar) */
@@ -386,7 +409,7 @@ section img,
   justify-content: center;     /* center horizontaal */
   z-index: 100050;
   background: transparent;     /* doorzichtig */
-  pointer-events: all;
+  pointer-events: auto !important;
 }
 
 /* .right-bar span {
