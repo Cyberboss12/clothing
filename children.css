@@ -22,150 +22,8 @@ body::-webkit-scrollbar {
   height: 0;
 }
 
-/* ===== Fullscreen sections (zorg dat ze exact 100vh zijn) ===== */
-section,
-.fullscreen-section {
-  width: 100%;
-  height: 100vh;          /* precies 1 viewport */
-  box-sizing: border-box;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  line-height: 0;
-  position: relative;
-}
-
-section img,
-.fullscreen-section img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  margin: 0;
-}
-
-.top-overlay {
-  position: absolute;
-  top: 25px;             /* altijd dezelfde afstand van bovenkant */
-  left: 50%;
-  /* transform: translateX(-50%); */
-  align-items: center;
-  text-align: center;
-  color: black;
-  z-index: 3000;
-  max-width: 90%;
-}
-
-/* Tekststijl */
-.top-overlay h1 {
-  /* font-size: 2,5rem;  */
-  margin: 0;
-  line-height: 1.2;
-  text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-}
-
-/* Fade in/out effect */
-.top-overlay .switch-item {
-  display: flex;              /* tekst of logo in een flexbox */
-  align-items: center;        /* verticaal centreren */
-  justify-content: center;    /* horizontaal centreren */
-  font-size: 2.3rem;
-  font-family: "Baskerville Old Face";
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.top-overlay .switch-item.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.top-overlay .switch-item img {
-  height: 1.5rem; /* zelfde hoogte als tekst */
-  width: auto;
-}
-
-.top-overlay .switch-item img.logo {
-  margin-top: -18px;
-  height: 30px;   /* pas aan naar wens */
-  width: auto;    /* behoud verhoudingen */
-}
-
-/* Split-grid layout (3 gelijke vakken naast elkaar) */
-.split-grid .vak {
-  position: relative;      /* nodig voor overlay */
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Subtiel hover-effect voor HELE vak (afbeelding + tekst) */
-.split-grid .vak:hover {
-  transform: scale(1.02); /* iets subtieler springen */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-
-/* Afbeelding stabiel */
-.split-grid .vak img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Tekst-overlay container */
-.split-grid .vak .text-overlay {
-  position: absolute;
-  bottom: 40px;  /* iets hoger */
-  left: 20px;
-  color: white;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Hoofdtekst */
-.split-grid .vak .overlay-title {
-  font-size: 1.8rem;
-  margin: 0 0 45px 0; /* 20px afstand tot bijtekst */
-  line-height: 1.3;   /* extra ruimte tussen regels */
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-}
-
-/* Bijtekst */
-.split-grid .vak .overlay-subtitle {
-  font-size: 1.2rem;
-  margin: 0;
-  line-height: 1.4;   /* iets luchtiger */
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
-}
-
-
 /* Hier moest de header styling komen: */
 
-/* Main content styling */
-main {
-    padding: 0 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-main h2 {
-    margin-bottom: 20px;
-}
-
-main p {
-    margin-bottom: 20px;
-} 
 
 /* Button styling */
 button {
@@ -182,19 +40,6 @@ button {
 button:hover {
     background-color: #555;
 } 
-
-/* Footer styling  */
-footer {
-    padding: 20px;
-    color: #333;
-    margin-top: 40px;
-    height: 200px;
-    background-color: #222;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 /* 2: Bovenste info-balk */
 .info-bar {
@@ -406,24 +251,6 @@ nav ul li a:hover {
   gap: 20px;
 }
 
-.color-block {
-  width: 200px;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
-}
-
-.block-1 {
-  background-color: #333;
-}
-
-.block-2 {
-  background-color: #777;
-}
-
 .close-btn {
   background: none;
   border: none;
@@ -440,7 +267,6 @@ nav ul li a:hover {
 .info-bar.hidden {
   display: none;
 }
-
 
 /* -------- Hamburger (positie en stijl) -------- */
 .hamburger-menu {
@@ -561,14 +387,6 @@ body.has-pinned-bar {
 .hamburger-menu.is-active .hamburger-icon span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
-
-
-/* Kleine responsive aanpassing (mobiel) */
-/* @media (max-width: 480px) {
-  .hamburger-menu { left: 14px; font-size: 0.95rem; }
-  .menu-grid { grid-template-columns: 1fr; gap: 12px; }
-  .menu-grid a { font-size: 1.15rem; }
-} */
 
 .white-bar {
   position: absolute;
