@@ -10,7 +10,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   -ms-overflow-style: none;   /* IE 10+ */
   scrollbar-width: none;      /* Firefox */
   scroll-behavior: smooth; /* voor smooth scrolling */
@@ -35,7 +34,6 @@ body::-webkit-scrollbar {
   display: flex;     /* zodat content netjes naast elkaar staat */
   align-items: stretch;
   justify-content: flex-start;
-  overflow: hidden;  /* voorkom dat content buiten de section zichtbaar is */
   pointer-events: auto;
   z-index: 0;
 }
@@ -51,7 +49,7 @@ body::-webkit-scrollbar {
 
   /* dit is CRUCIAAL → maakt de right-bar echt bovenop */
   position: relative;
-  z-index: 0;
+  z-index: 2000;
 }
 
 .horizontal-wrapper::-webkit-scrollbar {
