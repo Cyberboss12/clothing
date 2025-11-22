@@ -93,12 +93,13 @@ const rightBar = document.querySelector('.right-bar');
 const sections = document.querySelectorAll('.horizontal-section');
 let currentIndex = 0;
 
+const wrapper = document.querySelector('.horizontal-wrapper');
 rightBar.addEventListener('click', () => {
   if (currentIndex < sections.length - 1) {
     currentIndex++;
-    sections[currentIndex].scrollIntoView({
-      behavior: 'smooth',
-      inline: 'start'
+    wrapper.scrollTo({
+      left: sections[currentIndex].offsetLeft,
+      behavior: 'smooth'
     });
   }
 });

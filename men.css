@@ -408,7 +408,7 @@ section img,
   align-items: center;         /* center verticaal */
   justify-content: center;     /* center horizontaal */
   z-index: 100050;
-  background: transparent;     /* doorzichtig */
+  /* background: transparent;  */
   pointer-events: auto !important;
 }
 
