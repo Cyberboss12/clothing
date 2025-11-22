@@ -1,0 +1,38 @@
+.horizontal-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-section {
+  flex: 0 0 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  background: #ddd;
+  border-right: 1px solid #aaa;
+}
+
+.right-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 40px;               /* brede hitbox */
+  height: 100vh;
+  border-left: 2px solid black;
+  background: rgba(0,0,0,0.01); /* bijna transparant maar wel klikbaar */
+  cursor: pointer;
+  z-index: 99999;           /* boven alles */
+  pointer-events: auto;
+}
