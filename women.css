@@ -406,24 +406,6 @@ nav ul li a:hover {
   gap: 20px;
 }
 
-.color-block {
-  width: 200px;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
-}
-
-.block-1 {
-  background-color: #333;
-}
-
-.block-2 {
-  background-color: #777;
-}
-
 .close-btn {
   background: none;
   border: none;
