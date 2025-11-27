@@ -89,31 +89,36 @@ dropdownItems.forEach(item => {
 // ===== Horizontaal scrollen via rechter pijltje =====
 document.addEventListener("DOMContentLoaded", () => {
 
-const rightBar = document.querySelector('.right-bar');
-const sections = document.querySelectorAll('.horizontal-section');
-let currentIndex = 0;
+  const rightBar = document.querySelector('.right-bar');
+  const sections = document.querySelectorAll('.horizontal-section');
+  let currentIndex = 0;
 
-const wrapper = document.querySelector('.horizontal-wrapper');
-rightBar.addEventListener('click', () => {
-  if (currentIndex < sections.length - 1) {
-    currentIndex++;
-    wrapper.scrollTo({
-      left: sections[currentIndex].offsetLeft,
-      behavior: 'smooth'
-    });
-  }
-});
+  const wrapper = document.querySelector('.horizontal-wrapper');
 
-// update currentIndex bij handmatig scrollen
-window.addEventListener('scroll', () => {
-  const scrollLeft = window.scrollX;
-  sections.forEach((section, i) => {
-    if (scrollLeft >= section.offsetLeft - 10) {
-      currentIndex = i;
+  rightBar.addEventListener('click', () => {
+    if (currentIndex < sections.length - 1) {
+      currentIndex++;
+      wrapper.scrollTo({
+        left: sections[currentIndex].offsetLeft,
+        behavior: 'smooth'
+      });
     }
   });
-});
+
+  // update currentIndex bij handmatig horizontaal scrollen (Aangepast)
+  wrapper.addEventListener('scroll', () => {
+    const scrollLeft = wrapper.scrollLeft;
+    sections.forEach((section, i) => {
+      if (scrollLeft >= section.offsetLeft - 10) {
+        currentIndex = i;
+      }
+    });
+  });
 
   // Optioneel: initial scroll naar eerste section bij page load
-  scrollToSection(currentIndex);
+  wrapper.scrollTo({
+    left: sections[currentIndex].offsetLeft,
+    behavior: 'smooth'
+  });
+
 });
