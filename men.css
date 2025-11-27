@@ -241,8 +241,6 @@ section img,
   text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
-/* Hier moest de header styling komen: */
-
 /* 2: Bovenste info-balk */
 .info-bar {
   position: fixed;
@@ -410,13 +408,6 @@ section img,
   pointer-events: auto !important;
 }
 
-/* .right-bar span {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
-  font-family: 'Baskerville Old Face';
-} */
-
 .right-bar button {
   background: none;
   border: none;
@@ -470,4 +461,40 @@ section img,
   margin: 0;
   padding: 0;
   overflow: hidden;
+}
+
+
+
+/* ========================================================= */
+/* =====================   FIXES TOEGEVOEGD   =============== */
+/* ========================================================= */
+
+/* Info-bar ALTIJD boven alles */
+.info-bar {
+    z-index: 999999 !important;
+    background: white !important;
+    pointer-events: auto !important;
+}
+
+/* Iconen klikbaar en nooit overlapt */
+.info-icons,
+.hamburger-btn,
+.search-btn,
+.profile-icon {
+    pointer-events: auto !important;
+    z-index: 1000000 !important;
+}
+
+/* Afbeeldingen mogen NIET meer de icons blokkeren */
+.split-grid .vak img,
+section img {
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+/* Rechter balk altijd klikbaar en zichtbaar */
+.right-bar {
+    pointer-events: auto !important;
+    z-index: 1000000 !important;
+    background: white !important;
 }
