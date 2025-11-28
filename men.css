@@ -507,8 +507,8 @@ section img {
 
 .clickable-square {
   position: absolute;
-  top: 50%;           /* center verticaal */
-  left: 0;            /* links uitlijnen */
+  top: 0;           /* center verticaal */
+  left: var(--vertical-bar);            /* links uitlijnen */
   transform: translateY(-50%);
   width: 25%;         /* 1/4 van de section */
   height: 50%;        /* 50% van viewport hoogte */
