@@ -498,3 +498,43 @@ section img {
     z-index: 1000000 !important;
     background: white !important;
 }
+
+/* codes voor section 2, afbeelding 1 */
+/* Klikbaar vierkant in tweede section */
+.second-section {
+  position: relative; /* belangrijk zodat het vierkant absoluut kan */
+}
+
+.clickable-square {
+  position: absolute;
+  top: 50%;           /* center verticaal */
+  left: 0;            /* links uitlijnen */
+  transform: translateY(-50%);
+  width: 25%;         /* 1/4 van de section */
+  height: 50%;        /* 50% van viewport hoogte */
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255, 0.1); /* doorzichtig wit, 10% */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none; /* geen underline */
+  z-index: 10;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover effect */
+.clickable-square:hover {
+  transform: translateY(-50%) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Afbeelding in vierkant */
+.clickable-square img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* afbeelding blokkeert geen klik */
+}
