@@ -502,43 +502,41 @@ section img {
 /* codes voor section 2, afbeelding 1 */
 
 .second-view {
-  position: relative; /* container voor absolute positioning */
+  position: relative;
 }
 
 /* Eerste vierkant */
-.second-view .clickable-square.first-square {
+.second-view .first-square {
   position: absolute;
-  top: 0;                         /* bovenkant section */
-  left: var(--vertical-bar);      /* rechts van info-bar */
-  width: 25%;                     /* 1/4 breedte */
-  height: 50vh;                   /* 50% viewporthoogte */
+  top: 0;
+  left: var(--vertical-bar);
+  width: 25%;        /* 1/4 van section */
+  height: 50vh;      /* 50% viewporthoogte */
   border: 2px solid black;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255,255,255,0.1);
   cursor: pointer;
   overflow: hidden;
-  display: flex;
-  align-items: flex-start;        /* afbeelding bovenaan */
-  justify-content: center;
   z-index: 10;
-  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* afbeelding bovenkant */
 }
 
 /* Tweede vierkant */
-.second-view .clickable-square.second-square {
+.second-view .second-square {
   position: absolute;
-  top: 50vh;                       /* begint direct onder eerste vierkant */
+  top: 50vh;         /* direct onder eerste vierkant */
   left: var(--vertical-bar);
   width: 25%;
   height: 50vh;
   border: 2px solid black;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255,255,255,0.1);
   cursor: pointer;
   overflow: hidden;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
   z-index: 10;
-  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 /* Afbeeldingen */
