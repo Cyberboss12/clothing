@@ -26,18 +26,21 @@ function showNextMessage() {
 setInterval(showNextMessage, 3675);
 
 // ===== Wegklikbare info-bar & aanpassing eerste section =====
-const ham = document.getElementById('menuButton');
+const ham = document.getElementById('menuButton');   // <-- FIXED ID
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownItems = dropdownMenu.querySelectorAll('li');
+
 
 // Menu openen
 function openMenu() {
   dropdownMenu.classList.add('active');
   ham.classList.add('is-active');
 
+  // Scrolling blokkeren
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
 
+  // Animatie van menu-items
   dropdownItems.forEach((item, i) => {
     item.style.opacity = 0;
     item.style.transform = 'translateX(-20px)';
@@ -50,14 +53,17 @@ function openMenu() {
   });
 }
 
+
 // Menu sluiten
 function closeMenu() {
   dropdownMenu.classList.remove('active');
   ham.classList.remove('is-active');
 
+  // Scroll weer toestaan
   document.documentElement.style.overflow = '';
   document.body.style.overflow = '';
 
+  // Reset item-styling
   dropdownItems.forEach(item => {
     item.style.transition = '';
     item.style.opacity = '';
@@ -65,22 +71,26 @@ function closeMenu() {
   });
 }
 
+
 // Toggle bij klikken op hamburger
 ham.addEventListener('click', () => {
   if (dropdownMenu.classList.contains('active')) closeMenu();
   else openMenu();
 });
 
+
 // Klik buiten het menu sluit het menu
 dropdownMenu.addEventListener('click', (ev) => {
   if (ev.target === dropdownMenu) closeMenu();
 });
+
 
 // Klik op een link sluit ook het menu
 dropdownItems.forEach(item => {
   const link = item.querySelector('a');
   if (link) link.addEventListener('click', closeMenu);
 });
+
 
 // ===== Horizontaal scrollen via rechter pijltje =====
 document.addEventListener("DOMContentLoaded", () => {
@@ -103,14 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // update currentIndex bij handmatig scrollen
   window.addEventListener('scroll', () => {
-
-    // ⛔ BELANGRIJK:
-    // Als we in batch 2 (index 1) zitten, NIKS doen.
-    // Hierdoor zal verticale scroll NIET de horizontale index updaten.
-    if (currentIndex === 1) return;
-
     const scrollLeft = window.scrollX;
-
     sections.forEach((section, i) => {
       if (scrollLeft >= section.offsetLeft - 10) {
         currentIndex = i;
@@ -118,11 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Veilige functie die al door jouw script werd aangeroepen
-  function scrollToSection(i) {
-    if (!sections[i]) return;
-    wrapper.scrollTo({ left: sections[i].offsetLeft, behavior: "smooth" });
-  }
-
+  // Optioneel: initial scroll naar eerste section bij page load
   scrollToSection(currentIndex);
+
 });
