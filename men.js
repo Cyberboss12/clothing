@@ -26,7 +26,7 @@ function showNextMessage() {
 setInterval(showNextMessage, 3675);
 
 // ===== Wegklikbare info-bar & aanpassing eerste section =====
-const ham = document.getElementById('menuButton');   // <-- FIXED ID
+const ham = document.getElementById('menuButton');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownItems = dropdownMenu.querySelectorAll('li');
 
@@ -35,11 +35,9 @@ function openMenu() {
   dropdownMenu.classList.add('active');
   ham.classList.add('is-active');
 
-  // Scrolling blokkeren
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
 
-  // Animatie van menu-items
   dropdownItems.forEach((item, i) => {
     item.style.opacity = 0;
     item.style.transform = 'translateX(-20px)';
@@ -57,11 +55,9 @@ function closeMenu() {
   dropdownMenu.classList.remove('active');
   ham.classList.remove('is-active');
 
-  // Scroll weer toestaan
   document.documentElement.style.overflow = '';
   document.body.style.overflow = '';
 
-  // Reset item-styling
   dropdownItems.forEach(item => {
     item.style.transition = '';
     item.style.opacity = '';
@@ -105,9 +101,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // update currentIndex bij handmatig horizontaal scrollen (Aangepast)
-  wrapper.addEventListener('scroll', () => {
-    const scrollLeft = wrapper.scrollLeft;
+  // update currentIndex bij handmatig scrollen
+  window.addEventListener('scroll', () => {
+
+    // ⛔ BELANGRIJK:
+    // Als we in batch 2 (index 1) zitten, NIKS doen.
+    // Hierdoor zal verticale scroll NIET de horizontale index updaten.
+    if (currentIndex === 1) return;
+
+    const scrollLeft = window.scrollX;
+
     sections.forEach((section, i) => {
       if (scrollLeft >= section.offsetLeft - 10) {
         currentIndex = i;
@@ -115,10 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Optioneel: initial scroll naar eerste section bij page load
-  wrapper.scrollTo({
-    left: sections[currentIndex].offsetLeft,
-    behavior: 'smooth'
-  });
+  // Veilige functie die al door jouw script werd aangeroepen
+  function scrollToSection(i) {
+    if (!sections[i]) return;
+    wrapper.scrollTo({ left: sections[i].offsetLeft, behavior: "smooth" });
+  }
 
+  scrollToSection(currentIndex);
 });

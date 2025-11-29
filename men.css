@@ -546,3 +546,18 @@ section img {
   object-fit: cover;
   pointer-events: none;
 }
+
+/* Alleen voor batch 2 */
+.horizontal-section.vertical-enabled {
+  position: relative;
+  overflow: hidden; /* voorkomt onbedoeld horizontaal lekken */
+}
+
+.vertical-scroll-container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 20px; /* zodat scrollbar geen content overlapt */
+  scroll-behavior: smooth;
+}
