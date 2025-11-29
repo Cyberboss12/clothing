@@ -30,7 +30,6 @@ const ham = document.getElementById('menuButton');   // <-- FIXED ID
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownItems = dropdownMenu.querySelectorAll('li');
 
-
 // Menu openen
 function openMenu() {
   dropdownMenu.classList.add('active');
@@ -53,7 +52,6 @@ function openMenu() {
   });
 }
 
-
 // Menu sluiten
 function closeMenu() {
   dropdownMenu.classList.remove('active');
@@ -71,19 +69,16 @@ function closeMenu() {
   });
 }
 
-
 // Toggle bij klikken op hamburger
 ham.addEventListener('click', () => {
   if (dropdownMenu.classList.contains('active')) closeMenu();
   else openMenu();
 });
 
-
 // Klik buiten het menu sluit het menu
 dropdownMenu.addEventListener('click', (ev) => {
   if (ev.target === dropdownMenu) closeMenu();
 });
-
 
 // Klik op een link sluit ook het menu
 dropdownItems.forEach(item => {
@@ -101,6 +96,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const wrapper = document.querySelector('.horizontal-wrapper');
 
+  // ===== ADD: horizontale scroll lock functie =====
+  function updateScrollLock() {
+    if (currentIndex === 0) {
+      // View 1 → HORIZONTAAL LOCKEN
+      document.body.style.overflowX = "hidden";
+      document.documentElement.style.overflowX = "hidden";
+    } else {
+      // Andere views → VRIJ SCROLLEN
+      document.body.style.overflowX = "auto";
+      document.documentElement.style.overflowX = "auto";
+    }
+  }
+
+  // ===== Klik op rechter balk =====
   rightBar.addEventListener('click', () => {
     if (currentIndex < sections.length - 1) {
       currentIndex++;
@@ -108,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         left: sections[currentIndex].offsetLeft,
         behavior: 'smooth'
       });
+      updateScrollLock(); // <-- ADD
     }
   });
 
@@ -119,9 +129,13 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex = i;
       }
     });
+    updateScrollLock(); // <-- ADD
   });
 
   // Optioneel: initial scroll naar eerste section bij page load
   scrollToSection(currentIndex);
+
+  // Eerste view direct locken
+  updateScrollLock(); // <-- ADD
 
 });
