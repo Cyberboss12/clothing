@@ -98,16 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== ADD: horizontale scroll lock functie =====
   function updateScrollLock() {
-    if (currentIndex === 0) {
-      // View 1 → HORIZONTAAL LOCKEN
-      document.body.style.overflowX = "hidden";
-      document.documentElement.style.overflowX = "hidden";
-    } else {
-      // Andere views → VRIJ SCROLLEN
-      document.body.style.overflowX = "auto";
-      document.documentElement.style.overflowX = "auto";
-    }
+  if (currentIndex === 0) {
+    // View 1 → horizontale scroll blokkeren
+    wrapper.style.overflowX = "hidden";
+  } else {
+    // Andere views → horizontale scroll vrijgeven
+    wrapper.style.overflowX = "auto";
   }
+}
 
   // ===== Klik op rechter balk =====
   rightBar.addEventListener('click', () => {
