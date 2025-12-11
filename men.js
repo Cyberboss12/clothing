@@ -90,50 +90,57 @@ dropdownItems.forEach(item => {
 // ===== Horizontaal scrollen via rechter pijltje =====
 document.addEventListener("DOMContentLoaded", () => {
 
-  const rightBar = document.querySelector('.right-bar');
+  const wrapper = document.querySelector('.horizontal-wrapper');
   const sections = document.querySelectorAll('.horizontal-section');
+  const rightBar = document.querySelector('.right-bar');
+
   let currentIndex = 0;
 
-  const wrapper = document.querySelector('.horizontal-wrapper');
-
-  // ===== ADD: horizontale scroll lock functie =====
-  function updateScrollLock() {
-  if (currentIndex === 0) {
-    // View 1 → horizontale scroll blokkeren
-    wrapper.style.overflowX = "hidden";
-  } else {
-    // Andere views → horizontale scroll vrijgeven
-    wrapper.style.overflowX = "auto";
+  // --- Functie: naar een section scrollen ---
+  function scrollToSection(i) {
+    wrapper.scrollTo({
+      left: sections[i].offsetLeft,
+      behavior: "smooth"
+    });
   }
-}
 
-  // ===== Klik op rechter balk =====
-  rightBar.addEventListener('click', () => {
+  // --- Functie: horizontale scroll lock ---
+  function updateScrollLock() {
+    if (currentIndex === 0) {
+      // Eerste view → lock scroll
+      wrapper.style.overflowX = "hidden";
+    } else {
+      // Andere views → scroll vrijgeven
+      wrapper.style.overflowX = "auto";
+    }
+  }
+
+  // --- Rechterbalk klik ---
+  rightBar.addEventListener("click", () => {
     if (currentIndex < sections.length - 1) {
       currentIndex++;
-      wrapper.scrollTo({
-        left: sections[currentIndex].offsetLeft,
-        behavior: 'smooth'
-      });
-      updateScrollLock(); // <-- ADD
+      scrollToSection(currentIndex);
+      updateScrollLock();
     }
   });
 
-  // update currentIndex bij handmatig scrollen
-  window.addEventListener('scroll', () => {
-    const scrollLeft = window.scrollX;
-    sections.forEach((section, i) => {
-      if (scrollLeft >= section.offsetLeft - 10) {
-        currentIndex = i;
+  // --- Scroll detectie op wrapper (niet window!) ---
+  wrapper.addEventListener("scroll", () => {
+    const scrollLeft = wrapper.scrollLeft;
+
+    sections.forEach((section, index) => {
+      const midpoint = section.offsetLeft - window.innerWidth / 2;
+
+      if (scrollLeft >= midpoint) {
+        currentIndex = index;
       }
     });
-    updateScrollLock(); // <-- ADD
+
+    updateScrollLock();
   });
 
-  // Optioneel: initial scroll naar eerste section bij page load
-  scrollToSection(currentIndex);
-
-  // Eerste view direct locken
-  updateScrollLock(); // <-- ADD
+  // --- Start: lock view 1 ---
+  scrollToSection(0);
+  updateScrollLock();
 
 });
