@@ -93,12 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const wrapper = document.querySelector('.horizontal-wrapper');
   const sections = document.querySelectorAll('.horizontal-section');
   const rightBar = document.querySelector('.right-bar');
+  const backBtn = document.getElementById('backToFirst'); // NIEUW
+  const searchBtn = document.getElementById('searchButton');
 
   let currentIndex = 0;
-  let hasLeftFirstBatch = false; // <-- NIEUW: track of batch 1 is verlaten
-  const firstAllowedScrollLeft = sections[1].offsetLeft; // <-- NIEUW: batch 2 grens
+  let hasLeftFirstBatch = false;
+  const firstAllowedScrollLeft = sections[1].offsetLeft;
 
-  // --- Functie: naar een section scrollen ---
   function scrollToSection(i) {
     wrapper.scrollTo({
       left: sections[i].offsetLeft,
@@ -106,52 +107,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- Functie: horizontale scroll lock ---
   function updateScrollLock() {
     if (currentIndex === 0) {
-      // Eerste view → lock scroll
       wrapper.style.overflowX = "hidden";
     } else {
-      // Andere views → scroll vrijgeven
       wrapper.style.overflowX = "auto";
     }
   }
 
-  // --- Rechterbalk klik ---
   rightBar.addEventListener("click", () => {
     if (currentIndex < sections.length - 1) {
       currentIndex++;
       scrollToSection(currentIndex);
       updateScrollLock();
 
-      if (currentIndex > 0) {
-        hasLeftFirstBatch = true; // <-- markeer dat batch 1 verlaten is
-      }
+      if (currentIndex > 0) hasLeftFirstBatch = true;
     }
   });
 
-  // --- Scroll detectie op wrapper (niet window!) ---
+  // ===== NIEUW: terug naar batch 1 via < knop =====
+  backBtn.addEventListener("click", () => {
+    currentIndex = 0;
+    hasLeftFirstBatch = false; // zodat guard tijdelijk niet blokkeert
+    scrollToSection(0);
+    updateScrollLock();
+  });
+
   wrapper.addEventListener("scroll", () => {
     const scrollLeft = wrapper.scrollLeft;
 
     sections.forEach((section, index) => {
       const midpoint = section.offsetLeft - window.innerWidth / 2;
-
-      if (scrollLeft >= midpoint) {
-        currentIndex = index;
-      }
+      if (scrollLeft >= midpoint) currentIndex = index;
     });
 
     updateScrollLock();
 
-    // ===== NIEUW: hard blok tegen terugscrollen naar batch 1 =====
+    // ===== Guard: voorkomt shaky effect door terugscroll =====
+    // Alleen als batch 1 definitief verlaten is
     if (hasLeftFirstBatch && wrapper.scrollLeft < firstAllowedScrollLeft) {
       wrapper.scrollLeft = firstAllowedScrollLeft;
     }
   });
 
-  // --- Start: lock view 1 ---
   scrollToSection(0);
   updateScrollLock();
-
 });
