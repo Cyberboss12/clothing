@@ -95,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const rightBar = document.querySelector('.right-bar');
 
   let currentIndex = 0;
+  let hasLeftFirstBatch = false; // <-- NIEUW: track of batch 1 is verlaten
+  const firstAllowedScrollLeft = sections[1].offsetLeft; // <-- NIEUW: batch 2 grens
 
   // --- Functie: naar een section scrollen ---
   function scrollToSection(i) {
@@ -121,6 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
       currentIndex++;
       scrollToSection(currentIndex);
       updateScrollLock();
+
+      if (currentIndex > 0) {
+        hasLeftFirstBatch = true; // <-- markeer dat batch 1 verlaten is
+      }
     }
   });
 
@@ -137,6 +143,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateScrollLock();
+
+    // ===== NIEUW: hard blok tegen terugscrollen naar batch 1 =====
+    if (hasLeftFirstBatch && wrapper.scrollLeft < firstAllowedScrollLeft) {
+      wrapper.scrollLeft = firstAllowedScrollLeft;
+    }
   });
 
   // --- Start: lock view 1 ---
