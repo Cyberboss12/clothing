@@ -115,23 +115,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  rightBar.addEventListener("click", () => {
-    if (currentIndex < sections.length - 1) {
-      currentIndex++;
-      scrollToSection(currentIndex);
-      updateScrollLock();
+ rightBar.addEventListener("click", () => {
+  if (currentIndex < sections.length - 1) {
+    currentIndex++;
+    scrollToSection(currentIndex);
+    updateScrollLock();
 
-      if (currentIndex > 0) hasLeftFirstBatch = true;
+    if (currentIndex > 0) {
+      hasLeftFirstBatch = true;
+      backBtn.classList.add('visible'); // <-- NIEUW
     }
-  });
+  }
+});
 
   // ===== NIEUW: terug naar batch 1 via < knop =====
-  backBtn.addEventListener("click", () => {
-    currentIndex = 0;
-    hasLeftFirstBatch = false; // zodat guard tijdelijk niet blokkeert
-    scrollToSection(0);
-    updateScrollLock();
-  });
+ backBtn.addEventListener("click", () => {
+  currentIndex = 0;
+  hasLeftFirstBatch = false;
+  scrollToSection(0);
+  updateScrollLock();
+
+  backBtn.classList.remove('visible'); // <-- verberg weer
+});
 
   wrapper.addEventListener("scroll", () => {
     const scrollLeft = wrapper.scrollLeft;

@@ -375,16 +375,24 @@ section img,
   border: none;
   color: black;
   font-size: 18px;
-  margin-top: 12px; /* ruimte onder het zoekglas */
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.25s ease;
+
+  /* visuele polish */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+/* zichtbaar vanaf batch 2 */
+.back-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .back-btn:hover {
-  transform: scale(1.2);
+  transform: scale(1.15);
 }
 
 /* Profielicoon onderaan */
